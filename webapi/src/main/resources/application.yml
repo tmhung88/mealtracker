@@ -5,7 +5,7 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      dialect: org.hibernate.dialect.MySQL5Dialect
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 
 server:
   port: 9000

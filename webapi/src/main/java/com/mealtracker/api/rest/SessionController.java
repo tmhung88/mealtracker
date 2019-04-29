@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.mealtracker.payloads.CreateSessionResponse.bearerToken;
+
 @RestController
 @RequestMapping("/api/sessions")
 public class SessionController {
@@ -24,14 +26,14 @@ public class SessionController {
     private JwtTokenProvider jwtTokenProvider;
 
     @PostMapping
-    public ResponseEntity<?> authenticate(@RequestBody CreateSessionRequest createSessionRequest) {
+    public ResponseEntity<CreateSessionResponse> authenticate(@RequestBody CreateSessionRequest createSessionRequest) {
         var authenticationToken = new UsernamePasswordAuthenticationToken(
                 createSessionRequest.getEmail(),
                 createSessionRequest.getPassword()
         );
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtTokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new CreateSessionResponse(jwt));
+        String jwtAccessToken = jwtTokenProvider.generateToken(authentication);
+        return ResponseEntity.ok(bearerToken(jwtAccessToken));
     }
 }

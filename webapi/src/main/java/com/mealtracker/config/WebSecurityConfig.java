@@ -8,8 +8,6 @@ import com.mealtracker.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -40,9 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtProperties jwtProperties;
 
-    @Autowired
-    private RestAuthenticationEntryPoint unauthorizedHandler;
-
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService)
@@ -61,18 +56,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtTokenProvider jwtTokenProvider() {
-        return new JwtTokenProvider(jwtProperties.getSecretKey(), jwtProperties.getExpirationInMs());
-    }
-
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtTokenProvider());
-    }
-
-    @Bean
-    public RestAuthenticationEntryPoint restAuthenticationEntryPoint() {
-        return new RestAuthenticationEntryPoint();
+    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtProperties jwtProperties) {
+        var jwtTokenProvider =  new JwtTokenProvider(jwtProperties.getSecretKey(), jwtProperties.getExpirationInMs());
+        return new JwtAuthenticationFilter(jwtTokenProvider);
     }
 
 //
@@ -88,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .cors().and().csrf().disable()
-            .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+            .exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint()).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests()
 //                .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability").permitAll()
@@ -98,7 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         // Add our custom JWT security filter
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter(jwtProperties), UsernamePasswordAuthenticationFilter.class);
 
     }
 }
