@@ -1,5 +1,9 @@
 package com.mealtracker.domains;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +14,7 @@ import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "meals")
+@Setter @Getter @NoArgsConstructor
 public class Meal {
 
     @Id
@@ -27,44 +32,4 @@ public class Meal {
 
     @Column(name = "consumed_by")
     private Long consumedBy;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public ZonedDateTime getConsumedOn() {
-        return consumedOn;
-    }
-
-    public void setConsumedOn(ZonedDateTime consumedOn) {
-        this.consumedOn = consumedOn;
-    }
-
-    public Integer getCalories() {
-        return calories;
-    }
-
-    public void setCalories(Integer calories) {
-        this.calories = calories;
-    }
-
-    public Long getConsumedBy() {
-        return consumedBy;
-    }
-
-    public void setConsumedBy(Long consumedBy) {
-        this.consumedBy = consumedBy;
-    }
 }
