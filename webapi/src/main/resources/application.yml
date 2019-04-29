@@ -10,3 +10,7 @@ spring:
 server:
   port: 9000
 
+app:
+  jwt:
+    secretKey: JWTSuperSecretKey
+    expirationInMs: 604800000
