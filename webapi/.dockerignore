@@ -1,0 +1,11 @@
+*
+.idea/
+.git/
+.mvn/
+src/
+target/
+dev-env/
+dev-env/mysql
+!.dockerignore
+!Dockerfile
+!target/*.jar

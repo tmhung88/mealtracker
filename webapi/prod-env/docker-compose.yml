@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: mealtracker
+      MYSQL_ROOT_PASSWORD: 8&pqA24iyQ01
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "13307:3306"
+
+  webapi:
+    image: tmhung/mealtracker:0.0.1-SNAPSHOT
+    ports:
+      - "9001:9000"
+    depends_on:
+      - db

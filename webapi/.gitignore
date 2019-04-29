@@ -1,6 +1,8 @@
 ### Maven ###
+.mvn
 target
 /target/
+!.mvn/wrapper/maven-wrapper.jar
 
 ### IntelliJ IDEA ###
 .idea
@@ -10,3 +12,7 @@ target
 
 ### Others ###
 HELP.md
+
+### Docker ###
+local-env/mysql
+prod-env/mysql
