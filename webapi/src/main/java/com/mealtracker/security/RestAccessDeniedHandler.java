@@ -1,22 +1,23 @@
 package com.mealtracker.security;
 
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class RestAccessDeniedHandler implements AccessDeniedHandler {
 
     private final HandlerExceptionResolver exceptionResolver;
 
-    public RestAuthenticationEntryPoint(HandlerExceptionResolver exceptionResolver) {
+    public RestAccessDeniedHandler(HandlerExceptionResolver exceptionResolver) {
         this.exceptionResolver = exceptionResolver;
     }
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException ex) {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException ex) {
         exceptionResolver.resolveException(request, response, null, ex);
+
     }
 }

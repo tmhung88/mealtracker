@@ -38,7 +38,7 @@ public class HelloControllerIT {
 
 
     @Test
-    public void auth_apitest() throws Exception {
+    public void auth_test() throws Exception {
         String name = "hung";
         var response = new HashMap<String, String>();
         response.put("name", name);

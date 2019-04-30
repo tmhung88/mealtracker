@@ -13,7 +13,7 @@ public class ResourceNotFoundException extends RuntimeException {
 
     public ResourceNotFoundException(String message) {
         super();
-        this.error = new Error(NOT_FOUND, message);
+        this.error = Error.of(NOT_FOUND, message);
     }
 
     public Error getError() {
