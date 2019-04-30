@@ -1,22 +1,10 @@
 package com.mealtracker.exceptions;
 
-import com.mealtracker.payloads.Error;
-
-public class ResourceNotFoundException extends RuntimeException {
+public class ResourceNotFoundException extends AppException {
     private static final int NOT_FOUND = 40400;
 
-    private final Error error;
-
-    public static ResourceNotFoundException notFound(String message) {
-        return new ResourceNotFoundException(message);
-    }
-
     public ResourceNotFoundException(String message) {
-        super();
-        this.error = Error.of(NOT_FOUND, message);
+        super(NOT_FOUND, message);
     }
 
-    public Error getError() {
-        return error;
-    }
 }

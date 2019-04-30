@@ -4,6 +4,7 @@ import com.mealtracker.JwtToken;
 import com.mealtracker.MealTrackerApplication;
 import com.mealtracker.config.WebSecurityConfig;
 import com.mealtracker.domains.User;
+import com.mealtracker.exceptions.BadRequestException;
 import com.mealtracker.payloads.UserRegistrationRequest;
 import com.mealtracker.services.UserService;
 import org.junit.Test;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static com.mealtracker.TestUtils.json;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -59,16 +61,70 @@ public class UserControllerIT {
                 .andExpect(content().json("{'error':{'code':40400,'message':'User not found with the given email'}}"));
     }
 
-
     @Test
     public void registerUser_InvalidEmail_ExpectEmailValidationErrors() throws Exception {
         String invalidEmail = "abc";
         var request = validRegistrationRequest();
         request.setEmail(invalidEmail);
 
-        mockMvc.perform(post("/v1/users").content(json(request)).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+                post("/v1/users")
+                        .content(json(request)).contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+        )
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json("{'error':{'code':40000,'message':'Invalid Input','errorFields':[{'name':'email','message':'size must be between 5 and 200'},{'name':'email','message':'must be a well-formed email address'}]}}"));
+    }
+
+    @Test
+    public void registerUser_InvalidFullName_ExpectFullNameValidationErrors() throws Exception {
+        String invalidFullName = "aa";
+        var request = validRegistrationRequest();
+        request.setFullName(invalidFullName);
+
+        mockMvc.perform(
+                post("/v1/users")
+                        .content(json(request)).contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+        )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{'error':{'code':40000,'message':'Invalid Input','errorFields':[{'name':'fullName','message':'size must be between 5 and 200'}]}}"));
+    }
+
+    @Test
+    public void registerUser_InvalidPassword_ExpectFullNameValidationErrors() throws Exception {
+        String invalidPassword = "d";
+        var request = validRegistrationRequest();
+        request.setPassword(invalidPassword);
+
+        mockMvc.perform(
+                post("/v1/users")
+                        .content(json(request)).contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+        )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{'error':{'code':40000,'message':'Invalid Input','errorFields':[{'name':'password','message':'size must be between 5 and 100'}]}}"));
+    }
+
+
+
+    @Test
+    public void registerUser_ExistingEmail_ExpectError() throws Exception {
+        var request = validRegistrationRequest();
+
+        when(userService.registerUser(any(User.class))).thenThrow(new BadRequestException("Email superman@gmail.com is already taken"));
+
+        mockMvc.perform(
+                post("/v1/users")
+                        .content(json(request)).contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+        )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{'error':{'code':40000,'message':'Email superman@gmail.com is already taken'}}"));
+    }
+
+    @Test
+    public void registerUser_ValidUser_ExpectUserCreated() throws Exception {
+        var registrationRequest = validRegistrationRequest();
+        mockMvc.perform(post("/v1/users").content(json(registrationRequest)).contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{'data':{'message':'User registered successfully'}}"));
     }
 
     @Test

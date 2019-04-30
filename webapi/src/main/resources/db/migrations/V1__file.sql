@@ -1,15 +1,15 @@
 create table users
 (
 	id bigint(20) auto_increment,
-	email varchar(100) not null,
+	email varchar(200) not null,
 	encrypted_password varchar(100) not null,
 	role int(1) not null,
 	enabled tinyint(1) default 1 not null,
-	full_name varchar(100) not null,
+	full_name varchar(200) not null,
 	daily_calories_threshold int null,
 	constraint users_pk
 		primary key (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 create unique index users_email_uindex
 	on users (email);
@@ -24,7 +24,7 @@ create table meals
 	consumed_by bigint not null,
 	constraint meals_pk primary key (id),
 	constraint meals_users_id_fk foreign key (consumed_by) references users (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 create index meals_consumed_by_consumed_on_index
 	on meals (consumed_by asc, consumed_on desc);

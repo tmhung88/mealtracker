@@ -1,6 +1,8 @@
 package com.mealtracker.services;
 
+import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
+import com.mealtracker.exceptions.BadRequestException;
 import com.mealtracker.repositories.UserRepository;
 import com.mealtracker.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,15 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User addUser(User user) {
-        if (!user.getPassword().isEmpty()) {
-            user.setEncryptedPassword(passwordEncoder.encode(user.getPassword()));
+    public User registerUser(User user) {
+        Optional<User> existingUser = findByEmail(user.getEmail());
+        if (existingUser.isPresent()) {
+            throw new BadRequestException(String.format("Email %s is already taken", user.getEmail()));
         }
-        userRepository.save(user);
-        return user;
+        user.setRole(Role.REGULAR_USER);
+        user.setEnabled(true);
+        user.setEncryptedPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 
     public Optional<User> findByEmail(String email) {

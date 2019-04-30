@@ -1,6 +1,5 @@
 package com.mealtracker.payloads;
 
-import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
 import lombok.Data;
 
@@ -25,8 +24,6 @@ public class UserRegistrationRequest {
         user.setEmail(email);
         user.setFullName(fullName);
         user.setPassword(password);
-        user.setEnabled(true);
-        user.setRole(Role.REGULAR_USER);
         return user;
     }
 }

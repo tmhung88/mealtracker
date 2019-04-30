@@ -35,11 +35,18 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public @ResponseBody
-    ErrorEnvelop handleInvalidInputs(MethodArgumentNotValidException ex) {
+    ErrorEnvelop handleLibraryValidationException(MethodArgumentNotValidException ex) {
         var errorFields = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> new ErrorField(error.getField(), error.getDefaultMessage()))
                 .collect(Collectors.toList());
         return new ErrorEnvelop(Error.of(40000, "Invalid Input", errorFields));
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadRequestException.class)
+    public @ResponseBody
+    ErrorEnvelop handleAppValidationException(BadRequestException ex) {
+        return new ErrorEnvelop(ex.getError());
     }
 
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)

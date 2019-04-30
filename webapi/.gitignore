@@ -13,5 +13,5 @@ target
 HELP.md
 
 ### Docker ###
-local-env/mysql
-prod-env/mysql
+local-env/mysql/data
+prod-env/mysql/data

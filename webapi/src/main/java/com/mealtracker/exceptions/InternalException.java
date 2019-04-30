@@ -1,16 +1,10 @@
 package com.mealtracker.exceptions;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public class InternalException extends RuntimeException {
+public class InternalException extends AppException {
+    private static final int INTERNAL_SERVER_CODE = 50000;
 
     public InternalException(String message) {
-        super(message);
+        super(INTERNAL_SERVER_CODE, message);
     }
 
-    public InternalException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }
