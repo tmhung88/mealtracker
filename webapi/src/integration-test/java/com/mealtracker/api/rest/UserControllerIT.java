@@ -2,18 +2,19 @@ package com.mealtracker.api.rest;
 
 import com.mealtracker.MealTrackerApplication;
 import com.mealtracker.config.WebSecurityConfig;
-import com.mealtracker.services.HelloService;
+import com.mealtracker.domains.User;
 import com.mealtracker.services.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashMap;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -22,33 +23,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = {HelloController.class})
+@WebMvcTest(controllers = {UserController.class})
 @ContextConfiguration(classes={MealTrackerApplication.class, WebSecurityConfig.class})
-public class HelloControllerIT {
+public class UserControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private HelloService helloService;
-
-    @MockBean
     private UserService userService;
 
+    @Test
+    public void findByEmail_ExistingEmail_ExpectResultReturn() throws Exception {
+        User user = new User();
+        user.setEmail("superman@gmail.com");
+        user.setFullName("Superman");
+        when(userService.findByEmail(eq(user.getEmail()))).thenReturn(Optional.of(user));
 
+        mockMvc.perform(get(String.format("/v1/users?email=%s", user.getEmail())))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{'data':{'fullName':'Superman','email':'superman@gmail.com'}}"));
+    }
 
     @Test
-    public void auth_apitest() throws Exception {
-        String name = "hung";
-        var response = new HashMap<String, String>();
-        response.put("name", name);
-        when(helloService.greet(eq(name))).thenReturn(response);
+    public void findByEmail_UnknownEmail_ExpectNoResultReturn() throws Exception {
+        String unknownEmail = "unknownEmail";
+        when(userService.findByEmail(eq(unknownEmail))).thenReturn(Optional.empty());
 
-        mockMvc.perform(
-                get("/v1/hello/auth/hung")
-                .header("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJwcml2aWxlZ2VzIjpbIk1ZX01FQUxTIl0sInJvbGUiOiJSRUdVTEFSX1VTRVIiLCJmdWxsTmFtZSI6IlJlZ3VsYXIgVXNlciIsImlkIjozLCJlbWFpbCI6InVzZXJAZ21haWwuY29tIn0.0Z7ny6qmSUbwrF5JfnQmwFqDMw_o_-9uWwFWNdefIugEh_R3H3S3wlyJgIJ9TazMrg2i4ZGA6CjBaPYrEZJxlg")
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().string("{\"name\":\"hung\"}"));
+        mockMvc.perform(get(String.format("/v1/users?email=%s", unknownEmail)))
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
+                .andExpect(content().json("{'error':{'code':40400,'message':'User not found with the given email'}}"));
     }
 }

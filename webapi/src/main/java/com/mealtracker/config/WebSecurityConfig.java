@@ -74,12 +74,10 @@ public class WebSecurityConfig {
                     .exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint()).and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                     .authorizeRequests()
-//                .antMatchers("/v1/user/checkUsernameAvailability", "/v1/user/checkEmailAvailability").permitAll()
-                    .antMatchers(GET, "/v1/hello/unauth/**").permitAll() // sign-up
-                    .antMatchers(POST, "/v1/users").permitAll() // sign-up
-                    .antMatchers(POST, "/v1/sessions").permitAll() // sign-in
+                        .regexMatchers(GET, "\\/v1\\/users\\/?\\?email=.*").permitAll()
+                        .antMatchers(POST, "/v1/users").permitAll() // sign-up
+                        .antMatchers(POST, "/v1/sessions").permitAll() // sign-in
                     .anyRequest().authenticated();
-
             // Add our custom JWT security filter
             http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         }

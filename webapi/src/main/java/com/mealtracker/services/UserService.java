@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 public class UserService implements UserDetailsService {
@@ -27,6 +29,10 @@ public class UserService implements UserDetailsService {
         }
         userRepository.save(user);
         return user;
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     public UserDetails loadUserById(Long id) {
