@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = {HelloController.class})
 @ContextConfiguration(classes={MealTrackerApplication.class, WebSecurityConfig.class})
-public class HelloControllerTest {
+public class HelloControllerIT {
 
     @Autowired
     private MockMvc mockMvc;

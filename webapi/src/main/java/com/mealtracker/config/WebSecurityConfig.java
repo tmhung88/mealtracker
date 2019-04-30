@@ -5,7 +5,6 @@ import com.mealtracker.security.RestAuthenticationEntryPoint;
 import com.mealtracker.security.jwt.JwtAuthenticationFilter;
 import com.mealtracker.security.jwt.JwtTokenProvider;
 import com.mealtracker.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,25 +29,7 @@ import static org.springframework.http.HttpMethod.POST;
         jsr250Enabled = true,
         prePostEnabled = true
 )
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private JwtProperties jwtProperties;
-
-    @Override
-    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService)
-                .passwordEncoder(passwordEncoder());
-    }
-
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+public class WebSecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,8 +37,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtProperties jwtProperties) {
-        var jwtTokenProvider =  new JwtTokenProvider(jwtProperties.getSecretKey(), jwtProperties.getExpirationInMs());
+    public JwtTokenProvider jwtTokenProvider(JwtProperties jwtProperties) {
+        return new JwtTokenProvider(jwtProperties.getSecretKey(), jwtProperties.getExpirationInMs());
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
         return new JwtAuthenticationFilter(jwtTokenProvider);
     }
 
@@ -70,21 +55,46 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        return authProvider;
 //    }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .cors().and().csrf().disable()
-            .exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint()).and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-            .authorizeRequests()
+    @Configuration
+    public static class AppWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+        private final UserService userService;
+        private final PasswordEncoder passwordEncoder;
+        private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+        public AppWebSecurityConfigurerAdapter(UserService userService, PasswordEncoder passwordEncoder, JwtAuthenticationFilter jwtAuthenticationFilter) {
+            this.userService = userService;
+            this.passwordEncoder = passwordEncoder;
+            this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .cors().and().csrf().disable()
+                    .exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint()).and()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                    .authorizeRequests()
 //                .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability").permitAll()
-                .antMatchers(GET, "/api/hello/unauth/**").permitAll() // sign-up
-                .antMatchers(POST, "/api/users").permitAll() // sign-up
-                .antMatchers(POST, "/api/sessions").permitAll() // sign-in
-                .anyRequest().authenticated();
+                    .antMatchers(GET, "/api/hello/unauth/**").permitAll() // sign-up
+                    .antMatchers(POST, "/api/users").permitAll() // sign-up
+                    .antMatchers(POST, "/api/sessions").permitAll() // sign-in
+                    .anyRequest().authenticated();
 
-        // Add our custom JWT security filter
-        http.addFilterBefore(jwtAuthenticationFilter(jwtProperties), UsernamePasswordAuthenticationFilter.class);
+            // Add our custom JWT security filter
+            http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        }
 
+
+        @Override
+        protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+            auth.userDetailsService(userService)
+                    .passwordEncoder(passwordEncoder);
+        }
+
+        @Bean
+        @Override
+        public AuthenticationManager authenticationManagerBean() throws Exception {
+            return super.authenticationManagerBean();
+        }
     }
 }
