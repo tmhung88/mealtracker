@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.mealtracker.payloads.CreateSessionResponse.bearerToken;
 
 @RestController
-@RequestMapping("/api/sessions")
+@RequestMapping("/v1/sessions")
 public class SessionController {
 
     @Autowired

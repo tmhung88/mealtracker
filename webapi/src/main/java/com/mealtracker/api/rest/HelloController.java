@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/hello")
+@RequestMapping("/v1/hello")
 public class HelloController {
 
     @Autowired

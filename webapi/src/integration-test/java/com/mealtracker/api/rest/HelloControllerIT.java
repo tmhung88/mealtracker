@@ -43,7 +43,7 @@ public class HelloControllerIT {
         response.put("name", name);
         when(helloService.greet(eq(name))).thenReturn(response);
 
-        mockMvc.perform(get("/api/hello/unauth/hung"))
+        mockMvc.perform(get("/v1/hello/unauth/hung"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"name\":\"hung\"}"));
     }
@@ -57,8 +57,8 @@ public class HelloControllerIT {
         when(helloService.greet(eq(name))).thenReturn(response);
 
         mockMvc.perform(
-                get("/api/hello/auth/hung")
-                .header("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJwcml2aWxlZ2VzIjpbIk1ZX01FQUxTIl0sInJvbGUiOiJSRUdVTEFSX1VTRVIiLCJmdWxsTmFtZSI6IlJlZ3VsYXIgVXNlciIsImlkIjozLCJlbWFpbCI6InVzZXJAZ21haWwuY29tIn0.0Z7ny6qmSUbwrF5JfnQmwFqDMw_o_-9uWwFWNdefIugEh_R3H3S3wlyJgIJ9TazMrg2i4ZGA6CjBaPYrEZJxlg")
+                get("/v1/hello/auth/hung")
+                        .header("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJwcml2aWxlZ2VzIjpbIk1ZX01FQUxTIl0sInJvbGUiOiJSRUdVTEFSX1VTRVIiLCJmdWxsTmFtZSI6IlJlZ3VsYXIgVXNlciIsImlkIjozLCJlbWFpbCI6InVzZXJAZ21haWwuY29tIn0.0Z7ny6qmSUbwrF5JfnQmwFqDMw_o_-9uWwFWNdefIugEh_R3H3S3wlyJgIJ9TazMrg2i4ZGA6CjBaPYrEZJxlg")
         )
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"name\":\"hung\"}"));
