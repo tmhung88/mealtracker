@@ -2,6 +2,7 @@ package com.mealtracker.repositories;
 
 import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
+import com.mealtracker.domains.UserSettings;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +24,10 @@ public class UserRepositoryIT {
         user.setFullName("Hello World");
         user.setRole(Role.ADMIN);
         user.setEncryptedPassword("asdfkl;jdashfd");
+
+        var settings = new UserSettings();
+        settings.setDailyCalorieLimit(100);
+        user.setUserSettings(settings);
         userRepository.save(user);
 
 

@@ -61,7 +61,7 @@ public class UserServiceTest {
 
         userService.registerUser(user);
 
-        verify(userRepository).save(argThat(new RegistrationUserMatcher(expectation)));
+        verify(userRepository).save(registeredUser(expectation));
     }
 
     private User validRegistrationUser() {
@@ -70,6 +70,10 @@ public class UserServiceTest {
         user.setPassword("helloworld");
         user.setFullName("Superman");
         return user;
+    }
+
+    private User registeredUser(User expectCreatedUser) {
+        return argThat(new RegistrationUserMatcher(expectCreatedUser));
     }
 
     class RegistrationUserMatcher implements ArgumentMatcher<User> {
@@ -90,4 +94,6 @@ public class UserServiceTest {
                     expectation.isEnabled() == right.isEnabled();
         }
     }
+
+
 }

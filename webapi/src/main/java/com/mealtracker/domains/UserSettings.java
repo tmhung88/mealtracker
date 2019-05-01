@@ -9,6 +9,6 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class UserSettings {
 
-    @Column(name = "daily_calorie_limit")
-    private Integer dailyCalorieLimit;
+    @Column(name = "daily_calorie_limit", nullable = false)
+    private int dailyCalorieLimit = 0;
 }
