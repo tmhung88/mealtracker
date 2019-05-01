@@ -72,4 +72,8 @@ public class UserPrincipal implements UserDetails {
     public boolean isEnabled() {
         return user.isEnabled();
     }
+
+    public CurrentUser toCurrentUser() {
+        return new CurrentUser(this);
+    }
 }

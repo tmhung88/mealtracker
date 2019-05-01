@@ -1,10 +1,9 @@
 package com.mealtracker.domains;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,7 +16,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Setter @Getter @NoArgsConstructor
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +41,8 @@ public class User {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
+    @Embedded
+    private UserSettings userSettings;
 
     public List<Privilege> getPrivileges() {
         return role.getPrivileges();
