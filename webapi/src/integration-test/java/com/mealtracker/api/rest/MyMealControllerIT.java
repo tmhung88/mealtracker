@@ -3,7 +3,7 @@ package com.mealtracker.api.rest;
 import com.mealtracker.MealTrackerApplication;
 import com.mealtracker.config.WebSecurityConfig;
 import com.mealtracker.domains.Meal;
-import com.mealtracker.services.MyMealService;
+import com.mealtracker.services.mymeal.MyMealService;
 import com.mealtracker.services.mymeal.DeleteMyMealsInput;
 import com.mealtracker.services.user.UserService;
 import com.mealtracker.utils.matchers.CurrentUserMatchers;

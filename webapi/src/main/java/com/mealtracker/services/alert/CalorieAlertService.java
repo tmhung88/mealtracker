@@ -1,7 +1,7 @@
 package com.mealtracker.services.alert;
 
 import com.mealtracker.security.CurrentUser;
-import com.mealtracker.services.MyMealService;
+import com.mealtracker.services.mymeal.MyMealService;
 import com.mealtracker.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

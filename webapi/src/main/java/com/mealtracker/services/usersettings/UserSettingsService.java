@@ -1,7 +1,7 @@
-package com.mealtracker.services;
+package com.mealtracker.services.usersettings;
 
 import com.mealtracker.domains.UserSettings;
-import com.mealtracker.payloads.UpdateMySettingsRequest;
+import com.mealtracker.services.usersettings.UpdateMySettingsInput;
 import com.mealtracker.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +19,10 @@ public class UserSettingsService {
         return user.getUserSettings();
     }
 
-    public UserSettings updateUserSettings(long userId, UpdateMySettingsRequest request) {
+    public UserSettings updateUserSettings(long userId, UpdateMySettingsInput input) {
         var user = userRepository.getOne(userId);
-        if (request.getDailyCalorieLimit() != null) {
-            user.getUserSettings().setDailyCalorieLimit(request.getDailyCalorieLimit());
+        if (input.isDailyCalorieLimitPatched()) {
+            user.getUserSettings().setDailyCalorieLimit(input.getDailyCalorieLimit());
         }
         return userRepository.save(user).getUserSettings();
     }

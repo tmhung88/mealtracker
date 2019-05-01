@@ -1,4 +1,4 @@
-package com.mealtracker.services;
+package com.mealtracker.services.mymeal;
 
 import com.mealtracker.domains.Meal;
 import com.mealtracker.exceptions.AuthorizationAppException;

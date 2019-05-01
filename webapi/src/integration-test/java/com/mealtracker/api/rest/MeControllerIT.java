@@ -4,9 +4,9 @@ package com.mealtracker.api.rest;
 import com.mealtracker.MealTrackerApplication;
 import com.mealtracker.config.WebSecurityConfig;
 import com.mealtracker.domains.UserSettings;
-import com.mealtracker.payloads.UpdateMySettingsRequest;
-import com.mealtracker.services.UserSettingsService;
 import com.mealtracker.services.user.UserService;
+import com.mealtracker.services.usersettings.UpdateMySettingsInput;
+import com.mealtracker.services.usersettings.UserSettingsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,8 +96,8 @@ public class MeControllerIT {
     }
 
 
-    public UpdateMySettingsRequest updateCalorieLimitRequest(Integer calorieLimit) {
-        var request = new UpdateMySettingsRequest();
+    public UpdateMySettingsInput updateCalorieLimitRequest(Integer calorieLimit) {
+        var request = new UpdateMySettingsInput();
         request.setDailyCalorieLimit(calorieLimit);
         return request;
     }

@@ -2,8 +2,9 @@ package com.mealtracker.services;
 
 import com.mealtracker.domains.User;
 import com.mealtracker.domains.UserSettings;
-import com.mealtracker.payloads.UpdateMySettingsRequest;
 import com.mealtracker.repositories.UserRepository;
+import com.mealtracker.services.usersettings.UpdateMySettingsInput;
+import com.mealtracker.services.usersettings.UserSettingsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
@@ -68,8 +69,8 @@ public class UserSettingsServiceTest {
         return user;
     }
 
-    private UpdateMySettingsRequest updateSettingsRequest(Integer calorieLimit) {
-        var request = new UpdateMySettingsRequest();
+    private UpdateMySettingsInput updateSettingsRequest(Integer calorieLimit) {
+        var request = new UpdateMySettingsInput();
         request.setDailyCalorieLimit(calorieLimit);
         return request;
     }
