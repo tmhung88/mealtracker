@@ -1,13 +1,15 @@
 package com.mealtracker.payloads;
 
 import lombok.Value;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Page;
 
 @Value
 public class PaginationMeta {
-    private final boolean hasNext;
-    private final boolean hasPrevious;
-    public static <T> PaginationMeta of(Slice<T> slice) {
-        return new PaginationMeta(slice.hasNext(), slice.hasPrevious());
+
+    private final long totalElements;
+    private final int totalPages;
+
+    public static <T> PaginationMeta of(Page<T> page) {
+        return new PaginationMeta(page.getTotalElements(), page.getTotalPages());
     }
 }

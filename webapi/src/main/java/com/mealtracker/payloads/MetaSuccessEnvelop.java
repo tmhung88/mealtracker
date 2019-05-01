@@ -3,7 +3,7 @@ package com.mealtracker.payloads;
 import lombok.Value;
 
 @Value
-public class MetaSuccesEnvelop<D, M> {
+public class MetaSuccessEnvelop<D, M> {
 
     private final D data;
 

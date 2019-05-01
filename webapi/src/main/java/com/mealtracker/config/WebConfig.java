@@ -2,6 +2,7 @@ package com.mealtracker.config;
 
 import com.mealtracker.config.rest.CurrentUserMethodArgumentResolver;
 import com.mealtracker.exceptions.ErrorIdGenerator;
+import com.mealtracker.services.pagination.PageableBuilder;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,5 +54,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public ErrorIdGenerator errorIdGenerator() {
         return new ErrorIdGenerator();
+    }
+
+    @Bean
+    public PageableBuilder pageableBuilder() {
+        return new PageableBuilder();
     }
 }

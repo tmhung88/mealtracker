@@ -20,4 +20,9 @@ public class BadRequestAppException extends AppException {
     public static BadRequestAppException emailTaken(String email) {
         return new BadRequestAppException(SPECIFIC_BAD_INPUT, String.format("Email %s is already taken", email));
     }
+
+    public static BadRequestAppException invalidDateTimeRange(String fromFieldName, String toFieldName) {
+        var errorMessage = String.format("%s must be before %s", fromFieldName, toFieldName);
+        return new BadRequestAppException(SPECIFIC_BAD_INPUT, errorMessage);
+    }
 }

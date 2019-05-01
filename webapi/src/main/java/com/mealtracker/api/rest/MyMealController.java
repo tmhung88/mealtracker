@@ -1,10 +1,9 @@
 package com.mealtracker.api.rest;
 
 import com.mealtracker.payloads.MessageResponse;
-import com.mealtracker.payloads.MetaSuccesEnvelop;
+import com.mealtracker.payloads.MetaSuccessEnvelop;
 import com.mealtracker.payloads.PaginationMeta;
 import com.mealtracker.payloads.SuccessEnvelop;
-import com.mealtracker.payloads.mymeal.ListMyMealsResponse;
 import com.mealtracker.payloads.mymeal.MyMealResponse;
 import com.mealtracker.security.CurrentUser;
 import com.mealtracker.services.MyMealService;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/users/me/meals")
@@ -33,10 +33,10 @@ public class MyMealController {
     private MyMealService myMealService;
 
     @GetMapping
-    public MetaSuccesEnvelop<ListMyMealsResponse, PaginationMeta> listMeal(
-                                                                           CurrentUser currentUser) {
-        var mealSlice = myMealService.listMeals(new ListMyMealsInput(), currentUser);
-        return ListMyMealsResponse.envelop(mealSlice);
+    public MetaSuccessEnvelop<List<MyMealResponse>, PaginationMeta> listMeal(@Valid ListMyMealsInput input,
+                                                                             CurrentUser currentUser) {
+        var mealPage = myMealService.listMeals(input, currentUser);
+        return MyMealResponse.envelop(mealPage);
     }
 
     @PostMapping
