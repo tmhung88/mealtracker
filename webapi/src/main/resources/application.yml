@@ -8,6 +8,9 @@ spring:
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     properties:
       hibernate.create_empty_composites.enabled: true
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
 
 server:
   port: 9000
