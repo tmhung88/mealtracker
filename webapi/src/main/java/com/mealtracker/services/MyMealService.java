@@ -9,10 +9,12 @@ import com.mealtracker.security.CurrentUser;
 import com.mealtracker.services.mymeal.DeleteMyMealsInput;
 import com.mealtracker.services.mymeal.ListMyMealsInput;
 import com.mealtracker.services.mymeal.MyMealInput;
+import com.mealtracker.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +60,10 @@ public class MyMealService {
         return new ArrayList<>();
     }
 
+    public int calculateDailyCalories(LocalDate date, CurrentUser currentUser) {
+        var meals = mealRepository.findMealByConsumedDateAndConsumerAndDeleted(date, currentUser.toUser(), false);
+        return meals.stream().mapToInt(Meal::getCalories).sum();
+    }
 
     private Meal getExistingMeal(long mealId) {
         return mealRepository.findMealByIdAndDeleted(mealId, false)

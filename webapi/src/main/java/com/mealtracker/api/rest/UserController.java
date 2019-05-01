@@ -7,8 +7,8 @@ import com.mealtracker.payloads.MessageResponse;
 import com.mealtracker.payloads.PublicUserInfoResponse;
 import com.mealtracker.payloads.SuccessEnvelop;
 import com.mealtracker.payloads.UserListResponse;
-import com.mealtracker.payloads.UserRegistrationRequest;
-import com.mealtracker.services.UserService;
+import com.mealtracker.services.user.UserRegistrationInput;
+import com.mealtracker.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +28,8 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public SuccessEnvelop<MessageResponse> registerUser(@Valid @RequestBody UserRegistrationRequest registrationRequest) {
-        userService.registerUser(registrationRequest.toUser());
+    public SuccessEnvelop<MessageResponse> registerUser(@Valid @RequestBody UserRegistrationInput registrationInput) {
+        userService.registerUser(registrationInput);
         return MessageResponse.of("User registered successfully");
     }
 

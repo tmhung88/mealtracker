@@ -4,6 +4,8 @@ import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
 import com.mealtracker.domains.UserSettings;
 import com.mealtracker.exceptions.BadRequestAppException;
+import com.mealtracker.exceptions.ResourceName;
+import com.mealtracker.exceptions.ResourceNotFoundAppException;
 import com.mealtracker.repositories.UserRepository;
 import com.mealtracker.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +28,13 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User registerUser(User user) {
+    public User registerUser(UserRegistrationInput registrationInput) {
+        var user = registrationInput.toUser();
         Optional<User> existingUser = findByEmail(user.getEmail());
         if (existingUser.isPresent()) {
             throw BadRequestAppException.emailTaken(user.getEmail());
         }
         user.setRole(Role.REGULAR_USER);
-        user.setEnabled(true);
         user.setEncryptedPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserSettings(new UserSettings());
         return userRepository.save(user);
@@ -42,9 +44,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
-    public Optional<User> findActiveUser(long userId) {
-        // TODO: Implement it
-        return Optional.empty();
+    public User getExistingUser(long userId) {
+        return userRepository.findUserByIdAndDeleted(userId, false)
+                .orElseThrow(() -> ResourceNotFoundAppException.resourceNotInDb(ResourceName.USER));
     }
 
     @Override
