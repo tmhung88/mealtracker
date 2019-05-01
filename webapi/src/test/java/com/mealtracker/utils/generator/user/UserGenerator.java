@@ -13,10 +13,21 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * Generate sql insert statements for the users table
+ */
 @Slf4j
 public class UserGenerator {
 
     public static void main(String[] args) {
+        /**
+         * With this config, we generate 396 users in total. Their ids starts from 100
+         * - 2 admins
+         * - 4 user managers
+         * - 50 deleted users
+         *
+         * The login password for all users are test1234
+         */
         var config = new UserGeneratorConfig();
         config.setStartingId(100);
         config.setNumberOfUsers(396);
@@ -25,8 +36,7 @@ public class UserGenerator {
         config.setNumberOfDeletedUsers(50);
 
         userGenerator(config).generate();
-        log.info("{} users generated. Please find the generated file in the project directory at {}",
-                config.getNumberOfUsers(), config.getOutputFile());
+
     }
 
     private final List<WritableUser> users = new LinkedList<>();
@@ -58,11 +68,18 @@ public class UserGenerator {
         setAdmins();
         setUserManagers();
         deleteUsers();
+
+        fileWriter.write(config.getOutputFile(), users, (Writable::toMySQLInsert));
+        logStatistics();
+    }
+
+    public void logStatistics() {
         log.debug("There are {} regular users", countUsers(WritableUser::isRegularUser));
         log.debug("There are {} user managers", countUsers(WritableUser::isUserManager));
         log.debug("There are {} admins", countUsers(WritableUser::isAdmin));
         log.debug("There are {} deleted users", countUsers(WritableUser::isDeleted));
-        fileWriter.write(config.getOutputFile(), users, (Writable::toMySQLInsert));
+        log.info("{} users generated in total. Please find the generated file in the project directory at {}",
+                config.getNumberOfUsers(), config.getOutputFile());
     }
 
     public void setAdmins() {
