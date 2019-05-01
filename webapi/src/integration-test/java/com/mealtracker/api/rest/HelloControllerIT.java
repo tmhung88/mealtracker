@@ -1,6 +1,7 @@
 package com.mealtracker.api.rest;
 
 import com.mealtracker.MealTrackerApplication;
+import com.mealtracker.TestUser;
 import com.mealtracker.config.WebSecurityConfig;
 import com.mealtracker.services.HelloService;
 import com.mealtracker.services.UserService;
@@ -15,15 +16,15 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
 
+import static com.mealtracker.request.AppRequestBuilders.get;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = {HelloController.class})
-@ContextConfiguration(classes={MealTrackerApplication.class, WebSecurityConfig.class})
+@ContextConfiguration(classes = {MealTrackerApplication.class, WebSecurityConfig.class})
 public class HelloControllerIT {
 
     @Autowired
@@ -36,7 +37,6 @@ public class HelloControllerIT {
     private UserService userService;
 
 
-
     @Test
     public void auth_test() throws Exception {
         String name = "hung";
@@ -44,10 +44,7 @@ public class HelloControllerIT {
         response.put("name", name);
         when(helloService.greet(eq(name))).thenReturn(response);
 
-        mockMvc.perform(
-                get("/v1/hello/auth/hung")
-                .header("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJwcml2aWxlZ2VzIjpbIk1ZX01FQUxTIl0sInJvbGUiOiJSRUdVTEFSX1VTRVIiLCJmdWxsTmFtZSI6IlJlZ3VsYXIgVXNlciIsImlkIjozLCJlbWFpbCI6InVzZXJAZ21haWwuY29tIn0.0Z7ny6qmSUbwrF5JfnQmwFqDMw_o_-9uWwFWNdefIugEh_R3H3S3wlyJgIJ9TazMrg2i4ZGA6CjBaPYrEZJxlg")
-        )
+        mockMvc.perform(get("/v1/hello/auth/hung").auth(TestUser.USER))
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"name\":\"hung\"}"));
     }
