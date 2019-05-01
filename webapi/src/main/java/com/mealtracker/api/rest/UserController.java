@@ -1,7 +1,8 @@
 package com.mealtracker.api.rest;
 
 import com.mealtracker.domains.User;
-import com.mealtracker.exceptions.ResourceNotFoundException;
+import com.mealtracker.exceptions.ResourceName;
+import com.mealtracker.exceptions.ResourceNotFoundAppException;
 import com.mealtracker.payloads.MessageResponse;
 import com.mealtracker.payloads.PublicUserInfoResponse;
 import com.mealtracker.payloads.SuccessEnvelop;
@@ -35,7 +36,7 @@ public class UserController {
     @GetMapping(params = "email")
     public SuccessEnvelop<PublicUserInfoResponse> findUserByEmail(@RequestParam String email) {
         User user = userService.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with the given email"));
+                .orElseThrow(() -> ResourceNotFoundAppException.resourceNotInDb(ResourceName.USER));
         return PublicUserInfoResponse.of(user);
     }
 

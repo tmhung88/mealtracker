@@ -12,7 +12,15 @@ public class AppRequestBuilders {
         return new AppRequestBuilder(MockMvcRequestBuilders.post(urlTemplate));
     }
 
+    public static AppRequestBuilder put(String urlTemplate) {
+        return new AppRequestBuilder(MockMvcRequestBuilders.put(urlTemplate));
+    }
+
     public static AppRequestBuilder patch(String urlTemplate) {
         return new AppRequestBuilder(MockMvcRequestBuilders.patch(urlTemplate));
+    }
+
+    public static AppRequestBuilder delete(String urlTemplate) {
+        return new AppRequestBuilder(MockMvcRequestBuilders.delete(urlTemplate));
     }
 }

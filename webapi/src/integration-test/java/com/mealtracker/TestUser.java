@@ -53,5 +53,30 @@ public class TestUser {
             .token("Bearer eyJhbGciOiJIUzUxMiJ9.eyJwcml2aWxlZ2VzIjpbIk1ZX01FQUxTIl0sInJvbGUiOiJSRUdVTEFSX1VTRVIiLCJmdWxsTmFtZSI6IlJlZ3VsYXIgVXNlciIsImlkIjozLCJlbWFpbCI6InJlZ3VsYXJfdXNlckBnbWFpbC5jb20ifQ.p_VOz4XdeG8oxIjoZAN2vm-xxXt_FYH9sphVhmZEDdl3GPtHefHk4pPtxZ9yxrnhSQvrfJKDUMLoNgs-XkNW1w")
             .build();
 
+    public static final TestUser NO_MY_MEAL = TestUser.builder()
+            .id(4L)
+            .email("no_my_meal@gmail.com")
+            .fullName("No My Meal")
+            .enabled(true)
+            .role(Role.REGULAR_USER).privileges(TestPrivilege.exclude(MY_MEALS))
+            .token("Bearer eyJhbGciOiJIUzUxMiJ9.eyJwcml2aWxlZ2VzIjpbIlVTRVJfTUFOQUdFTUVOVCIsIk1FQUxfTUFOQUdFTUVOVCJdLCJyb2xlIjoiTk9fTVlfTUVBTCIsImZ1bGxOYW1lIjoiTm8gTXkgTWVhbCIsImlkIjo0LCJlbWFpbCI6Im5vX215X21lYWxAZ21haWwuY29tIn0.WHOysasy6N5leMCTfP7jfmp015Yr3-rWbIGB0HM7t6HDfNJJe4nZZvRFyFLfnIg5qSGTf7HsTDsGFgmf1HD8QA")
+            .build();
 
+    public static final TestUser NO_USER_MANAGEMENT = TestUser.builder()
+            .id(5L)
+            .email("no_user_managent@gmail.com")
+            .fullName("No User Management")
+            .enabled(true)
+            .role(Role.REGULAR_USER).privileges(TestPrivilege.exclude(USER_MANAGEMENT))
+            .token("Bearer eyJhbGciOiJIUzUxMiJ9.eyJwcml2aWxlZ2VzIjpbIk1ZX01FQUxTIiwiTUVBTF9NQU5BR0VNRU5UIl0sInJvbGUiOiJOT19VU0VSX01BTkFHRU1FTlQiLCJmdWxsTmFtZSI6Ik5vIFVzZXIgTWFuYWdlbWVudCIsImlkIjo1LCJlbWFpbCI6Im5vX3VzZXJfbWFuYWdlbnRAZ21haWwuY29tIn0.9n-dta54Vz_92c5RQP86AHzds8ZnySdQjvtI1LCFFy1-Mwy6tHAbA4pUxplibj-vCtZ61p4HDTkHcWfyVZDGRQ")
+            .build();
+
+    public static final TestUser NO_MEAL_MANAGEMENT = TestUser.builder()
+            .id(6L)
+            .email("no_meal_managent@gmail.com")
+            .fullName("No Meal Management")
+            .enabled(true)
+            .role(Role.REGULAR_USER).privileges(TestPrivilege.exclude(MEAL_MANAGEMENT))
+            .token("Bearer eyJhbGciOiJIUzUxMiJ9.eyJwcml2aWxlZ2VzIjpbIk1ZX01FQUxTIiwiVVNFUl9NQU5BR0VNRU5UIl0sInJvbGUiOiJOT19NRUFMX01BTkFHRU1FTlQiLCJmdWxsTmFtZSI6Ik5vIE1lYWwgTWFuYWdlbWVudCIsImlkIjo2LCJlbWFpbCI6Im5vX21lYWxfbWFuYWdlbnRAZ21haWwuY29tIn0.8sYrfGXS0loUD2P75_py796HzOz4W-RbDVzI2rr_zCujn7IbzVtlAnfPqcT4GBnNMZFhkoEWVIIsQ7EgZd-7mw")
+            .build();
 }

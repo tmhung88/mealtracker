@@ -1,21 +1,22 @@
 package com.mealtracker.domains;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "meals")
-@Setter @Getter @NoArgsConstructor
-public class Meal {
+@Data
+public class Meal implements Ownable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +25,24 @@ public class Meal {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "consumed_on", nullable = false)
-    private ZonedDateTime consumedOn;
+    @Column(name = "consumed_date", nullable = false)
+    private LocalDate consumedDate;
+
+    @Column(name = "consumed_time", nullable = false)
+    private LocalTime consumedTime;
 
     @Column(name = "calories", nullable = false)
     private Integer calories;
 
-    @Column(name = "consumed_by")
-    private Long consumedBy;
+    @ManyToOne
+    @JoinColumn(name = "consumer_id")
+    private User consumer;
+
+    @Column(name = "deleted")
+    private boolean deleted = false;
+
+    @Override
+    public User getOwner() {
+        return consumer;
+    }
 }

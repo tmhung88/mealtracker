@@ -10,7 +10,11 @@ import static com.mealtracker.domains.Privilege.USER_MANAGEMENT;
 public enum Role {
     REGULAR_USER(Arrays.asList(MY_MEALS)),
     USER_MANAGER(Arrays.asList(MY_MEALS, USER_MANAGEMENT)),
-    ADMIN(Arrays.asList(MY_MEALS, USER_MANAGEMENT, MEAL_MANAGEMENT));
+    ADMIN(Arrays.asList(MY_MEALS, USER_MANAGEMENT, MEAL_MANAGEMENT)),
+    NO_MY_MEAL(Arrays.asList(USER_MANAGEMENT, MEAL_MANAGEMENT)),
+    NO_USER_MANAGEMENT(Arrays.asList(MY_MEALS, MEAL_MANAGEMENT)),
+    NO_MEAL_MANAGEMENT(Arrays.asList(MY_MEALS, USER_MANAGEMENT)),
+    ;
 
     private final List<Privilege> privileges;
 
