@@ -1,6 +1,5 @@
 package com.mealtracker.exceptions;
 
-import com.mealtracker.payloads.Error;
 import com.mealtracker.payloads.ErrorEnvelop;
 import com.mealtracker.payloads.ErrorField;
 import lombok.extern.slf4j.Slf4j;
@@ -26,26 +25,26 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    @ExceptionHandler({ResourceNotFoundException.class})
+    @ExceptionHandler({ResourceNotFoundAppException.class})
     public @ResponseBody
-    ErrorEnvelop handleNotFoundException(ResourceNotFoundException ex) {
+    ErrorEnvelop handleNotFoundException(ResourceNotFoundAppException ex) {
         return new ErrorEnvelop(ex.getError());
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public @ResponseBody
-    ErrorEnvelop handleLibraryValidationException(MethodArgumentNotValidException ex) {
+    ErrorEnvelop handleBadRequestException(MethodArgumentNotValidException ex) {
         var errorFields = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> new ErrorField(error.getField(), error.getDefaultMessage()))
                 .collect(Collectors.toList());
-        return new ErrorEnvelop(Error.of(40000, "Invalid Input", errorFields));
+        return new ErrorEnvelop(BadRequestAppException.commonBadInputs(errorFields));
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(BadRequestException.class)
+    @ExceptionHandler(BadRequestAppException.class)
     public @ResponseBody
-    ErrorEnvelop handleAppValidationException(BadRequestException ex) {
+    ErrorEnvelop handleBadRequestException(BadRequestAppException ex) {
         return new ErrorEnvelop(ex.getError());
     }
 
@@ -53,30 +52,30 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({AuthenticationException.class })
     public @ResponseBody
     ErrorEnvelop handleAuthenticationException(AuthenticationException ex) {
-        log.info("40100 - You shall not pass!");
-        return new ErrorEnvelop(Error.of(40100, "No authentication token found. Please look at this document"));
+        return new ErrorEnvelop(AuthenticationAppException.missingToken());
     }
 
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     @ExceptionHandler({ AccessDeniedException.class })
     public @ResponseBody
-    ErrorEnvelop handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
-        log.info("40300 - You shall not pass!");
-        return new ErrorEnvelop(Error.of(40300, "You are not allowed to use this api"));
+    ErrorEnvelop handleAuthorizationException(AccessDeniedException ex, WebRequest request) {
+        return new ErrorEnvelop(AuthorizationAppException.apiAccessDenied());
+    }
+
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    @ExceptionHandler({ AuthorizationAppException.class })
+    public @ResponseBody
+    ErrorEnvelop handleAuthorizationException(AuthorizationAppException ex) {
+        return new ErrorEnvelop(ex.getError());
     }
 
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler({Exception.class, InternalException.class})
+    @ExceptionHandler({Exception.class, InternalAppException.class})
     public @ResponseBody
-    ErrorEnvelop handleException(Exception ex) {
+    ErrorEnvelop handleUnexpectedException(Exception ex) {
         String errorId = generator.generateUniqueId();
         log.error("Please investigate the error {}", errorId, ex);
-        String errorMessage = String.format("Oops! Please send us this id %s. We love to know what magic happened to you!", errorId);
-        return new ErrorEnvelop(Error.of(50000, errorMessage));
+        return new ErrorEnvelop(InternalAppException.unexpectException(errorId));
     }
-
-
-
-
 }

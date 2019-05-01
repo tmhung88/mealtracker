@@ -2,7 +2,8 @@ package com.mealtracker.services;
 
 import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
-import com.mealtracker.exceptions.BadRequestException;
+import com.mealtracker.domains.UserSettings;
+import com.mealtracker.exceptions.BadRequestAppException;
 import com.mealtracker.repositories.UserRepository;
 import com.mealtracker.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,12 @@ public class UserService implements UserDetailsService {
     public User registerUser(User user) {
         Optional<User> existingUser = findByEmail(user.getEmail());
         if (existingUser.isPresent()) {
-            throw new BadRequestException(String.format("Email %s is already taken", user.getEmail()));
+            throw BadRequestAppException.emailTaken(user.getEmail());
         }
         user.setRole(Role.REGULAR_USER);
         user.setEnabled(true);
         user.setEncryptedPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUserSettings(new UserSettings());
         return userRepository.save(user);
     }
 
@@ -40,10 +42,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
-    public UserDetails loadUserById(Long id) {
-        var user = userRepository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
-        return new UserPrincipal(user);
+    public Optional<User> findActiveUser(long userId) {
+        // TODO: Implement it
+        return Optional.empty();
     }
 
     @Override

@@ -3,7 +3,8 @@ package com.mealtracker.services;
 import com.mealtracker.AppErrorCode;
 import com.mealtracker.assertions.AppAssertions;
 import com.mealtracker.domains.User;
-import com.mealtracker.exceptions.BadRequestException;
+import com.mealtracker.domains.UserSettings;
+import com.mealtracker.exceptions.BadRequestAppException;
 import com.mealtracker.repositories.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,8 +43,8 @@ public class UserServiceTest {
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(new User()));
 
         AppAssertions.assertThatThrownBy(() -> userService.registerUser(user))
-                .isInstanceOf(BadRequestException.class)
-                .hasError(AppErrorCode.BAD_INPUT, "Email existing@mail.com is already taken");
+                .isInstanceOf(BadRequestAppException.class)
+                .hasError(AppErrorCode.SPECIFIC_BAD_INPUT, "Email existing@mail.com is already taken");
 
     }
 
@@ -58,6 +59,7 @@ public class UserServiceTest {
         expectation.setEncryptedPassword(encryptedPassword);
         expectation.setEnabled(true);
         expectation.setRole(REGULAR_USER);
+        expectation.setUserSettings(new UserSettings());
 
         userService.registerUser(user);
 
@@ -85,13 +87,14 @@ public class UserServiceTest {
         }
 
         @Override
-        public boolean matches(User right) {
-            return expectation.getEmail().equals(right.getEmail()) &&
-                    expectation.getEncryptedPassword().equals(right.getEncryptedPassword()) &&
-                    expectation.getFullName().equals(right.getFullName()) &&
-                    expectation.getRole().equals(right.getRole()) &&
-                    expectation.getPrivileges().equals(right.getPrivileges()) &&
-                    expectation.isEnabled() == right.isEnabled();
+        public boolean matches(User actual) {
+            return expectation.getEmail().equals(actual.getEmail()) &&
+                    expectation.getEncryptedPassword().equals(actual.getEncryptedPassword()) &&
+                    expectation.getFullName().equals(actual.getFullName()) &&
+                    expectation.getRole().equals(actual.getRole()) &&
+                    expectation.getPrivileges().equals(actual.getPrivileges()) &&
+                    expectation.isEnabled() == actual.isEnabled() &&
+                    expectation.getUserSettings().equals(actual.getUserSettings());
         }
     }
 
