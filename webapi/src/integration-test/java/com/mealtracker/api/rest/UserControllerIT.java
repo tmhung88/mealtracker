@@ -4,8 +4,8 @@ import com.mealtracker.MealTrackerApplication;
 import com.mealtracker.config.WebSecurityConfig;
 import com.mealtracker.domains.User;
 import com.mealtracker.exceptions.BadRequestAppException;
-import com.mealtracker.payloads.UserRegistrationRequest;
-import com.mealtracker.services.UserService;
+import com.mealtracker.services.user.UserRegistrationInput;
+import com.mealtracker.services.user.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import static com.mealtracker.TestError.RESOURCE_DATA_NOT_IN_DB;
 import static com.mealtracker.TestUser.USER;
 import static com.mealtracker.request.AppRequestBuilders.get;
 import static com.mealtracker.request.AppRequestBuilders.post;
-import static org.mockito.ArgumentMatchers.any;
+import static com.mealtracker.utils.matchers.UserRegistrationInputMatchers.email;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -102,7 +102,8 @@ public class UserControllerIT {
     public void registerUser_ExistingEmail_ExpectError() throws Exception {
         var input = registrationRequest();
 
-        when(userService.registerUser(any(User.class))).thenThrow(BadRequestAppException.emailTaken("superman@gmail.com"));
+        when(userService.registerUser(email(input.getEmail())))
+                .thenThrow(BadRequestAppException.emailTaken("superman@gmail.com"));
 
         mockMvc.perform(post("/v1/users").content(input))
                 .andExpect(BAD_SPECIFIC_INPUT.httpStatus())
@@ -131,8 +132,8 @@ public class UserControllerIT {
                 .andExpect(AUTHORIZATION_API_ACCESS_DENIED.json());
     }
 
-    UserRegistrationRequest registrationRequest() {
-        var request =  new UserRegistrationRequest();
+    UserRegistrationInput registrationRequest() {
+        var request =  new UserRegistrationInput();
         request.setEmail("superman@gmail.com");
         request.setFullName("Superman");
         request.setPassword("JusticeLeague");

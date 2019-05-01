@@ -6,6 +6,8 @@ import com.mealtracker.domains.User;
 import com.mealtracker.domains.UserSettings;
 import com.mealtracker.exceptions.BadRequestAppException;
 import com.mealtracker.repositories.UserRepository;
+import com.mealtracker.services.user.UserRegistrationInput;
+import com.mealtracker.services.user.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
@@ -37,12 +39,12 @@ public class UserServiceTest {
 
     @Test
     public void registerUser_ExistingUserEmail_ExpectException() {
-        User user = validRegistrationUser();
-        user.setEmail("existing@mail.com");
+        var registrationInput = validRegistrationInput();
+        registrationInput.setEmail("existing@mail.com");
 
-        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(new User()));
+        when(userRepository.findByEmail(registrationInput.getEmail())).thenReturn(Optional.of(new User()));
 
-        AppAssertions.assertThatThrownBy(() -> userService.registerUser(user))
+        AppAssertions.assertThatThrownBy(() -> userService.registerUser(registrationInput))
                 .isInstanceOf(BadRequestAppException.class)
                 .hasError(AppErrorCode.SPECIFIC_BAD_INPUT, "Email existing@mail.com is already taken");
 
@@ -51,27 +53,27 @@ public class UserServiceTest {
     @Test
     public void registerUser_ValidUser_ExpectUserStoredWithEncryptedPassword() {
         String encryptedPassword = "dfasdl57280573nl;adjfdslfj";
-        User user = validRegistrationUser();
-        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-        when(passwordEncoder.encode(user.getPassword())).thenReturn(encryptedPassword);
+        var registrationInput = validRegistrationInput();
+        when(userRepository.findByEmail(registrationInput.getEmail())).thenReturn(Optional.empty());
+        when(passwordEncoder.encode(registrationInput.getPassword())).thenReturn(encryptedPassword);
 
-        User expectation = validRegistrationUser();
+        User expectation = registrationInput.toUser();
         expectation.setEncryptedPassword(encryptedPassword);
-        expectation.setEnabled(true);
+        expectation.setDeleted(true);
         expectation.setRole(REGULAR_USER);
         expectation.setUserSettings(new UserSettings());
 
-        userService.registerUser(user);
+        userService.registerUser(registrationInput);
 
         verify(userRepository).save(registeredUser(expectation));
     }
 
-    private User validRegistrationUser() {
-        User user = new User();
-        user.setEmail("superman@gmail.com");
-        user.setPassword("helloworld");
-        user.setFullName("Superman");
-        return user;
+    private UserRegistrationInput validRegistrationInput() {
+        var registrationInput = new UserRegistrationInput();
+        registrationInput.setEmail("superman@gmail.com");
+        registrationInput.setPassword("helloworld");
+        registrationInput.setFullName("Superman");
+        return registrationInput;
     }
 
     private User registeredUser(User expectCreatedUser) {

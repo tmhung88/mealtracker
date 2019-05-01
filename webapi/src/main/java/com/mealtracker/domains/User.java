@@ -32,8 +32,8 @@ public class User {
     @Column(name = "encrypted_password", nullable = false)
     private String encryptedPassword;
 
-    @Column(name = "enabled", nullable = false)
-    private boolean enabled = true;
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = true;
 
     @Column(name = "role")
     @Enumerated(EnumType.ORDINAL)
@@ -47,5 +47,18 @@ public class User {
 
     public List<Privilege> getPrivileges() {
         return role.getPrivileges();
+    }
+
+    public boolean isDailyCalorieLimitExceeded(int totalCalories) {
+        var isCalorieAlertDisabled = userSettings.getDailyCalorieLimit() == 0;
+        if (isCalorieAlertDisabled) {
+            return false;
+        } else {
+            return totalCalories >= userSettings.getDailyCalorieLimit();
+        }
+    }
+
+    public boolean isEnabled() {
+        return !deleted;
     }
 }

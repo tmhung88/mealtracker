@@ -1,4 +1,4 @@
-package com.mealtracker.payloads;
+package com.mealtracker.services.user;
 
 import com.mealtracker.domains.User;
 import lombok.Data;
@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
 @Data
-public class UserRegistrationRequest {
+public class UserRegistrationInput {
 
     @Email
     @Size(min = 5, max = 200)
