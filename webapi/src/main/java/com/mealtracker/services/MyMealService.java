@@ -50,8 +50,7 @@ public class MyMealService {
     }
 
     public void deleteMeals(DeleteMyMealsInput input, CurrentUser currentUser) {
-        // TODO: Check if the current user can have access to all given meals . If not, throw exceptions
-        mealRepository.deleteWithIds(input.getMealIds());
+        mealRepository.deleteConsumerMeals(input.getMealIds(), currentUser.getId());
     }
 
     public List<Meal> listMeals(ListMyMealsInput input, CurrentUser currentUser) {

@@ -66,7 +66,7 @@ public class UserControllerIT {
     @Test
     public void registerUser_InvalidEmail_ExpectEmailValidationErrors() throws Exception {
         String invalidEmail = "abc";
-        var input = validRegistrationRequest();
+        var input = registrationRequest();
         input.setEmail(invalidEmail);
 
         mockMvc.perform(post("/v1/users").content(input))
@@ -77,7 +77,7 @@ public class UserControllerIT {
     @Test
     public void registerUser_InvalidFullName_ExpectFullNameValidationErrors() throws Exception {
         String invalidFullName = "aa";
-        var input = validRegistrationRequest();
+        var input = registrationRequest();
         input.setFullName(invalidFullName);
 
         mockMvc.perform(post("/v1/users").content(input))
@@ -88,7 +88,7 @@ public class UserControllerIT {
     @Test
     public void registerUser_InvalidPassword_ExpectFullNameValidationErrors() throws Exception {
         String invalidPassword = "d";
-        var input = validRegistrationRequest();
+        var input = registrationRequest();
         input.setPassword(invalidPassword);
 
         mockMvc.perform(post("/v1/users").content(input))
@@ -100,7 +100,7 @@ public class UserControllerIT {
 
     @Test
     public void registerUser_ExistingEmail_ExpectError() throws Exception {
-        var input = validRegistrationRequest();
+        var input = registrationRequest();
 
         when(userService.registerUser(any(User.class))).thenThrow(BadRequestAppException.emailTaken("superman@gmail.com"));
 
@@ -111,7 +111,7 @@ public class UserControllerIT {
 
     @Test
     public void registerUser_ValidUser_ExpectUserCreated() throws Exception {
-        var registrationInput = validRegistrationRequest();
+        var registrationInput = registrationRequest();
         mockMvc.perform(post("/v1/users").content(registrationInput))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{'data':{'message':'User registered successfully'}}"));
@@ -131,7 +131,7 @@ public class UserControllerIT {
                 .andExpect(AUTHORIZATION_API_ACCESS_DENIED.json());
     }
 
-    UserRegistrationRequest validRegistrationRequest() {
+    UserRegistrationRequest registrationRequest() {
         var request =  new UserRegistrationRequest();
         request.setEmail("superman@gmail.com");
         request.setFullName("Superman");

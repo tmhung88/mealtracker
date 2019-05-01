@@ -43,7 +43,7 @@ public class MyMealController {
     }
 
     @DeleteMapping
-    public SuccessEnvelop<MessageResponse> deleteMeals(@RequestBody DeleteMyMealsInput request, CurrentUser currentUser) {
+    public SuccessEnvelop<MessageResponse> deleteMeals(@Valid @RequestBody DeleteMyMealsInput request, CurrentUser currentUser) {
         myMealService.deleteMeals(request, currentUser);
         return MessageResponse.of("Meals deleted successfully");
     }
