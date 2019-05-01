@@ -6,6 +6,8 @@ spring:
   jpa:
     hibernate:
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate.create_empty_composites.enabled: true
 
 server:
   port: 9000

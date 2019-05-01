@@ -43,7 +43,7 @@ public class MeControllerIT {
     }
 
     @Test
-    public void getMySettings_ValidToken_ExpectUserSettingsReturned() throws Exception {
+    public void getMySettings_UserHasSettings_ExpectUserSettingsReturned() throws Exception {
         var userSettings = new UserSettings();
         userSettings.setDailyCalorieLimit(500);
         when(userSettingsService.getUserSettings(USER.getId())).thenReturn(userSettings);
@@ -53,5 +53,16 @@ public class MeControllerIT {
         )
                 .andExpect(status().isOk())
                 .andExpect(content().json("{'data':{'dailyCalorieLimit':500}}"));
+    }
+
+    @Test
+    public void getMySettings_UserHasNoSettings_ExpectEmptyDataReturned() throws Exception {
+        when(userSettingsService.getUserSettings(USER.getId())).thenReturn(null);
+        mockMvc.perform(
+                get("/v1/me")
+                        .header("Authorization", USER.getToken())
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().json("{'data':{}}"));
     }
 }
