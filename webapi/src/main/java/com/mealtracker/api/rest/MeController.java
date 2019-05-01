@@ -1,9 +1,9 @@
 package com.mealtracker.api.rest;
 
-import com.mealtracker.payloads.GetMySettingsResponse;
 import com.mealtracker.payloads.MessageResponse;
 import com.mealtracker.payloads.SuccessEnvelop;
 import com.mealtracker.payloads.UpdateMySettingsRequest;
+import com.mealtracker.payloads.me.GetMySettingsResponse;
 import com.mealtracker.security.CurrentUser;
 import com.mealtracker.services.UserSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;

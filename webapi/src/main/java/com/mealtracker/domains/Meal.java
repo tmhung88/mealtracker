@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +35,7 @@ public class Meal implements Ownable {
     @Column(name = "calories", nullable = false)
     private Integer calories;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "consumer_id")
     private User consumer;
 

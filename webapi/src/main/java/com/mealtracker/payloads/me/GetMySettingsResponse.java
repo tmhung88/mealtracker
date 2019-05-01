@@ -1,7 +1,8 @@
-package com.mealtracker.payloads;
+package com.mealtracker.payloads.me;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mealtracker.domains.UserSettings;
+import com.mealtracker.payloads.SuccessEnvelop;
 import lombok.Value;
 
 @Value

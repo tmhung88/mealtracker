@@ -1,8 +1,11 @@
 package com.mealtracker.api.rest;
 
 import com.mealtracker.payloads.MessageResponse;
-import com.mealtracker.payloads.MyMealResponse;
+import com.mealtracker.payloads.MetaSuccesEnvelop;
+import com.mealtracker.payloads.PaginationMeta;
 import com.mealtracker.payloads.SuccessEnvelop;
+import com.mealtracker.payloads.mymeal.ListMyMealsResponse;
+import com.mealtracker.payloads.mymeal.MyMealResponse;
 import com.mealtracker.security.CurrentUser;
 import com.mealtracker.services.MyMealService;
 import com.mealtracker.services.mymeal.DeleteMyMealsInput;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -31,9 +33,10 @@ public class MyMealController {
     private MyMealService myMealService;
 
     @GetMapping
-    public SuccessEnvelop<MessageResponse> listMeal(@Valid @RequestParam ListMyMealsInput request, CurrentUser currentUser) {
-        myMealService.listMeals(request, currentUser);
-        return MessageResponse.of("Meals listed successfully");
+    public MetaSuccesEnvelop<ListMyMealsResponse, PaginationMeta> listMeal(
+                                                                           CurrentUser currentUser) {
+        var mealSlice = myMealService.listMeals(new ListMyMealsInput(), currentUser);
+        return ListMyMealsResponse.envelop(mealSlice);
     }
 
     @PostMapping
@@ -60,7 +63,7 @@ public class MyMealController {
     public SuccessEnvelop<MyMealResponse> getMeal(@PathVariable long mealId,
                                                   CurrentUser currentUser) {
         var meal = myMealService.getMeal(mealId, currentUser);
-        return MyMealResponse.of(meal);
+        return MyMealResponse.envelop(meal);
     }
 
 

@@ -1,7 +1,7 @@
 package com.mealtracker.api.rest;
 
-import com.mealtracker.payloads.CreateSessionRequest;
-import com.mealtracker.payloads.CreateSessionResponse;
+import com.mealtracker.payloads.session.CreateSessionRequest;
+import com.mealtracker.payloads.session.CreateSessionResponse;
 import com.mealtracker.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.mealtracker.payloads.CreateSessionResponse.bearerToken;
+import static com.mealtracker.payloads.session.CreateSessionResponse.bearerToken;
 
 @RestController
 @RequestMapping("/v1/sessions")

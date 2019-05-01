@@ -11,12 +11,12 @@ import com.mealtracker.services.mymeal.ListMyMealsInput;
 import com.mealtracker.services.mymeal.MyMealInput;
 import com.mealtracker.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional
@@ -35,7 +35,7 @@ public class MyMealService {
     }
 
     public Meal updateMeal(long mealId, MyMealInput input, CurrentUser currentUser) {
-        Meal existingMeal = getExistingMeal(mealId);
+        var existingMeal = getExistingMeal(mealId);
         if (!currentUser.isOwner(existingMeal)) {
             throw AuthorizationAppException.notResourceOwner();
         }
@@ -44,7 +44,7 @@ public class MyMealService {
     }
 
     public Meal getMeal(long mealId, CurrentUser currentUser) {
-        Meal existingMeal = getExistingMeal(mealId);
+        var existingMeal = getExistingMeal(mealId);
         if (!currentUser.isOwner(existingMeal)) {
             throw AuthorizationAppException.notResourceOwner();
         }
@@ -55,9 +55,9 @@ public class MyMealService {
         mealRepository.deleteConsumerMeals(input.getMealIds(), currentUser.getId());
     }
 
-    public List<Meal> listMeals(ListMyMealsInput input, CurrentUser currentUser) {
-        // TODO: https://dzone.com/articles/pagination-and-sorting-with-spring-data-jpa
-        return new ArrayList<>();
+    public Slice<Meal> listMeals(ListMyMealsInput input, CurrentUser currentUser) {
+        var pageable = PageRequest.of(0, 2);
+        return mealRepository.findByDeleted(false, pageable);
     }
 
     public int calculateDailyCalories(LocalDate date, CurrentUser currentUser) {

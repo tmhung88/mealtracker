@@ -1,4 +1,4 @@
-package com.mealtracker.payloads;
+package com.mealtracker.payloads.session;
 
 import lombok.Value;
 
