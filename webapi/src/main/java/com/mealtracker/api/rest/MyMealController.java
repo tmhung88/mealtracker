@@ -40,22 +40,22 @@ public class MyMealController {
     }
 
     @PostMapping
-    public SuccessEnvelop<MessageResponse> addMeal(@Valid @RequestBody MyMealInput request, CurrentUser currentUser) {
-        myMealService.addMeal(request, currentUser);
+    public SuccessEnvelop<MessageResponse> addMeal(@Valid @RequestBody MyMealInput input, CurrentUser currentUser) {
+        myMealService.addMeal(input, currentUser);
         return MessageResponse.of("Meal added successfully");
     }
 
     @DeleteMapping
-    public SuccessEnvelop<MessageResponse> deleteMeals(@Valid @RequestBody DeleteMyMealsInput request, CurrentUser currentUser) {
-        myMealService.deleteMeals(request, currentUser);
+    public SuccessEnvelop<MessageResponse> deleteMeals(@Valid @RequestBody DeleteMyMealsInput input, CurrentUser currentUser) {
+        myMealService.deleteMeals(input, currentUser);
         return MessageResponse.of("Meals deleted successfully");
     }
 
     @PutMapping("/{mealId}")
     public SuccessEnvelop<MessageResponse> updateMeal(@PathVariable long mealId,
-                                                      @Valid @RequestBody MyMealInput request,
+                                                      @Valid @RequestBody MyMealInput input,
                                                       CurrentUser currentUser) {
-        myMealService.updateMeal(mealId, request, currentUser);
+        myMealService.updateMeal(mealId, input, currentUser);
         return MessageResponse.of("Meal updated successfully");
     }
 
@@ -65,6 +65,4 @@ public class MyMealController {
         var meal = myMealService.getMeal(mealId, currentUser);
         return MyMealResponse.envelop(meal);
     }
-
-
 }

@@ -7,3 +7,15 @@ spring:
     hibernate:
       ddl-auto: validate
       dialect: org.hibernate.dialect.MySQL5Dialect
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL:
+          TRACE
+        type:z
+          descriptor:
+            sql:
+              BasicBinder:
+                TRACE

@@ -4,7 +4,7 @@ import com.mealtracker.domains.Meal;
 import com.mealtracker.payloads.MetaSuccessEnvelop;
 import com.mealtracker.payloads.PaginationMeta;
 import com.mealtracker.payloads.SuccessEnvelop;
-import lombok.Value;
+import lombok.Data;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
@@ -12,7 +12,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Value
+@Data
 public class MyMealResponse {
     private final long id;
     private final String name;

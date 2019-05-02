@@ -4,6 +4,7 @@ import com.mealtracker.domains.Meal;
 import com.mealtracker.domains.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 public interface MealRepository extends PagingAndSortingRepository<Meal, Long> {
 
+    @EntityGraph(value = "Meal.consumer", type = EntityGraph.EntityGraphType.LOAD)
     Optional<Meal> findMealByIdAndDeleted(long mealId, boolean deleted);
 
     @Modifying

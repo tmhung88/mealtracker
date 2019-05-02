@@ -46,7 +46,6 @@ public class TestUser {
             .role(Role.USER_MANAGER).privileges(asList(MY_MEALS, USER_MANAGEMENT))
             .build();
 
-
     public static final TestUser USER = TestUser.builder()
             .id(3L)
             .email("regular_user@gmail.com")

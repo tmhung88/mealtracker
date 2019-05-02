@@ -10,12 +10,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
 @Table(name = "meals")
+@NamedEntityGraph(name = "Meal.consumer",
+        attributeNodes = @NamedAttributeNode("consumer"))
 @Data
 public class Meal implements Ownable {
 
