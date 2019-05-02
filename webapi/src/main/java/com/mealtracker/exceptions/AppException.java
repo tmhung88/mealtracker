@@ -10,6 +10,11 @@ public abstract class AppException extends RuntimeException {
         this.error = Error.of(code, message);
     }
 
+    AppException(Error error) {
+        super(error.getMessage());
+        this.error = error;
+    }
+
     public Error getError() {
         return error;
     }

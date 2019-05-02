@@ -2,6 +2,7 @@ package com.mealtracker.exceptions;
 
 import com.mealtracker.payloads.ErrorEnvelop;
 import com.mealtracker.payloads.ErrorField;
+import com.mealtracker.security.jwt.JwtValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -29,7 +30,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({ResourceNotFoundAppException.class})
     public @ResponseBody
     ErrorEnvelop handleNotFoundException(ResourceNotFoundAppException ex) {
-        return new ErrorEnvelop(ex.getError());
+        return new ErrorEnvelop(ex);
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -39,7 +40,7 @@ public class GlobalExceptionHandler {
         var errorFields = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> new ErrorField(error.getField(), error.getDefaultMessage()))
                 .collect(Collectors.toList());
-        return new ErrorEnvelop(BadRequestAppException.commonBadInputs(errorFields));
+        return new ErrorEnvelop(BadRequestAppException.commonBadInputsError(errorFields));
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -49,7 +50,7 @@ public class GlobalExceptionHandler {
         var errorFields = ex.getFieldErrors().stream()
                 .map(fieldError -> new ErrorField(fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
-        return new ErrorEnvelop(BadRequestAppException.commonBadInputs(errorFields));
+        return new ErrorEnvelop(BadRequestAppException.commonBadInputsError(errorFields));
     }
 
 
@@ -57,7 +58,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadRequestAppException.class)
     public @ResponseBody
     ErrorEnvelop handleBadRequestException(BadRequestAppException ex) {
-        return new ErrorEnvelop(ex.getError());
+        return new ErrorEnvelop(ex);
     }
 
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
@@ -67,18 +68,25 @@ public class GlobalExceptionHandler {
         return new ErrorEnvelop(AuthenticationAppException.missingToken());
     }
 
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({JwtValidationException.class })
+    public @ResponseBody
+    ErrorEnvelop handleJwtValidationException(JwtValidationException ex) {
+        return new ErrorEnvelop(AuthenticationAppException.invalidJwtToken(ex));
+    }
+
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     @ExceptionHandler({ AccessDeniedException.class })
     public @ResponseBody
     ErrorEnvelop handleAuthorizationException(AccessDeniedException ex, WebRequest request) {
-        return new ErrorEnvelop(AuthorizationAppException.apiAccessDenied());
+        return new ErrorEnvelop(AuthorizationAppException.apiAccessDeniedError());
     }
 
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     @ExceptionHandler({ AuthorizationAppException.class })
     public @ResponseBody
     ErrorEnvelop handleAuthorizationException(AuthorizationAppException ex) {
-        return new ErrorEnvelop(ex.getError());
+        return new ErrorEnvelop(ex);
     }
 
 

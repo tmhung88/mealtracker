@@ -13,7 +13,7 @@ public class BadRequestAppException extends AppException {
         super(code, message);
     }
 
-    public static Error commonBadInputs(List<ErrorField> errorFields) {
+    public static Error commonBadInputsError(List<ErrorField> errorFields) {
         return Error.of(COMMON_BAD_INPUT, "Bad Input", errorFields);
     }
 
