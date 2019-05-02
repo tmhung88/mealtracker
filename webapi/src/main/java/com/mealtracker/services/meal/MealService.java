@@ -4,8 +4,10 @@ import com.mealtracker.domains.Meal;
 import com.mealtracker.exceptions.ResourceName;
 import com.mealtracker.exceptions.ResourceNotFoundAppException;
 import com.mealtracker.repositories.MealRepository;
+import com.mealtracker.services.pagination.PageableBuilder;
 import com.mealtracker.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,9 @@ public class MealService {
 
     @Autowired
     private MealRepository mealRepository;
+
+    @Autowired
+    private PageableBuilder pageableBuilder;
 
     public Meal addMeal(MealInput input) {
         userService.getExistingUser(input.getConsumerId());
@@ -40,10 +45,13 @@ public class MealService {
         return getExistingMeal(mealId);
     }
 
-    private Meal getExistingMeal(long mealId) {
-        return mealRepository.findMealByIdAndDeleted(mealId, false)
-                .orElseThrow(() -> ResourceNotFoundAppException.resourceNotInDb(ResourceName.MEAL));
+    public Page<Meal> listMeals(ListMealsInput input) {
+        var pageable = pageableBuilder.build(input);
+        return mealRepository.findByDeleted(false, pageable);
     }
 
-
+    private Meal getExistingMeal(long mealId) {
+        return mealRepository.findByIdAndDeleted(mealId, false)
+                .orElseThrow(() -> ResourceNotFoundAppException.resourceNotInDb(ResourceName.MEAL));
+    }
 }

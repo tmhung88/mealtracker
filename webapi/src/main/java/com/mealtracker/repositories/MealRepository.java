@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface MealRepository extends PagingAndSortingRepository<Meal, Long> {
 
     @EntityGraph(value = "Meal.consumer", type = EntityGraph.EntityGraphType.LOAD)
-    Optional<Meal> findMealByIdAndDeleted(long mealId, boolean deleted);
+    Optional<Meal> findByIdAndDeleted(long mealId, boolean deleted);
 
     @Modifying
     @Query("UPDATE Meal meal SET meal.deleted = true where meal.id IN :mealIds and meal.consumer.id = :consumerId")
@@ -39,4 +39,6 @@ public interface MealRepository extends PagingAndSortingRepository<Meal, Long> {
                                @Param("fromTime") LocalTime fromTime,
                                @Param("toTime") LocalTime toTime,
                                Pageable pageable);
+
+    Page<Meal> findByDeleted(boolean deleted, Pageable pageable);
 }

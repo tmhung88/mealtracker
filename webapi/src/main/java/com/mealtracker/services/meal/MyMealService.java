@@ -78,7 +78,7 @@ public class MyMealService {
     }
 
     private Meal getExistingMeal(long mealId) {
-        return mealRepository.findMealByIdAndDeleted(mealId, false)
+        return mealRepository.findByIdAndDeleted(mealId, false)
                 .orElseThrow(() -> ResourceNotFoundAppException.resourceNotInDb(ResourceName.MEAL));
     }
 }

@@ -1,9 +1,12 @@
 package com.mealtracker.api.rest;
 
 import com.mealtracker.payloads.MessageResponse;
+import com.mealtracker.payloads.MetaSuccessEnvelop;
+import com.mealtracker.payloads.PaginationMeta;
 import com.mealtracker.payloads.SuccessEnvelop;
 import com.mealtracker.payloads.meal.MealResponse;
 import com.mealtracker.services.meal.DeleteMealsInput;
+import com.mealtracker.services.meal.ListMealsInput;
 import com.mealtracker.services.meal.MealInput;
 import com.mealtracker.services.meal.MealService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Secured("MEAL_MANAGEMENT")
 @RestController
@@ -28,8 +32,9 @@ public class MealController {
     private MealService mealService;
 
     @GetMapping
-    public SuccessEnvelop<MessageResponse> listMeal() {
-        return MessageResponse.of("Meal listed successfully");
+    public MetaSuccessEnvelop<List<MealResponse>, PaginationMeta> listMeals(@Valid ListMealsInput input) {
+        var mealPage =mealService.listMeals(input);
+        return MealResponse.envelop(mealPage);
     }
 
     @PostMapping
