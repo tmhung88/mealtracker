@@ -26,18 +26,16 @@ public class JwtTokenProvider {
     public String generateToken(Authentication authentication) {
         var userPrincipal = (UserPrincipal) authentication.getPrincipal();
         return Jwts.builder()
-                .setClaims(new AppJwtClaims(userPrincipal).toMap())
+                .setClaims(userPrincipal.toJwtClaims())
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    public AppJwtClaims getBodyFromJwtToken(String token) {
-        Claims claims = Jwts.parser()
+    public Claims getBodyFromJwtToken(String token) {
+        return Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-
-        return new AppJwtClaims(claims);
     }
 
     public boolean validateToken(String authToken) {

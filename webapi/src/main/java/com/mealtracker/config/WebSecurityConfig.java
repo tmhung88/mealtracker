@@ -5,6 +5,7 @@ import com.mealtracker.security.RestAccessDeniedHandler;
 import com.mealtracker.security.RestAuthenticationEntryPoint;
 import com.mealtracker.security.jwt.JwtAuthenticationFilter;
 import com.mealtracker.security.jwt.JwtTokenProvider;
+import com.mealtracker.security.jwt.JwtTokenValidator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,8 +46,13 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
-        return new JwtAuthenticationFilter(jwtTokenProvider);
+    public JwtTokenValidator jwtTokenValidator(JwtProperties jwtProperties) {
+        return new JwtTokenValidator(jwtProperties.getSecretKey());
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider, JwtTokenValidator jwtTokenValidator) {
+        return new JwtAuthenticationFilter(jwtTokenProvider, jwtTokenValidator);
     }
 
     @Bean
@@ -88,6 +94,7 @@ public class WebSecurityConfig {
                     .regexMatchers(GET, "\\/v1\\/users\\/?\\?email=.*").permitAll()
                     .antMatchers(POST, "/v1/users").permitAll()
                     .antMatchers(POST, "/v1/sessions").permitAll()
+
                     .anyRequest().authenticated();
 
 

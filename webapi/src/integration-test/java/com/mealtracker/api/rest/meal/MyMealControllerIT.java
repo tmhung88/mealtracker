@@ -1,13 +1,13 @@
-package com.mealtracker.api.rest;
+package com.mealtracker.api.rest.meal;
 
 import com.mealtracker.MealTrackerApplication;
+import com.mealtracker.api.rest.MyMealController;
 import com.mealtracker.config.WebSecurityConfig;
 import com.mealtracker.domains.Meal;
 import com.mealtracker.services.meal.DeleteMealsInput;
 import com.mealtracker.services.meal.MyMealService;
 import com.mealtracker.services.user.UserService;
 import com.mealtracker.utils.matchers.CurrentUserMatchers;
-import lombok.Getter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,7 +151,7 @@ public class MyMealControllerIT {
         mockMvc.perform(
                 delete("/v1/users/me/meals").auth(USER).content(deleteMyMealsRequest()))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().json("{'error':{'code':40000,'message':'Bad Input','errorFields':[{'name':'mealIds','message':'size must be between 1 and 50'}]}}"));
+                .andExpect(content().json("{'error':{'code':40000,'message':'Bad Input','errorFields':[{'name':'ids','message':'size must be between 1 and 50'}]}}"));
     }
 
     @Test
@@ -163,17 +163,17 @@ public class MyMealControllerIT {
     }
 
 
-    private MyMealRequest addMealRequest() {
-        return new MyMealRequest().calories(500).consumedDate("2019-05-01").consumedTime("02:25").name("Pizza");
+    private MealRequest addMealRequest() {
+        return new MealRequest().calories(500).consumedDate("2019-05-01").consumedTime("02:25").name("Pizza");
     }
 
-    private MyMealRequest updateMealRequest() {
-        return new MyMealRequest().calories(400).consumedDate("2016-02-09").consumedTime("14:10").name("Soup");
+    private MealRequest updateMealRequest() {
+        return new MealRequest().calories(400).consumedDate("2016-02-09").consumedTime("14:10").name("Soup");
     }
 
-    private DeleteMealsInput deleteMyMealsRequest(Long... mealIds) {
+    private DeleteMealsInput deleteMyMealsRequest(Long... ids) {
         var input = new DeleteMealsInput();
-        input.setIds(Arrays.asList(mealIds));
+        input.setIds(Arrays.asList(ids));
         return input;
     }
 
@@ -185,43 +185,5 @@ public class MyMealControllerIT {
         meal.setCalories(100);
         meal.setName("Coffee");
         return meal;
-    }
-
-    @Getter
-    static class MyMealRequest {
-        private Long id;
-
-        private String name;
-
-        private int calories;
-
-        private String consumedDate;
-
-        private String consumedTime;
-
-        public MyMealRequest id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        MyMealRequest name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        MyMealRequest calories(int calories) {
-            this.calories = calories;
-            return this;
-        }
-
-        MyMealRequest consumedDate(String consumedDate) {
-            this.consumedDate = consumedDate;
-            return this;
-        }
-
-        MyMealRequest consumedTime(String consumedTime) {
-            this.consumedTime = consumedTime;
-            return this;
-        }
     }
 }

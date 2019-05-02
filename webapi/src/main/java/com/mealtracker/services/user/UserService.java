@@ -53,6 +53,6 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         var user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-        return new UserPrincipal(user);
+        return UserPrincipal.allDetails(user);
     }
 }
