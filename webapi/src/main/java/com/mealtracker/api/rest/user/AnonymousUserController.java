@@ -1,4 +1,4 @@
-package com.mealtracker.api.rest;
+package com.mealtracker.api.rest.user;
 
 import com.mealtracker.domains.User;
 import com.mealtracker.exceptions.ResourceName;
@@ -6,11 +6,9 @@ import com.mealtracker.exceptions.ResourceNotFoundAppException;
 import com.mealtracker.payloads.MessageResponse;
 import com.mealtracker.payloads.PublicUserInfoResponse;
 import com.mealtracker.payloads.SuccessEnvelop;
-import com.mealtracker.payloads.UserListResponse;
 import com.mealtracker.services.user.UserRegistrationInput;
 import com.mealtracker.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +20,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/users")
-public class UserController {
+public class AnonymousUserController {
 
     @Autowired
     private UserService userService;
@@ -38,12 +36,5 @@ public class UserController {
         User user = userService.findByEmail(email)
                 .orElseThrow(() -> ResourceNotFoundAppException.resourceNotInDb(ResourceName.USER));
         return PublicUserInfoResponse.of(user);
-    }
-
-
-    @Secured({"USER_MANAGEMENT"})
-    @GetMapping
-    public SuccessEnvelop<UserListResponse> listUsers() {
-        return UserListResponse.of();
     }
 }

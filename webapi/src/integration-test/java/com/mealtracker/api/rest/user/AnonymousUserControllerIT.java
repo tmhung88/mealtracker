@@ -1,4 +1,4 @@
-package com.mealtracker.api.rest;
+package com.mealtracker.api.rest.user;
 
 import com.mealtracker.MealTrackerApplication;
 import com.mealtracker.config.WebSecurityConfig;
@@ -17,11 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
-import static com.mealtracker.TestError.AUTHENTICATION_MISSING_TOKEN;
-import static com.mealtracker.TestError.AUTHORIZATION_API_ACCESS_DENIED;
 import static com.mealtracker.TestError.BAD_SPECIFIC_INPUT;
 import static com.mealtracker.TestError.RESOURCE_DATA_NOT_IN_DB;
-import static com.mealtracker.TestUser.USER;
 import static com.mealtracker.request.AppRequestBuilders.get;
 import static com.mealtracker.request.AppRequestBuilders.post;
 import static com.mealtracker.utils.matchers.UserRegistrationInputMatchers.email;
@@ -31,9 +28,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = {UserController.class})
+@WebMvcTest(controllers = {AnonymousUserController.class})
 @ContextConfiguration(classes={MealTrackerApplication.class, WebSecurityConfig.class})
-public class UserControllerIT {
+public class AnonymousUserControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -111,26 +108,13 @@ public class UserControllerIT {
     }
 
     @Test
-    public void registerUser_ValidUser_ExpectUserCreated() throws Exception {
+    public void registerUser_ValidUser_ExpectUserRegistered() throws Exception {
         var registrationInput = registrationRequest();
         mockMvc.perform(post("/v1/users").content(registrationInput))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{'data':{'message':'User registered successfully'}}"));
     }
 
-    @Test
-    public void listUsers_Anonymous_ExpectAuthenticationError() throws Exception {
-        mockMvc.perform(get("/v1/users"))
-                .andExpect(AUTHENTICATION_MISSING_TOKEN.httpStatus())
-                .andExpect(AUTHENTICATION_MISSING_TOKEN.json());
-    }
-
-    @Test
-    public void listUsers_NonAdminUser_ExpectAuthorizationError() throws Exception {
-        mockMvc.perform(get("/v1/users").auth(USER))
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.httpStatus())
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.json());
-    }
 
     UserRegistrationInput registrationRequest() {
         var request =  new UserRegistrationInput();
