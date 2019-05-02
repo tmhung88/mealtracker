@@ -4,12 +4,12 @@ import com.mealtracker.payloads.MessageResponse;
 import com.mealtracker.payloads.MetaSuccessEnvelop;
 import com.mealtracker.payloads.PaginationMeta;
 import com.mealtracker.payloads.SuccessEnvelop;
-import com.mealtracker.payloads.mymeal.MyMealResponse;
+import com.mealtracker.payloads.meal.MyMealResponse;
 import com.mealtracker.security.CurrentUser;
-import com.mealtracker.services.mymeal.DeleteMyMealsInput;
-import com.mealtracker.services.mymeal.ListMyMealsInput;
-import com.mealtracker.services.mymeal.MyMealInput;
-import com.mealtracker.services.mymeal.MyMealService;
+import com.mealtracker.services.meal.DeleteMealsInput;
+import com.mealtracker.services.meal.ListMyMealsInput;
+import com.mealtracker.services.meal.MyMealInput;
+import com.mealtracker.services.meal.MyMealService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,7 +46,7 @@ public class MyMealController {
     }
 
     @DeleteMapping
-    public SuccessEnvelop<MessageResponse> deleteMeals(@Valid @RequestBody DeleteMyMealsInput input, CurrentUser currentUser) {
+    public SuccessEnvelop<MessageResponse> deleteMeals(@Valid @RequestBody DeleteMealsInput input, CurrentUser currentUser) {
         myMealService.deleteMeals(input, currentUser);
         return MessageResponse.of("Meals deleted successfully");
     }

@@ -3,8 +3,8 @@ package com.mealtracker.api.rest;
 import com.mealtracker.MealTrackerApplication;
 import com.mealtracker.config.WebSecurityConfig;
 import com.mealtracker.domains.Meal;
-import com.mealtracker.services.mymeal.MyMealService;
-import com.mealtracker.services.mymeal.DeleteMyMealsInput;
+import com.mealtracker.services.meal.DeleteMealsInput;
+import com.mealtracker.services.meal.MyMealService;
 import com.mealtracker.services.user.UserService;
 import com.mealtracker.utils.matchers.CurrentUserMatchers;
 import lombok.Getter;
@@ -171,9 +171,9 @@ public class MyMealControllerIT {
         return new MyMealRequest().calories(400).consumedDate("2016-02-09").consumedTime("14:10").name("Soup");
     }
 
-    private DeleteMyMealsInput deleteMyMealsRequest(Long... mealIds) {
-        var input = new DeleteMyMealsInput();
-        input.setMealIds(Arrays.asList(mealIds));
+    private DeleteMealsInput deleteMyMealsRequest(Long... mealIds) {
+        var input = new DeleteMealsInput();
+        input.setIds(Arrays.asList(mealIds));
         return input;
     }
 

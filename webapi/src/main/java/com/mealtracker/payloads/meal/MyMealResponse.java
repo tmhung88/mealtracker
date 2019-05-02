@@ -1,4 +1,4 @@
-package com.mealtracker.payloads.mymeal;
+package com.mealtracker.payloads.meal;
 
 import com.mealtracker.domains.Meal;
 import com.mealtracker.payloads.MetaSuccessEnvelop;

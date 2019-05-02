@@ -32,6 +32,10 @@ public class MealService {
         return mealRepository.save(existingMeal);
     }
 
+    public void deleteMeals(DeleteMealsInput input) {
+        mealRepository.deleteConsumerMeals(input.getIds());
+    }
+
     public Meal getMeal(long mealId) {
         return getExistingMeal(mealId);
     }

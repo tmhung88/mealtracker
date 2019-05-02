@@ -1,4 +1,4 @@
-package com.mealtracker.services.mymeal;
+package com.mealtracker.services.meal;
 
 import com.mealtracker.domains.Meal;
 import com.mealtracker.exceptions.AuthorizationAppException;
@@ -7,9 +7,6 @@ import com.mealtracker.exceptions.ResourceName;
 import com.mealtracker.exceptions.ResourceNotFoundAppException;
 import com.mealtracker.repositories.MealRepository;
 import com.mealtracker.security.CurrentUser;
-import com.mealtracker.services.mymeal.DeleteMyMealsInput;
-import com.mealtracker.services.mymeal.ListMyMealsInput;
-import com.mealtracker.services.mymeal.MyMealInput;
 import com.mealtracker.services.pagination.PageableBuilder;
 import com.mealtracker.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +52,8 @@ public class MyMealService {
         return existingMeal;
     }
 
-    public void deleteMeals(DeleteMyMealsInput input, CurrentUser currentUser) {
-        mealRepository.deleteConsumerMeals(input.getMealIds(), currentUser.getId());
+    public void deleteMeals(DeleteMealsInput input, CurrentUser currentUser) {
+        mealRepository.deleteConsumerMeals(input.getIds(), currentUser.getId());
     }
 
     public Page<Meal> listMeals(ListMyMealsInput input, CurrentUser currentUser) {

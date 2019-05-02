@@ -1,7 +1,7 @@
 package com.mealtracker.services;
 
 import com.mealtracker.repositories.MealRepository;
-import com.mealtracker.services.mymeal.MyMealService;
+import com.mealtracker.services.meal.MyMealService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

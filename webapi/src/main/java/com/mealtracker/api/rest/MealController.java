@@ -3,6 +3,7 @@ package com.mealtracker.api.rest;
 import com.mealtracker.payloads.MessageResponse;
 import com.mealtracker.payloads.SuccessEnvelop;
 import com.mealtracker.payloads.meal.MealResponse;
+import com.mealtracker.services.meal.DeleteMealsInput;
 import com.mealtracker.services.meal.MealInput;
 import com.mealtracker.services.meal.MealService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,8 @@ public class MealController {
     }
 
     @DeleteMapping
-    public SuccessEnvelop<MessageResponse> deleteMeals() {
-
+    public SuccessEnvelop<MessageResponse> deleteMeals(@Valid @RequestBody DeleteMealsInput input) {
+        mealService.deleteMeals(input);
         return MessageResponse.of("Meals deleted successfully");
     }
 

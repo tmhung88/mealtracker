@@ -1,4 +1,4 @@
-package com.mealtracker.services.mymeal;
+package com.mealtracker.services.meal;
 
 import com.mealtracker.services.pagination.PageableOrder;
 import com.mealtracker.services.pagination.PageableParams;

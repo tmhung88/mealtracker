@@ -1,4 +1,4 @@
-package com.mealtracker.services.mymeal;
+package com.mealtracker.services.meal;
 
 import lombok.Data;
 
@@ -8,13 +8,13 @@ import java.util.Collections;
 import java.util.List;
 
 @Data
-public class DeleteMyMealsInput {
+public class DeleteMealsInput {
 
     @NotNull
     @Size(min = 1, max = 50)
-    private List<Long> mealIds;
+    private List<Long> ids;
 
-    public List<Long> getMealIds() {
-        return mealIds == null ? Collections.emptyList() : mealIds;
+    public List<Long> getIds() {
+        return ids == null ? Collections.emptyList() : ids;
     }
 }
