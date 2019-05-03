@@ -5,6 +5,7 @@ import com.mealtracker.payloads.MessageResponse;
 import com.mealtracker.payloads.MetaSuccessEnvelop;
 import com.mealtracker.payloads.PaginationMeta;
 import com.mealtracker.payloads.SuccessEnvelop;
+import com.mealtracker.payloads.user.LookupResponse;
 import com.mealtracker.payloads.user.ManageUserResponse;
 import com.mealtracker.security.CurrentUser;
 import com.mealtracker.services.user.DeleteUsersInput;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -47,6 +49,13 @@ public class ManagerUserController {
     public MetaSuccessEnvelop<List<ManageUserResponse>, PaginationMeta> listUsers(@Valid ListUsersInput listUsersInput) {
         var userPage = managerUserService.listUsers(listUsersInput);
         return ManageUserResponse.envelop(userPage);
+    }
+
+    @GetMapping(params = "keyword")
+    public MetaSuccessEnvelop<List<LookupResponse>, PaginationMeta> lookupUsers(@RequestParam String keyword,
+                                                                                @Valid ListUsersInput input) {
+        var userPage = managerUserService.lookupUsers(keyword, input);
+        return LookupResponse.envelop(userPage);
     }
 
     @DeleteMapping

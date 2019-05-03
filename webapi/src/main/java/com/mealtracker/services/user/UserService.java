@@ -23,7 +23,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserService implements UserDetailsService {
-
+    private static final String START_WITH_TEMPLATE = "%s%%";
     @Autowired
     private UserRepository userRepository;
 
@@ -54,6 +54,11 @@ public class UserService implements UserDetailsService {
 
     public Page<User> findExistingUsers(List<Role> includedRoles, Pageable pageable) {
         return userRepository.findByDeletedAndRoleIn(false, includedRoles, pageable);
+    }
+
+    public Page<User> lookupExistingUsers(String keyword, List<Role> includedRoles, Pageable pageable) {
+        var startWith = String.format(START_WITH_TEMPLATE, keyword);
+        return userRepository.lookupExistingUsers(startWith, includedRoles, pageable);
     }
 
 

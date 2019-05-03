@@ -44,6 +44,11 @@ public class ManagerUserService {
         return userService.findExistingUsers(MANAGER_ACCESSIBLE_ROLES, pageable);
     }
 
+    public Page<User> lookupUsers(String keyword, ListUsersInput input) {
+        var pageable = pageableBuilder.build(input);
+        return userService.lookupExistingUsers(keyword, MANAGER_ACCESSIBLE_ROLES, pageable);
+    }
+
     public void deleteUsers(DeleteUsersInput input, CurrentUser currentUser) {
         var isDeletingHimSelf = input.getIds().size() == 1 && input.getIds().contains(currentUser.getId());
         if (isDeletingHimSelf) {

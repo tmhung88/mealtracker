@@ -34,9 +34,14 @@ public class AdminUserService {
         return userService.addUser(input.toUser());
     }
 
-    public Page<User> listUsers(ListUsersInput listUsersInput) {
-        var pageable = pageableBuilder.build(listUsersInput);
+    public Page<User> listUsers(ListUsersInput input) {
+        var pageable = pageableBuilder.build(input);
         return userService.findExistingUsers(ADMIN_ACCESSIBLE_ROLES, pageable);
+    }
+
+    public Page<User> lookupUsers(String keyword, ListUsersInput input) {
+        var pageable = pageableBuilder.build(input);
+        return userService.lookupExistingUsers(keyword, ADMIN_ACCESSIBLE_ROLES, pageable);
     }
 
     public void deleteUsers(DeleteUsersInput input, CurrentUser currentUser) {
@@ -62,4 +67,6 @@ public class AdminUserService {
         input.merge(existingUser);
         return userService.updateUser(existingUser);
     }
+
+
 }
