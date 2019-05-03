@@ -1,5 +1,6 @@
 package com.mealtracker.exceptions;
 
+import com.mealtracker.domains.Role;
 import com.mealtracker.payloads.Error;
 import com.mealtracker.payloads.ErrorField;
 
@@ -28,6 +29,11 @@ public class BadRequestAppException extends AppException {
 
     public static BadRequestAppException deleteYourself() {
         var errorMessage = "You cannot delete your own account. Please ask your peer to perform";
+        return new BadRequestAppException(SPECIFIC_BAD_INPUT, errorMessage);
+    }
+
+    public static BadRequestAppException setSuperiorRole(Role superiorRole) {
+        var errorMessage = "You are not allowed to set Role as " + superiorRole.name();
         return new BadRequestAppException(SPECIFIC_BAD_INPUT, errorMessage);
     }
 }

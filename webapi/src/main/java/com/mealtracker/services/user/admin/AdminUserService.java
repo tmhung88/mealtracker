@@ -15,12 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class AdminUserService {
+    private static final List<Role> ADMIN_ACCESSIBLE_ROLES = Arrays.asList(Role.values());
 
     @Autowired
     private UserService userService;
@@ -32,14 +34,9 @@ public class AdminUserService {
         return userService.addUser(input.toUser());
     }
 
-    public User updateUser(long userId, ManageUserInput input) {
-        User existingUser = userService.getExistingUser(userId);
-        input.merge(existingUser);
-        return userService.updateUser(existingUser);
-    }
-
-    public User getUser(long userId) {
-        return userService.getExistingUser(userId);
+    public Page<User> listUsers(ListUsersInput listUsersInput) {
+        var pageable = pageableBuilder.build(listUsersInput);
+        return userService.findExistingUsers(ADMIN_ACCESSIBLE_ROLES, pageable);
     }
 
     public void deleteUsers(DeleteUsersInput input, CurrentUser currentUser) {
@@ -52,12 +49,17 @@ public class AdminUserService {
         var userIds = input.getIds().stream()
                 .filter(notCurrentUser)
                 .distinct().collect(Collectors.toList());
-        userService.softDeleteUsers(userIds);
+
+        userService.softDeleteUsers(userIds, ADMIN_ACCESSIBLE_ROLES);
     }
 
-    public Page<User> listUsers(ListUsersInput listUsersInput) {
-        var pageable = pageableBuilder.build(listUsersInput);
-        var allRoles = Arrays.asList(Role.values());
-        return userService.findExistingUsers(allRoles, pageable);
+    public User getUser(long userId) {
+        return userService.getExistingUser(userId);
+    }
+
+    public User updateUser(long userId, ManageUserInput input) {
+        User existingUser = userService.getExistingUser(userId);
+        input.merge(existingUser);
+        return userService.updateUser(existingUser);
     }
 }

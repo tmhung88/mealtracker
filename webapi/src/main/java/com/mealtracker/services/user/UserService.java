@@ -48,8 +48,8 @@ public class UserService implements UserDetailsService {
         return userRepository.save(updatedUser);
     }
 
-    public void softDeleteUsers(List<Long> userIds) {
-        userRepository.softDelete(userIds);
+    public void softDeleteUsers(List<Long> userIds, List<Role> roles) {
+        userRepository.softDelete(userIds, roles);
     }
 
     public Page<User> findExistingUsers(List<Role> includedRoles, Pageable pageable) {
