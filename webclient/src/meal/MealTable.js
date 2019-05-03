@@ -307,7 +307,7 @@ class EnhancedTable extends React.Component {
                       <TableCell component="th" scope="row" padding="none">
                         {moment(n.datetime).format("DD MMM YYYY")}
                       </TableCell>
-                      <TableCell align="left">{moment(n.datetime).format("HH:mm:ss")}</TableCell>
+                      <TableCell align="left">{moment(n.datetime).format("hh:mm A")}</TableCell>
                       <TableCell align="left">{n.text}</TableCell>
                       <TableCell align="right">{n.calories}</TableCell>
                     </TableRow>

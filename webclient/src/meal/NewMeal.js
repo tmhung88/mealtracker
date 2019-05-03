@@ -66,7 +66,7 @@ class NewMeal extends React.Component {
             calories: 0,
             text: "Meal Info",
         },
-        saving: false,
+        loading: false,
     }
     handleSubmit = async (e) => {
         e.preventDefault();
@@ -82,7 +82,7 @@ class NewMeal extends React.Component {
 
     render() {
         return (<LoadingOverlay
-            active={this.state.saving}
+            active={this.state.loading}
             spinner
         >
             {this.renderContent()}
