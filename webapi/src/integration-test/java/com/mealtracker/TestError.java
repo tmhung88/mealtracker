@@ -17,6 +17,7 @@ public enum TestError {
 
     AUTHORIZATION_API_ACCESS_DENIED(40300, "You are not allowed to use the api"),
 
+    API_NOT_FOUND(40400, "The given %s does not exist"),
     RESOURCE_DATA_NOT_IN_DB(40401, "The given %s does not exist"),
     ;
 

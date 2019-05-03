@@ -22,11 +22,11 @@ public interface MealRepository extends PagingAndSortingRepository<Meal, Long> {
 
     @Modifying
     @Query("UPDATE Meal meal SET meal.deleted = true where meal.id IN :mealIds and meal.consumer.id = :consumerId")
-    void deleteConsumerMeals(@Param("mealIds") List<Long> mealIds, @Param("consumerId") Long consumerId);
+    void softDelete(@Param("mealIds") List<Long> mealIds, @Param("consumerId") Long consumerId);
 
     @Modifying
     @Query("UPDATE Meal meal SET meal.deleted = true where meal.id IN :mealIds")
-    void deleteConsumerMeals(@Param("mealIds") List<Long> mealIds);
+    void softDelete(@Param("mealIds") List<Long> mealIds);
 
     List<Meal> findMealByConsumedDateAndConsumerAndDeleted(LocalDate date, User consumer, boolean deleted);
 

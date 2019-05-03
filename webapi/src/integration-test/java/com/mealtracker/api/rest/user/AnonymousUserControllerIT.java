@@ -2,9 +2,9 @@ package com.mealtracker.api.rest.user;
 
 import com.mealtracker.MealTrackerApplication;
 import com.mealtracker.config.WebSecurityConfig;
-import com.mealtracker.domains.User;
 import com.mealtracker.exceptions.BadRequestAppException;
-import com.mealtracker.services.user.UserRegistrationInput;
+import com.mealtracker.services.user.AnonymousUserService;
+import com.mealtracker.services.user.RegisterUserInput;
 import com.mealtracker.services.user.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,14 +15,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
-
 import static com.mealtracker.TestError.BAD_SPECIFIC_INPUT;
-import static com.mealtracker.TestError.RESOURCE_DATA_NOT_IN_DB;
-import static com.mealtracker.request.AppRequestBuilders.get;
 import static com.mealtracker.request.AppRequestBuilders.post;
 import static com.mealtracker.utils.matchers.UserRegistrationInputMatchers.email;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,29 +31,11 @@ public class AnonymousUserControllerIT {
     private MockMvc mockMvc;
 
     @MockBean
+    private AnonymousUserService anonymousUserService;
+
+    @MockBean
     private UserService userService;
 
-    @Test
-    public void findUserByEmail_ExistingEmail_ExpectResultReturn() throws Exception {
-        User user = new User();
-        user.setEmail("superman@gmail.com");
-        user.setFullName("Superman");
-        when(userService.findByEmail(eq(user.getEmail()))).thenReturn(Optional.of(user));
-
-        mockMvc.perform(get(String.format("/v1/users?email=%s", user.getEmail())))
-                .andExpect(status().isOk())
-                .andExpect(content().json("{'data':{'fullName':'Superman','email':'superman@gmail.com'}}"));
-    }
-
-    @Test
-    public void findUserByEmail_UnknownEmail_ExpectNoResultReturn() throws Exception {
-        String unknownEmail = "unknownEmail";
-        when(userService.findByEmail(eq(unknownEmail))).thenReturn(Optional.empty());
-
-        mockMvc.perform(get(String.format("/v1/users?email=%s", unknownEmail)))
-                .andExpect(RESOURCE_DATA_NOT_IN_DB.httpStatus())
-                .andExpect(RESOURCE_DATA_NOT_IN_DB.json("user"));
-    }
 
     @Test
     public void registerUser_InvalidEmail_ExpectEmailValidationErrors() throws Exception {
@@ -94,12 +71,11 @@ public class AnonymousUserControllerIT {
     }
 
 
-
     @Test
     public void registerUser_ExistingEmail_ExpectError() throws Exception {
         var input = registrationRequest();
 
-        when(userService.registerUser(email(input.getEmail())))
+        when(anonymousUserService.registerUser(email(input.getEmail())))
                 .thenThrow(BadRequestAppException.emailTaken("superman@gmail.com"));
 
         mockMvc.perform(post("/v1/users").content(input))
@@ -116,8 +92,8 @@ public class AnonymousUserControllerIT {
     }
 
 
-    UserRegistrationInput registrationRequest() {
-        var request =  new UserRegistrationInput();
+    RegisterUserInput registrationRequest() {
+        var request =  new RegisterUserInput();
         request.setEmail("superman@gmail.com");
         request.setFullName("Superman");
         request.setPassword("JusticeLeague");

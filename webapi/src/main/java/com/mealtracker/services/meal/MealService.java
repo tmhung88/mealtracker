@@ -38,7 +38,7 @@ public class MealService {
     }
 
     public void deleteMeals(DeleteMealsInput input) {
-        mealRepository.deleteConsumerMeals(input.getIds());
+        mealRepository.softDelete(input.getIds());
     }
 
     public Meal getMeal(long mealId) {

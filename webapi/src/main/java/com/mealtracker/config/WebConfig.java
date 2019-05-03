@@ -1,8 +1,10 @@
 package com.mealtracker.config;
 
 import com.mealtracker.config.rest.CurrentUserMethodArgumentResolver;
+import com.mealtracker.config.rest.RequestRoleMappingHandlerMapping;
 import com.mealtracker.exceptions.ErrorIdGenerator;
 import com.mealtracker.services.pagination.PageableBuilder;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +12,9 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.util.List;
 
@@ -27,6 +31,12 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:3000")
                 .allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE")
                 .maxAge(MAX_AGE_SECS);
+    }
+
+
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        // stop forward 404 to the default handler
     }
 
     @Override
@@ -50,7 +60,6 @@ public class WebConfig implements WebMvcConfigurer {
         return bean;
     }
 
-
     @Bean
     public ErrorIdGenerator errorIdGenerator() {
         return new ErrorIdGenerator();
@@ -59,5 +68,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public PageableBuilder pageableBuilder() {
         return new PageableBuilder();
+    }
+
+
+    @Configuration
+    public static class WebMvcRegistrationsConfig implements WebMvcRegistrations {
+        @Override
+        public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
+            return new RequestRoleMappingHandlerMapping();
+        }
     }
 }

@@ -1,13 +1,11 @@
 package com.mealtracker.api.rest.user;
 
 import com.mealtracker.domains.User;
-import com.mealtracker.exceptions.ResourceName;
-import com.mealtracker.exceptions.ResourceNotFoundAppException;
 import com.mealtracker.payloads.MessageResponse;
 import com.mealtracker.payloads.PublicUserInfoResponse;
 import com.mealtracker.payloads.SuccessEnvelop;
-import com.mealtracker.services.user.UserRegistrationInput;
-import com.mealtracker.services.user.UserService;
+import com.mealtracker.services.user.AnonymousUserService;
+import com.mealtracker.services.user.RegisterUserInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,18 +21,17 @@ import javax.validation.Valid;
 public class AnonymousUserController {
 
     @Autowired
-    private UserService userService;
+    private AnonymousUserService anonymousUserService;
 
     @PostMapping
-    public SuccessEnvelop<MessageResponse> registerUser(@Valid @RequestBody UserRegistrationInput registrationInput) {
-        userService.registerUser(registrationInput);
+    public SuccessEnvelop<MessageResponse> registerUser(@Valid @RequestBody RegisterUserInput registrationInput) {
+        anonymousUserService.registerUser(registrationInput);
         return MessageResponse.of("User registered successfully");
     }
 
     @GetMapping(params = "email")
     public SuccessEnvelop<PublicUserInfoResponse> findUserByEmail(@RequestParam String email) {
-        User user = userService.findByEmail(email)
-                .orElseThrow(() -> ResourceNotFoundAppException.resourceNotInDb(ResourceName.USER));
+        User user = anonymousUserService.getByEmail(email);
         return PublicUserInfoResponse.of(user);
     }
 }

@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -31,6 +34,11 @@ public class GlobalExceptionHandler {
     public @ResponseBody
     ErrorEnvelop handleNotFoundException(ResourceNotFoundAppException ex) {
         return new ErrorEnvelop(ex);
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ModelAndView handleError404(HttpServletRequest request, Exception e)   {
+        return new ModelAndView("404");
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)

@@ -2,7 +2,6 @@ package com.mealtracker.config.rest;
 
 import com.mealtracker.config.rest.RequestRoleMapping.RequestRole;
 import com.mealtracker.exceptions.AuthenticationAppException;
-import com.mealtracker.exceptions.AuthorizationAppException;
 import com.mealtracker.security.UserPrincipal;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,9 +32,9 @@ public class RequestRoleMappingRequestCondition implements RequestCondition<Requ
         }
 
         var userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        var isAllowed = role.name().equals(userPrincipal.getRole().name());
-        if (!isAllowed) {
-            throw AuthorizationAppException.apiAccessDenied();
+        var userHasRole = role.name().equals(userPrincipal.getRole().name());
+        if (!userHasRole) {
+            return null;
         }
         return this;
     }

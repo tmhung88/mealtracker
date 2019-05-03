@@ -12,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.mealtracker.TestError.AUTHORIZATION_API_ACCESS_DENIED;
+import static com.mealtracker.TestError.API_NOT_FOUND;
 import static com.mealtracker.TestUser.NO_USER_MANAGEMENT;
 import static com.mealtracker.TestUser.USER_MANAGER;
 import static com.mealtracker.request.AppRequestBuilders.delete;
@@ -36,8 +36,7 @@ public class ManagerUserControllerIT {
     @Test
     public void addUser_NoUserManagementUser_ExpectAuthorizationError() throws Exception {
         mockMvc.perform(post("/v1/users").auth(NO_USER_MANAGEMENT))
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.httpStatus())
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.json());
+                .andExpect(API_NOT_FOUND.httpStatus());
     }
 
     @Test
@@ -50,8 +49,7 @@ public class ManagerUserControllerIT {
     @Test
     public void listUsers_NoUserManagementUser_ExpectAuthorizationError() throws Exception {
         mockMvc.perform(get("/v1/users").auth(NO_USER_MANAGEMENT))
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.httpStatus())
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.json());
+                .andExpect(API_NOT_FOUND.httpStatus());
     }
 
     @Test
@@ -64,8 +62,7 @@ public class ManagerUserControllerIT {
     @Test
     public void deleteUsers_NoUserManagementUser_ExpectAuthorizationError() throws Exception {
         mockMvc.perform(delete("/v1/users").auth(NO_USER_MANAGEMENT))
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.httpStatus())
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.json());
+                .andExpect(API_NOT_FOUND.httpStatus());
     }
 
     @Test
@@ -78,8 +75,7 @@ public class ManagerUserControllerIT {
     @Test
     public void getUser_NoUserManagementUser_ExpectAuthorizationError() throws Exception {
         mockMvc.perform(get("/v1/users/6").auth(NO_USER_MANAGEMENT))
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.httpStatus())
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.json());
+                .andExpect(API_NOT_FOUND.httpStatus());
     }
 
     @Test
@@ -92,8 +88,7 @@ public class ManagerUserControllerIT {
     @Test
     public void updateUser_NoUserManagementUser_ExpectAuthorizationError() throws Exception {
         mockMvc.perform(put("/v1/users/6").auth(NO_USER_MANAGEMENT))
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.httpStatus())
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.json());
+                .andExpect(API_NOT_FOUND.httpStatus());
     }
 
     @Test

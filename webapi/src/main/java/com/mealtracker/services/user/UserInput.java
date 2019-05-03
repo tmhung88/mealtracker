@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
 @Data
-public class UserRegistrationInput {
+public class UserInput {
 
     @Email
     @Size(min = 5, max = 200)

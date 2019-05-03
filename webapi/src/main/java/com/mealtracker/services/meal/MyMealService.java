@@ -53,7 +53,7 @@ public class MyMealService {
     }
 
     public void deleteMeals(DeleteMealsInput input, CurrentUser currentUser) {
-        mealRepository.deleteConsumerMeals(input.getIds(), currentUser.getId());
+        mealRepository.softDelete(input.getIds(), currentUser.getId());
     }
 
     public Page<Meal> listMeals(ListMyMealsInput input, CurrentUser currentUser) {

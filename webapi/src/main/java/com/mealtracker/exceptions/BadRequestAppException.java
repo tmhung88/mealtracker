@@ -25,4 +25,9 @@ public class BadRequestAppException extends AppException {
         var errorMessage = String.format("%s must be before %s", fromFieldName, toFieldName);
         return new BadRequestAppException(SPECIFIC_BAD_INPUT, errorMessage);
     }
+
+    public static BadRequestAppException deleteYourself() {
+        var errorMessage = "You cannot delete your own account. Please ask your peer to perform";
+        return new BadRequestAppException(SPECIFIC_BAD_INPUT, errorMessage);
+    }
 }

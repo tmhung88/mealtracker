@@ -2,15 +2,28 @@ package com.mealtracker.api.rest.user;
 
 import com.mealtracker.config.rest.RequestRoleMapping;
 import com.mealtracker.payloads.MessageResponse;
+import com.mealtracker.payloads.MetaSuccessEnvelop;
+import com.mealtracker.payloads.PaginationMeta;
 import com.mealtracker.payloads.SuccessEnvelop;
+import com.mealtracker.payloads.user.ManageUserResponse;
+import com.mealtracker.security.CurrentUser;
+import com.mealtracker.services.user.DeleteUsersInput;
+import com.mealtracker.services.user.ListUsersInput;
+import com.mealtracker.services.user.ManageUserInput;
+import com.mealtracker.services.user.admin.AdminUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.List;
 
 import static com.mealtracker.config.rest.RequestRoleMapping.RequestRole.ADMIN;
 
@@ -21,28 +34,37 @@ import static com.mealtracker.config.rest.RequestRoleMapping.RequestRole.ADMIN;
 @RequestRoleMapping(ADMIN)
 public class AdminUserController {
 
+    @Autowired
+    private AdminUserService adminUserService;
+
     @PostMapping
-    public SuccessEnvelop<MessageResponse> addUser() {
-        return MessageResponse.of("Admin wants to add a new user");
+    public SuccessEnvelop<MessageResponse> addUser(@Valid @RequestBody ManageUserInput input) {
+        adminUserService.addUser(input);
+        return MessageResponse.of("User added successfully");
     }
 
     @GetMapping
-    public SuccessEnvelop<MessageResponse> listUsers() {
-        return MessageResponse.of("Admin wants to list users");
+    public MetaSuccessEnvelop<List<ManageUserResponse>, PaginationMeta> listUsers(@Valid ListUsersInput input) {
+        var userPage = adminUserService.listUsers(input);
+        return ManageUserResponse.envelop(userPage);
     }
 
     @DeleteMapping
-    public SuccessEnvelop<MessageResponse> deleteUsers() {
-        return MessageResponse.of("Admin wants to delete users");
+    public SuccessEnvelop<MessageResponse> deleteUsers(@Valid @RequestBody DeleteUsersInput input, CurrentUser currentUser) {
+        adminUserService.deleteUsers(input, currentUser);
+        return MessageResponse.of("Users deleted successfully");
     }
 
-    @GetMapping(value = "/{id}")
-    public SuccessEnvelop<MessageResponse> getUser(@PathVariable Long id) {
-        return MessageResponse.of(String.format("Admin wants to get details of user %s", id));
+    @GetMapping(value = "/{userId}")
+    public SuccessEnvelop<ManageUserResponse> getUser(@PathVariable Long userId) {
+        var user = adminUserService.getUser(userId);
+        return ManageUserResponse.envelop(user);
     }
 
-    @PutMapping(value = "/{id}")
-    public SuccessEnvelop<MessageResponse> updateUser(@PathVariable Long id) {
-        return MessageResponse.of(String.format("Admin wants to update user %s", id));
+    @PutMapping(value = "/{userId}")
+    public SuccessEnvelop<MessageResponse> updateUser(@PathVariable long userId,
+                                                      @Valid @RequestBody ManageUserInput input) {
+        adminUserService.updateUser(userId, input);
+        return MessageResponse.of("User updated successfully");
     }
 }

@@ -32,12 +32,21 @@ public class AppRequestBuilder implements RequestBuilder {
 
     public AppRequestBuilder content(Object object) {
         if (object instanceof String) {
-            this.builder.content((String) object);
+            builder.content((String) object);
         } else {
-            this.builder.contentType(MediaType.APPLICATION_JSON);
-            this.builder.content(json(object));
+            builder.contentType(MediaType.APPLICATION_JSON);
+            builder.content(json(object));
         }
         return this;
+    }
+
+    public AppRequestBuilder pagination(int rowPerPages) {
+        builder.param("rowsPerPage", String.valueOf(rowPerPages));
+        return this;
+    }
+
+    public AppRequestBuilder oneRowPerPage() {
+        return pagination(1);
     }
 
     private static ObjectMapper objectMapper = new ObjectMapper();

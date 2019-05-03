@@ -2,13 +2,14 @@ package com.mealtracker.services.user;
 
 import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
-import com.mealtracker.domains.UserSettings;
 import com.mealtracker.exceptions.BadRequestAppException;
 import com.mealtracker.exceptions.ResourceName;
 import com.mealtracker.exceptions.ResourceNotFoundAppException;
 import com.mealtracker.repositories.UserRepository;
 import com.mealtracker.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,17 +30,32 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User registerUser(UserRegistrationInput registrationInput) {
-        var user = registrationInput.toUser();
-        Optional<User> existingUser = findByEmail(user.getEmail());
+    public User addUser(User newUser) {
+        Optional<User> existingUser = userRepository.findByEmail(newUser.getEmail());
         if (existingUser.isPresent()) {
-            throw BadRequestAppException.emailTaken(user.getEmail());
+            throw BadRequestAppException.emailTaken(newUser.getEmail());
         }
-        user.setRole(Role.REGULAR_USER);
-        user.setEncryptedPassword(passwordEncoder.encode(user.getPassword()));
-        user.setUserSettings(new UserSettings());
-        return userRepository.save(user);
+        newUser.setEncryptedPassword(passwordEncoder.encode(newUser.getPassword()));
+
+        return userRepository.save(newUser);
     }
+
+    public User updateUser(User updatedUser) {
+        boolean isPasswordChanged = updatedUser.getPassword() != null;
+        if (isPasswordChanged) {
+            updatedUser.setEncryptedPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
+        return userRepository.save(updatedUser);
+    }
+
+    public void softDeleteUsers(List<Long> userIds) {
+        userRepository.softDelete(userIds);
+    }
+
+    public Page<User> findExistingUsers(List<Role> includedRoles, Pageable pageable) {
+        return userRepository.findByDeletedAndRoleIn(false, includedRoles, pageable);
+    }
+
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
