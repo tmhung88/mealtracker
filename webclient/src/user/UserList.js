@@ -36,6 +36,10 @@ class UserList extends React.Component {
                     <UserTable rows={this.state.data} />
                 </LoadingOverlay>
             </div>
+            <Button component={Link} to="/users/new"
+                variant="contained" color="primary" className={classes.button}>
+                New User
+      </Button>
         </div>
     }
 }

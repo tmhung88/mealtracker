@@ -53,6 +53,7 @@ function getSorting(order, orderBy) {
 
 const rows = [
   { id: 'email', numeric: false, disablePadding: true, label: 'Email' },
+  { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -292,7 +293,7 @@ class EnhancedTable extends React.Component {
                       hover
 
                       onClick={event => { 
-                        {/* this.props.history.push(`/users/${n.id}/update`)  */}
+                        this.props.history.push(`/users/${n.id}/update`) 
                         }}
                       role="checkbox"
                       aria-checked={isSelected}
@@ -305,12 +306,14 @@ class EnhancedTable extends React.Component {
                       </TableCell>
                       
                       <TableCell align="left">{n.email}</TableCell>
+                      <TableCell align="right">{n.calories}</TableCell>
                     </TableRow>
                   );
                 })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 49 * emptyRows }}>
                   <TableCell colSpan={6} />
+
                 </TableRow>
               )}
             </TableBody>

@@ -59,12 +59,12 @@ const styles = theme => ({
 });
 
 
-class NewMeal extends React.Component {
+class NewUser extends React.Component {
     state = {
-        meal: {
+        user: {
             datetime: new Date(),
             calories: 0,
-            text: "Meal Info",
+            text: "User Info",
         },
         loading: false,
     }
@@ -72,8 +72,8 @@ class NewMeal extends React.Component {
         e.preventDefault();
         this.setState({ loading: true });
         try {
-            await post("/api/meals", this.state.meal);
-            this.props.history.replace("/meals")
+            await post("/api/users", this.state.user);
+            this.props.history.replace("/users")
         } finally {
             this.setState({ loading: false });
         }
@@ -95,76 +95,22 @@ class NewMeal extends React.Component {
                 <CssBaseline />
                 <Paper className={classes.paper}>
                     <Typography component="h1" variant="h5">
-                        New Meal
+                        New user
                     </Typography>
                     <form className={classes.form}>
-                        <FormControl margin="normal" required fullWidth>
+                    <FormControl margin="normal" required fullWidth>
                             <TextField
-                                id="date"
-                                label="Date"
-                                type="date"
-                                value={moment(this.state.meal.datetime).format("YYYY-MM-DD")}
-                                onChange={(e) => {
-                                    const value = e.currentTarget.value;
-                                    console.log(value);
-                                    const dateMoment = value ? moment(value) : moment();
-                                    this.setState({
-                                        meal: {
-                                            ...this.state.meal,
-                                            datetime: moment(this.state.meal.datetime)
-                                                .year(dateMoment.year())
-                                                .month(dateMoment.month())
-                                                .date(dateMoment.date())
-                                        }
-                                    })
-                                }}
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </FormControl>
-                        <FormControl margin="normal" required fullWidth>
-                            <TextField
-                                id="time"
-                                label="Time"
-                                type="time"
-                                value={moment(this.state.meal.datetime).format("HH:mm")}
-                                onChange={(e) => {
-                                    const value = e.currentTarget.value;
-                                    console.log(value);
-                                    const dateMoment = value ? moment(value, "HH:mm") : moment();
-                                    this.setState({
-                                        meal: {
-                                            ...this.state.meal,
-                                            datetime: moment(this.state.meal.datetime)
-                                                .hour(dateMoment.hour())
-                                                .minute(dateMoment.minute())
-                                        }
-                                    })
-                                }}
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                inputProps={{
-                                    step: 300, // 5 min
-                                }}
-                            />
-                        </FormControl>
-                        <FormControl margin="normal" required fullWidth>
-                            <TextField
-                                id="text"
-                                label="Text"
+                                id="mail"
+                                label="Mail"
                                 multiline
                                 className={classes.textField}
                                 margin="normal"
-                                value={this.state.meal.text || ""}
+                                value={this.state.user.email || ""}
                                 onChange={e => {
                                     this.setState({
-                                        meal: {
-                                            ...this.state.meal,
-                                            text: e.currentTarget.value,
+                                        user: {
+                                            ...this.state.user,
+                                            email: e.currentTarget.value,
                                         }
                                     });
                                 }}
@@ -181,19 +127,20 @@ class NewMeal extends React.Component {
                                     shrink: true,
                                 }}
                                 margin="normal"
-                                value={this.state.meal.colories || 0}
+                                value={this.state.user.calories || 0}
                                 onChange={e => {
+                                    console.log("new value", e.currentTarget.value);
                                     this.setState({
-                                        meal: {
-                                            ...this.state.meal,
-                                            colories: Number.parseInt(e.currentTarget.value, 10),
+                                        user: {
+                                            ...this.state.user,
+                                            calories: Number.parseInt(e.currentTarget.value, 10),
                                         }
                                     });
                                 }}
                             />
 
                         </FormControl>
-                        <Button component={Link} to="/meals"
+                        <Button component={Link} to="/users"
                             variant="contained"
                             color="secondary"
                             className={classes.cancel}
@@ -219,8 +166,8 @@ class NewMeal extends React.Component {
 
 }
 
-NewMeal.propTypes = {
+NewUser.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default  withRouter(withStyles(styles)(NewMeal));
+export default  withRouter(withStyles(styles)(NewUser));

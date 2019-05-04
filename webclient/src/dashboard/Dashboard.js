@@ -23,6 +23,8 @@ import UpdateMeal from "../meal/UpdateMeal";
 import MealList from "../meal/MealList";
 import UserList from "../user/UserList";
 import UserSettings from "../user/UserSettings";
+import UpdateUser from "../user/UpdateUser";
+import NewUser from "../user/NewUser";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { styles } from "./DashboardStyles";
@@ -117,6 +119,8 @@ class Dashboard extends React.Component {
             <Route path="/meals/:id/update" component={UpdateMeal} />
             <Route path="/meals" exact component={MealList} />
             <Route path="/users" exact component={UserList} />
+            <Route path="/users/:id/update" exact component={UpdateUser} />
+            <Route path="/users/new" exact component={NewUser} />
             <Route path="/users/settings" component={UserSettings} />
           </Switch>
         </main>

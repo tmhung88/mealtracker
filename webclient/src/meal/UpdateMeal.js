@@ -107,7 +107,7 @@ class UpdateMeal extends React.Component {
                 <CssBaseline />
                 <Paper className={classes.paper}>
                     <Typography component="h1" variant="h5">
-                        New Meal
+                        Update Meal
                     </Typography>
                     <form className={classes.form}>
                         <FormControl margin="normal" required fullWidth>
