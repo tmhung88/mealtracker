@@ -19,92 +19,19 @@ import { mainListItems, secondaryListItems } from './listItems';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import Register from "../user/Register";
 import NewMeal from "../meal/NewMeal";
+import UpdateMeal from "../meal/UpdateMeal";
 import MealList from "../meal/MealList";
 import UserList from "../user/UserList";
 import UserSettings from "../user/UserSettings";
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import { styles } from "./DashboardStyles";
 
-const drawerWidth = 240;
-
-const styles = theme => ({
-  root: {
-    display: 'flex',
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing.unit * 7,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing.unit * 9,
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing.unit * 3,
-    height: '100vh',
-    overflow: 'auto',
-  },
-  chartContainer: {
-    marginLeft: -22,
-  },
-  tableContainer: {
-    height: 320,
-  },
-  h5: {
-    marginBottom: theme.spacing.unit * 2,
-  },
-});
 
 class Dashboard extends React.Component {
   state = {
     open: true,
+    anchorEl: null,
   };
 
   handleDrawerOpen = () => {
@@ -115,6 +42,12 @@ class Dashboard extends React.Component {
     this.setState({ open: false });
   };
 
+  handleUserMenuClose = () => {
+    this.setState({ anchorEl: null });
+  }
+  handleUserMenuClick = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
   render() {
     const { classes } = this.props;
 
@@ -146,12 +79,20 @@ class Dashboard extends React.Component {
             >
               Dashboard
             </Typography>
-            <Link to="/users/settings" style={{ color: "white" }}>
-              <IconButton color="inherit" >
-                <AccountCircleIcon />
-              </IconButton>
-            </Link>
-
+            <IconButton color="inherit" onClick={this.handleUserMenuClick} >
+              <AccountCircleIcon />
+            </IconButton>
+            <Menu
+              id="simple-menu"
+              anchorEl={this.state.anchorEl}
+              open={Boolean(this.state.anchorEl)}
+              onClose={this.handleUserMenuClose}
+            >
+              <MenuItem component={Link} to="/users/settings" onClick={this.handleUserMenuClose}>
+                Settings
+                </MenuItem>
+              <MenuItem onClick={this.handleUserMenuClose}>Logout</MenuItem>
+            </Menu>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -173,11 +114,11 @@ class Dashboard extends React.Component {
           <div className={classes.appBarSpacer} />
           <Switch>
             <Route path="/meals/new" component={NewMeal} />
+            <Route path="/meals/:id/update" component={UpdateMeal} />
             <Route path="/meals" exact component={MealList} />
             <Route path="/users" exact component={UserList} />
             <Route path="/users/settings" component={UserSettings} />
           </Switch>
-
         </main>
       </div>
     );

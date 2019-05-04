@@ -44,7 +44,10 @@ const styles = theme => ({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing.unit,
     },
-    add: {
+    submit: {
+        marginTop: theme.spacing.unit * 3,
+    },
+    update: {
         marginTop: theme.spacing.unit * 3,
         marginLeft:theme.spacing.unit * 3,
         paddingLeft:theme.spacing.unit * 4,
@@ -63,7 +66,7 @@ function NewMeal(props) {
             <CssBaseline />
             <Paper className={classes.paper}>
                 <Typography component="h1" variant="h5">
-                    New Meal
+                    Update Meal
                 </Typography>
                 <form className={classes.form}>
                     <FormControl margin="normal" required fullWidth>
@@ -127,11 +130,10 @@ function NewMeal(props) {
                         type="submit"
                         variant="contained"
                         color="primary"
-                        className={classes.add}
+                        className={classes.update}
                     >
-                        Add
+                        Update
                     </Button>
-
                 </form>
             </Paper>
         </main>

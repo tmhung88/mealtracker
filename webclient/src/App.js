@@ -20,6 +20,9 @@ function AppRouter() {
               <Link to="/meals/new">New Meal</Link>
             </li>
             <li>
+              <Link to="/meals/123/update">Update Meal</Link>
+            </li>
+            <li>
               <Link to="/meals">Meals</Link>
             </li>
             <li>
