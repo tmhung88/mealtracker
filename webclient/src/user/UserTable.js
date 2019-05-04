@@ -52,10 +52,7 @@ function getSorting(order, orderBy) {
 }
 
 const rows = [
-  { id: 'date', numeric: false, disablePadding: true, label: 'Date' },
-  { id: 'time', numeric: false, disablePadding: false, label: 'Time' },
-  { id: 'text', numeric: false, disablePadding: false, label: 'Text' },
-  { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
+  { id: 'email', numeric: false, disablePadding: true, label: 'Email' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -156,7 +153,7 @@ let EnhancedTableToolbar = props => {
           </Typography>
         ) : (
             <Typography variant="h6" id="tableTitle">
-              Meals
+              Users
           </Typography>
           )}
       </div>
@@ -294,7 +291,9 @@ class EnhancedTable extends React.Component {
                     <TableRow
                       hover
 
-                      onClick={event => { this.props.history.push(`/meals/${n.id}/update`) }}
+                      onClick={event => { 
+                        {/* this.props.history.push(`/users/${n.id}/update`)  */}
+                        }}
                       role="checkbox"
                       aria-checked={isSelected}
                       tabIndex={-1}
@@ -304,12 +303,8 @@ class EnhancedTable extends React.Component {
                       <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
-                        {moment(n.datetime).format("DD MMM YYYY")}
-                      </TableCell>
-                      <TableCell align="left">{moment(n.datetime).format("HH:mm:ss")}</TableCell>
-                      <TableCell align="left">{n.text}</TableCell>
-                      <TableCell align="right">{n.calories}</TableCell>
+                      
+                      <TableCell align="left">{n.email}</TableCell>
                     </TableRow>
                   );
                 })}
