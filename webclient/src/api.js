@@ -1,6 +1,16 @@
 import 'whatwg-fetch'
 import Promise from "bluebird";
 
+let apiToken = undefined;
+
+export function setToken(value) {
+    apiToken = value;
+}
+
+export function hasToken(){
+    return !!apiToken;
+}
+
 const headers = {
     'Accept': 'application/json, text/plain, */*',
     'Content-Type': 'application/json'
@@ -14,9 +24,12 @@ function getFetch() {
     return fetch;
 }
 
+export class UnauthorizedError extends Error {}
 
 function handleError(response) {
-
+    if (response.status === 401) {
+        throw new UnauthorizedError("Unauthorized");
+    }
 
     return response;
 }
@@ -25,10 +38,21 @@ function handleCatchError(error) {
     throw error;
 }
 
+function getHeader(){
+    if(apiToken) {
+        return {
+            ...headers,
+            'Authorization': 'Bearer ' +apiToken,
+        }
+    }
+
+    return headers;
+}
+
 export var get = function (path) {
 
     return Promise.resolve(getFetch()(path, {
-        headers: headers,
+        headers: getHeader(),
         credentials: 'same-origin'
     })).then(handleError).catch(handleCatchError);
 }
@@ -36,7 +60,7 @@ export var get = function (path) {
 export var deleteRequest = function (path, data) {
     return Promise.resolve(getFetch()(path, {
         method: "DELETE",
-        headers: headers,
+        headers: getHeader(),
         credentials: 'same-origin',
         body: stringifyContent(data)
     })).then(handleError).catch(handleCatchError)
@@ -45,7 +69,7 @@ export var deleteRequest = function (path, data) {
 export var put = function (path, data) {
     return Promise.resolve(getFetch()(path, {
         method: "PUT",
-        headers: headers,
+        headers: getHeader(),
         credentials: 'same-origin',
         body: stringifyContent(data)
     })).then(handleError).catch(handleCatchError)
@@ -54,7 +78,7 @@ export var put = function (path, data) {
 export var post = function (path, data) {
     return Promise.resolve(getFetch()(path, {
         method: "POST",
-        headers: headers,
+        headers: getHeader(),
         credentials: 'same-origin',
         body: stringifyContent(data)
     })).then(handleError).catch(handleCatchError)

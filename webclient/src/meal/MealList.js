@@ -6,6 +6,7 @@ import MealTable from './MealTable';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import LoadingOverlay from 'react-loading-overlay';
 import { get } from '../api';
+import { withPage } from '../AppPage';
 
 const styles = theme => ({
     button: {
@@ -17,10 +18,15 @@ const styles = theme => ({
 class MealList extends React.Component {
     state = { dataLoaded: false, data: [] };
     async componentDidMount() {
-        const response = await get("/api/meals");
-        const json = await response.json();
-        console.log(json);
-        this.setState({ dataLoaded: true, data: json })
+        try {
+            const response = await get("/api/meals");
+            const json = await response.json();
+            console.log(json);
+            this.setState({ dataLoaded: true, data: json })
+        } catch {
+            this.setState({ dataLoaded: true, data: []})
+        }
+
     }
     render() {
         const { classes } = this.props;
@@ -45,4 +51,4 @@ class MealList extends React.Component {
     }
 }
 
-export default withStyles(styles)(MealList);
+export default  withPage(withStyles(styles)(MealList));

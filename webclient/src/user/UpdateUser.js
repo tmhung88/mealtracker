@@ -13,6 +13,7 @@ import { BrowserRouter as Router, Route, Link, Switch, withRouter } from "react-
 import moment from "moment";
 import { put, post, get } from '../api';
 import LoadingOverlay from 'react-loading-overlay';
+import { withPage } from '../AppPage';
 
 const styles = theme => ({
     main: {
@@ -182,4 +183,4 @@ UpdateUser.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withRouter(withStyles(styles)(UpdateUser));
+export default withPage(withStyles(styles)(UpdateUser));

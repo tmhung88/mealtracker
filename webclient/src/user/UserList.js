@@ -6,6 +6,7 @@ import UserTable from './UserTable';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import LoadingOverlay from 'react-loading-overlay';
 import { get } from '../api';
+import { withPage } from '../AppPage';
 
 const styles = theme => ({
     button: {
@@ -44,4 +45,4 @@ class UserList extends React.Component {
     }
 }
 
-export default withStyles(styles)(UserList);
+export default withPage(withStyles(styles)(UserList));

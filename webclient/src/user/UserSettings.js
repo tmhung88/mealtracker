@@ -9,6 +9,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { withPage } from '../AppPage';
 
 const styles = theme => ({
     main: {
@@ -93,4 +94,4 @@ UserSettings.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(UserSettings);
+export default withPage(withStyles(styles)(UserSettings));
