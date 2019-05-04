@@ -48,7 +48,7 @@ const styles = theme => ({
     },
 });
 
-function NewMeal(props) {
+function UserSettings(props) {
     const { classes } = props;
 
     return (
@@ -56,47 +56,10 @@ function NewMeal(props) {
             <CssBaseline />
             <Paper className={classes.paper}>
                 <Typography component="h1" variant="h5">
-                    New Meal
+                    User Settings
                 </Typography>
                 <form className={classes.form}>
-                    <FormControl margin="normal" required fullWidth>
-                        <TextField
-                            id="date"
-                            label="Date"
-                            type="date"
-                            defaultValue="2017-05-24"
-                            className={classes.textField}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                    </FormControl>
-                    <FormControl margin="normal" required fullWidth>
-                        <TextField
-                            id="time"
-                            label="Time"
-                            type="time"
-                            defaultValue="07:30"
-                            className={classes.textField}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            inputProps={{
-                                step: 300, // 5 min
-                            }}
-                        />
-                    </FormControl>
-                    <FormControl margin="normal" required fullWidth>
-                        {/* <InputLabel htmlFor="text">Text</InputLabel> */}
-                        <TextField
-                            id="text"
-                            label="Text"
-                            multiline
-                            className={classes.textField}
-                            margin="normal"
-                        />
 
-                    </FormControl>
                     <FormControl margin="normal" required fullWidth>
                         <TextField
                             id="calories"
@@ -110,6 +73,7 @@ function NewMeal(props) {
                         />
 
                     </FormControl>
+
                     <Button
                         type="submit"
                         fullWidth
@@ -117,7 +81,7 @@ function NewMeal(props) {
                         color="primary"
                         className={classes.submit}
                     >
-                        Add
+                        Save
                     </Button>
                 </form>
             </Paper>
@@ -125,8 +89,8 @@ function NewMeal(props) {
     );
 }
 
-NewMeal.propTypes = {
+UserSettings.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(NewMeal);
+export default withStyles(styles)(UserSettings);

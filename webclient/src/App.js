@@ -11,22 +11,28 @@ function AppRouter() {
         <nav style={{position:"fixed", bottom:0, zIndex:1000000}}>
           <ul>
             <li>
-              <Link to="/login">Login</Link>
+              <Link to="/users/login">Login</Link>
             </li>
             <li>
-              <Link to="/register">Register</Link>
+              <Link to="/users/register">Register</Link>
             </li>
             <li>
-              <Link to="/new-meal">New Meal</Link>
+              <Link to="/meals/new">New Meal</Link>
             </li>
             <li>
               <Link to="/meals">Meals</Link>
             </li>
+            <li>
+              <Link to="/users">Users</Link>
+            </li>
+            <li>
+              <Link to="/users/settings">User Settings</Link>
+            </li>
           </ul>
         </nav>
         <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
+          <Route path="/users/login" component={Login} />
+          <Route path="/users/register" component={Register} />
           <Route path="/*" component={Dashboard} />
         </Switch>
 

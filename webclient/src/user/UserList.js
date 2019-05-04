@@ -5,11 +5,11 @@ import SimpleTable from './SimpleTable';
 
 const styles = theme => ({})
 
-function MealList(props) {
+function UserList(props) {
     const { classes } = props;
     return <div>
         <Typography variant="h4" gutterBottom component="h2">
-            Meals
+            Users
           </Typography>
         <div className={classes.tableContainer}>
             <SimpleTable />
@@ -17,4 +17,4 @@ function MealList(props) {
     </div>
 }
 
-export default withStyles(styles)(MealList);
+export default withStyles(styles)(UserList);
