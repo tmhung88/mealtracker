@@ -1,14 +1,28 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
+import React from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import Main from "./Main";
+import Login from "./Login";
 
-function App() {
+function AppRouter() {
   return (
-    <div className="App">
-      <Button variant="contained" color="primary">
-        Hello World
-    </Button>
-    </div>
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/login/">Login</Link>
+            </li>
+          </ul>
+        </nav>
+
+        <Route path="/" exact component={Main} />
+        <Route path="/login" component={Login} />
+      </div>
+    </Router>
   );
 }
 
-export default App;
+export default AppRouter;
