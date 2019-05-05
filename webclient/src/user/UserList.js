@@ -31,9 +31,6 @@ class UserList extends React.Component {
     render() {
         const { classes } = this.props;
         return <div>
-            <Typography variant="h4" gutterBottom component="h2">
-                Users
-          </Typography>
             <div className={classes.tableContainer}>
                 <LoadingOverlay
                     active={!this.state.dataLoaded}

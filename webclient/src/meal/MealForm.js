@@ -4,7 +4,6 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import withStyles from '@material-ui/core/styles/withStyles';
 import moment from "moment";
-import { withPage } from '../AppPage';
 import Form from '../common/form/Form';
 
 const styles = () => ({
@@ -121,4 +120,4 @@ MealForm.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withPage(withStyles(styles)(MealForm));
+export default withStyles(styles)(MealForm);
