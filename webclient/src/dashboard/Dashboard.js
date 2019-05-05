@@ -126,14 +126,15 @@ class Dashboard extends React.Component {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Switch>
-            <AppRoute path="/meals" exact component={MealList} />
-            <AppRoute path="/meals/new" component={NewMeal} />
-            <AppRoute path="/meals/:id/update" component={UpdateMeal} />
-            <AppRoute path="/meals/all" exact component={AllMealList} />
-            <AppRoute path="/users" exact component={UserList} />
-            <AppRoute path="/users/:id/update" exact component={UpdateUser} />
-            <AppRoute path="/users/new" exact component={NewUser} />
-            <AppRoute path="/users/settings" component={UserSettings} />
+            <AppRoute right={Rights.MyMeal} path="/meals" exact component={MealList} />
+            <AppRoute right={Rights.MyMeal} path="/meals/new" component={NewMeal} />
+            <AppRoute right={Rights.MyMeal} path="/meals/:id/update" component={UpdateMeal} />
+            <AppRoute right={Rights.AllMeal} path="/meals/all" exact component={AllMealList} />
+            <AppRoute right={Rights.MyMeal} path="/users/settings" component={UserSettings} />
+
+            <AppRoute right={Rights.UserManagement} path="/users" exact component={UserList} />
+            <AppRoute right={Rights.UserManagement} path="/users/:id/update" exact component={UpdateUser} />
+            <AppRoute right={Rights.UserManagement} path="/users/new" exact component={NewUser} />
             <Redirect from="/" exact to="/meals" />
             <Redirect to="/not-found" />
           </Switch>
