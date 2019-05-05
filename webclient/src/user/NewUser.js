@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { post } from '../api';
 import UserForm from './UserForm';
 import { withPage } from '../AppPage';

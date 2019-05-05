@@ -1,5 +1,4 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from "react-router-dom";
@@ -7,6 +6,7 @@ import LoadingOverlay from 'react-loading-overlay';
 import { get } from '../api';
 import { withPage } from '../AppPage';
 import { EnhancedTable } from '../common/table/Table';
+import { Loading } from '../common/loading/Loading';
 
 const styles = theme => ({
     button: {
@@ -32,16 +32,15 @@ class UserList extends React.Component {
         const { classes } = this.props;
         return <div>
             <div className={classes.tableContainer}>
-                <LoadingOverlay
+                <Loading
                     active={!this.state.dataLoaded}
-                    spinner
                 >
                     <EnhancedTable
                         onRowSelect={(id) => {
                             this.props.history.push(`/users/${id}/update`);
                         }}
                         rows={this.state.data} columns={columns} tableName="Users" />
-                </LoadingOverlay>
+                </Loading>
             </div>
             <Button component={Link} to="/users/new"
                 variant="contained" color="primary" className={classes.button}>

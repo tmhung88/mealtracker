@@ -7,6 +7,7 @@ import { get } from '../api';
 import { withPage } from '../AppPage';
 import { EnhancedTable } from '../common/table/Table';
 import moment from "moment";
+import { Loading } from '../common/loading/Loading';
 
 const styles = theme => ({
     button: {
@@ -41,9 +42,8 @@ class MealList extends React.Component {
         return <div>
 
             <div className={classes.tableContainer}>
-                <LoadingOverlay
+                <Loading
                     active={!this.state.dataLoaded}
-                    spinner
                 >
                     <EnhancedTable
                         columns={columns}
@@ -53,7 +53,7 @@ class MealList extends React.Component {
                         }}
                         rows={this.state.data} />
 
-                </LoadingOverlay>
+                </Loading>
             </div>
             <Button component={Link} to="/meals/new"
                 variant="contained" color="primary" className={classes.button}>

@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { post, setToken } from '../api';
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from "react-router-dom";
+import { Loading } from '../common/loading/Loading';
 
 const styles = theme => ({
   main: {
@@ -48,15 +49,27 @@ const styles = theme => ({
 });
 
 class SignIn extends React.Component {
-  handleSubmit= async (e)=>{
+  state = { loading: false }
+  handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await post("/api/users/login",{});
-    const json = await response.json();
-    setToken(json.token);
-    this.props.history.replace("/meals")
+    try {
+      this.setState({ loading: true })
+      const response = await post("/api/users/login", {});
+      const json = await response.json();
+      setToken(json.token);
+      this.props.history.replace("/meals")
+    } catch{
+      this.setState({ loading: false })
+    }
+
   }
-  render(){
-  const { classes } = this.props;
+  render() {
+    return <Loading active={this.state.loading}>
+      {this.renderContent()}
+    </Loading>
+  }
+  renderContent() {
+    const { classes } = this.props;
 
     return (
       <main className={classes.main}>
@@ -95,7 +108,7 @@ class SignIn extends React.Component {
         </Paper>
       </main>
     );
-  }  
+  }
 }
 
 SignIn.propTypes = {
