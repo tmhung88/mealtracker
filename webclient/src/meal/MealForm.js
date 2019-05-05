@@ -90,6 +90,7 @@ class MealForm extends React.Component {
 
                 </FormControl>
                 <FormControl margin="normal" required fullWidth>
+                    
                     <TextField
                         id="calories"
                         type="number"

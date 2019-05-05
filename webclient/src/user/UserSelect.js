@@ -15,7 +15,7 @@ import { get } from '../api';
 const styles = theme => ({
     root: {
         flexGrow: 1,
-        height: 250,
+        minHeight: 100,
     },
     input: {
         display: 'flex',
@@ -186,20 +186,24 @@ class UserSelect extends React.Component {
 
         return (
             <div className={classes.root}>
-                <NoSsr>
-                    <AsyncSelect
-                        cacheOptions
-                        classes={classes}
-                        styles={selectStyles}
-                        defaultOptions={[{ key: "me", label: "Me" }]}
-                        components={components}
-                        value={this.state.single}
-                        onChange={this.handleChange('single')}
-                        loadOptions={this.handleLoadOptions}
-                        placeholder="Search and select user"
-                        isClearable
-                    />
-                </NoSsr>
+                <AsyncSelect
+                    cacheOptions
+                    classes={classes}
+                    styles={selectStyles}
+                    textFieldProps={{
+                        label: 'User',
+                        InputLabelProps: {
+                            shrink: true,
+                        },
+                    }}
+                    defaultOptions={[{ key: "me", label: "Me" }]}
+                    components={components}
+                    value={this.state.single}
+                    onChange={this.handleChange('single')}
+                    loadOptions={this.handleLoadOptions}
+                    placeholder="Search and select user"
+                    isClearable
+                />
             </div>
         );
     }
