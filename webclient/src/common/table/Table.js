@@ -158,7 +158,7 @@ export class EnhancedTable extends React.Component {
                                             </TableCell>
                                             {columns.map(c => {
                                                 return <TableCell key={c.id} align={c.numeric ? "right" : "left"} >
-                                                    {c.renderContent ? c.renderContent(n[c.id]) : n[c.id]}
+                                                    {c.renderContent ? c.renderContent(n[c.dataField]) : n[c.dataField]}
                                                 </TableCell>
                                             })}
                                         </TableRow>

@@ -16,10 +16,10 @@ const styles = theme => ({
 })
 
 const columns = [
-    { id: 'date', numeric: false, disablePadding: true, label: 'Date', renderContent(d){ return moment(d).format("DD MMM YYYY") } },
-    { id: 'time', numeric: false, disablePadding: false, label: 'Time', renderContent(d){ return moment(d).format("hh:mm A") } },
-    { id: 'text', numeric: false, disablePadding: false, label: 'Text' },
-    { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
+    { id: 'date', dataField: "datetime", numeric: false, disablePadding: true, label: 'Date', renderContent(d) { return moment(d).format("DD MMM YYYY") } },
+    { id: 'time', dataField: "datetime", numeric: false, disablePadding: false, label: 'Time', renderContent(d) { return moment(d).format("hh:mm A") } },
+    { id: 'text', dataField: "text",  numeric: false, disablePadding: false, label: 'Text' },
+    { id: 'calories', dataField: "calories",  numeric: true, disablePadding: false, label: 'Calories' },
 ];
 
 
@@ -48,7 +48,7 @@ class MealList extends React.Component {
                     <EnhancedTable
                         columns={columns}
                         tableName="Meals"
-                        onRowSelect={(id)=> {
+                        onRowSelect={(id) => {
                             this.props.history.push(`/meals/${id}/update`);
                         }}
                         rows={this.state.data} />

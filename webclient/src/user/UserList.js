@@ -16,8 +16,8 @@ const styles = theme => ({
 })
 
 const columns = [
-    { id: 'email', numeric: false, disablePadding: true, label: 'Email' },
-    { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
+    { id: 'email', dataField: "email", numeric: false, disablePadding: true, label: 'Email' },
+    { id: 'calories', dataField: "calories", numeric: true, disablePadding: false, label: 'Calories' },
 ];
 
 class UserList extends React.Component {
@@ -40,7 +40,7 @@ class UserList extends React.Component {
                     spinner
                 >
                     <EnhancedTable
-                        onRowSelect={(id)=> {
+                        onRowSelect={(id) => {
                             this.props.history.push(`/users/${id}/update`);
                         }}
                         rows={this.state.data} columns={columns} tableName="Users" />
