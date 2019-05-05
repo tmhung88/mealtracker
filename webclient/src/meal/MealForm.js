@@ -5,6 +5,7 @@ import FormControl from '@material-ui/core/FormControl';
 import withStyles from '@material-ui/core/styles/withStyles';
 import moment from "moment";
 import Form from '../common/form/Form';
+import UserSelect from '../user/UserSelect';
 
 const styles = () => ({
 
@@ -107,6 +108,9 @@ class MealForm extends React.Component {
                         }}
                     />
 
+                </FormControl>
+                <FormControl margin="normal" required fullWidth>
+                    <UserSelect />
                 </FormControl>
                 {renderActionButtons()}
             </Form>

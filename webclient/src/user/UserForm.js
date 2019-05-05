@@ -20,7 +20,7 @@ class UserForm extends React.Component {
             text: "",
         };
         return (
-            <Form formName="Meal" loading={loading}>
+            <Form formName="User" loading={loading}>
                 <FormControl margin="normal" required fullWidth>
                     <TextField
                         id="mail"
