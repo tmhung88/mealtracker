@@ -17,6 +17,10 @@ export function getToken(){
     return localStorage.getItem("apiToken");
 }
 
+export function clearToken(){
+    localStorage.removeItem("apiToken");
+}
+
 const headers = {
     'Accept': 'application/json, text/plain, */*',
     'Content-Type': 'application/json'

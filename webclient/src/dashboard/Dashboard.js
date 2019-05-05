@@ -26,6 +26,7 @@ import NewUser from "../user/NewUser";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { styles } from "./DashboardStyles";
+import { clearToken } from '../api';
 
 
 class Dashboard extends React.Component {
@@ -48,6 +49,11 @@ class Dashboard extends React.Component {
   handleUserMenuClick = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
+
+  handleLogout = ()=>{
+    clearToken();
+    this.props.history.push("/users/login");
+  }
   render() {
     const { classes } = this.props;
     console.log(this.props.location.pathname);
@@ -91,7 +97,7 @@ class Dashboard extends React.Component {
               <MenuItem component={Link} to="/users/settings" onClick={this.handleUserMenuClose}>
                 Settings
                 </MenuItem>
-              <MenuItem onClick={this.handleUserMenuClose}>Logout</MenuItem>
+              <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
             </Menu>
           </Toolbar>
         </AppBar>
