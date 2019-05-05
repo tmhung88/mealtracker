@@ -20,6 +20,7 @@ const columns = [
     { id: 'time', dataField: "datetime", numeric: false, disablePadding: false, label: 'Time', renderContent(d) { return moment(d).format("hh:mm A") } },
     { id: 'text', dataField: "text", numeric: false, disablePadding: false, label: 'Text' },
     { id: 'calories', dataField: "calories", numeric: true, disablePadding: false, label: 'Calories' },
+    { id: 'user', dataField: "calories", numeric: true, disablePadding: false, label: 'User', renderContent(d) { return "Fake user" } },
 ];
 
 
