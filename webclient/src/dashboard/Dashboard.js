@@ -14,7 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { MainListItems } from './ListItems';
-import { Route, Link, Switch, withRouter, Redirect } from "react-router-dom";
+import { Link, Switch, withRouter, Redirect } from "react-router-dom";
 import NewMeal from "../meal/NewMeal";
 import UpdateMeal from "../meal/UpdateMeal";
 import MealList from "../meal/MealList";
@@ -27,6 +27,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { styles } from "./DashboardStyles";
 import { clearToken } from '../api';
+import { AppRoute } from '../AppRouter';
 
 
 class Dashboard extends React.Component {
@@ -121,14 +122,14 @@ class Dashboard extends React.Component {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Switch>
-            <Route path="/meals" exact component={MealList} />
-            <Route path="/meals/new" component={NewMeal} />
-            <Route path="/meals/:id/update" component={UpdateMeal} />
-            <Route path="/meals/all" exact component={AllMealList} />
-            <Route path="/users" exact component={UserList} />
-            <Route path="/users/:id/update" exact component={UpdateUser} />
-            <Route path="/users/new" exact component={NewUser} />
-            <Route path="/users/settings" component={UserSettings} />
+            <AppRoute path="/meals" exact component={MealList} />
+            <AppRoute path="/meals/new" component={NewMeal} />
+            <AppRoute path="/meals/:id/update" component={UpdateMeal} />
+            <AppRoute path="/meals/all" exact component={AllMealList} />
+            <AppRoute path="/users" exact component={UserList} />
+            <AppRoute path="/users/:id/update" exact component={UpdateUser} />
+            <AppRoute path="/users/new" exact component={NewUser} />
+            <AppRoute path="/users/settings" component={UserSettings} />
             <Redirect from="/" exact to="/meals" />
             <Redirect to="/not-found" />
           </Switch>
