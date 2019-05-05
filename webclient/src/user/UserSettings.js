@@ -6,7 +6,7 @@ import FormControl from '@material-ui/core/FormControl';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { withPage } from '../AppPage';
 import Form from '../common/form/Form';
-import { get, put } from '../api';
+
 
 const styles = theme => ({
     submit: {
@@ -19,7 +19,7 @@ class UserSettings extends React.Component {
 
     async componentDidMount() {
         try {
-            const response = await get(`/api/users/settings`);
+            const response = await this.props.api.get(`/api/users/settings`);
             const json = await response.json();
             this.setState({
                 userSettings: json,
@@ -34,7 +34,7 @@ class UserSettings extends React.Component {
         e.preventDefault();
         this.setState({ loading: true });
         try {
-            await put(`/api/users/settings`, this.state.userSettings);
+            await this.props.api.put(`/api/users/settings`, this.state.userSettings);
         } finally {
             this.setState({ loading: false });
         }

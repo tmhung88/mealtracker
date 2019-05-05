@@ -1,5 +1,4 @@
 import React from "react";
-import { hasToken } from "./api";
 import { Route, Redirect } from "react-router-dom";
 import userSession from "./userSession";
 

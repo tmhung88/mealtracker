@@ -2,7 +2,6 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from "react-router-dom";
-import { get } from '../api';
 import { withPage } from '../AppPage';
 import { EnhancedTable } from '../common/table/Table';
 import moment from "moment";
@@ -27,7 +26,7 @@ class MealList extends React.Component {
     state = { dataLoaded: false, data: [] };
     async componentDidMount() {
         try {
-            const response = await get("/api/meals");
+            const response = await this.props.api.get("/api/meals");
             const json = await response.json();
             console.log(json);
             this.setState({ dataLoaded: true, data: json })

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from "react-router-dom";
-import { put, get } from '../api';
 import { withPage } from '../AppPage';
 import UserForm from './UserForm';
 
@@ -30,7 +29,7 @@ class UpdateUser extends React.Component {
     }
     async componentDidMount() {
         try {
-            const response = await get(`/api/users/${this.props.match.params.id}`);
+            const response = await this.props.api.get(`/api/users/${this.props.match.params.id}`);
             const json = await response.json();
             this.setState({
                 user: json,
@@ -44,7 +43,7 @@ class UpdateUser extends React.Component {
         e.preventDefault();
         this.setState({ loading: true });
         try {
-            await put(`/api/users/${this.state.user.id}`, this.state.user);
+            await this.props.api.put(`/api/users/${this.state.user.id}`, this.state.user);
             this.props.history.replace("/users");
         } finally {
             this.setState({ loading: false });

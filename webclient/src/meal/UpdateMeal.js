@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from "react-router-dom";
-import { put, get } from '../api';
 import { withPage } from '../AppPage';
 import MealForm from './MealForm';
 import queryString from 'query-string'
@@ -33,7 +32,7 @@ class UpdateMeal extends React.Component {
     }
     async componentDidMount() {
         try {
-            const response = await get(`/api/meals/${this.props.match.params.id}`);
+            const response = await this.props.api.get(`/api/meals/${this.props.match.params.id}`);
             const json = await response.json();
             this.setState({
                 meal: json,
@@ -47,7 +46,7 @@ class UpdateMeal extends React.Component {
         e.preventDefault();
         this.setState({ loading: true });
         try {
-            await put(`/api/meals/${this.state.meal.id}`, this.state.meal);
+            await this.props.api.put(`/api/meals/${this.state.meal.id}`, this.state.meal);
             this.props.history.replace("/meals");
         } finally {
             this.setState({ loading: false });

@@ -35,10 +35,15 @@ function getFetch() {
 }
 
 export class UnauthorizedError extends Error {}
+export class UnauthenticatedError extends Error {}
 
 function handleError(response) {
     if (response.status === 401) {
-        throw new UnauthorizedError("Unauthorized");
+        throw new UnauthenticatedError("");
+    }
+
+    if (response.status === 402) {
+        throw new UnauthorizedError("");
     }
 
     return response;
