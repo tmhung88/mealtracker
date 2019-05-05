@@ -15,6 +15,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { post, setToken } from '../api';
 import { withRouter } from "react-router-dom";
 import { Loading } from '../common/loading/Loading';
+import userSession, { Rights } from '../userSession';
 
 const styles = theme => ({
   main: {
@@ -49,15 +50,28 @@ const styles = theme => ({
 });
 
 class SignIn extends React.Component {
-  state = { loading: false }
+  state = {
+    form: { username: "", password: "" },
+    loading: false,
+  }
+
+  navigateToProperPage() {
+    if (userSession.hasRight(Rights.MyMeal)) {
+      this.props.history.replace("/meals");
+    } else if (userSession.hasRight(Rights.UserManagement)) {
+      this.props.history.replace("/users");
+    } else {
+      this.props.history.replace("/meals/all");
+    }
+  }
   handleSubmit = async (e) => {
     e.preventDefault();
     try {
       this.setState({ loading: true })
-      const response = await post("/api/users/login", {});
+      const response = await post("/api/users/login", this.state.form);
       const json = await response.json();
       setToken(json.token);
-      this.props.history.replace("/meals")
+      this.navigateToProperPage();
     } catch{
       this.setState({ loading: false })
     }
@@ -70,7 +84,7 @@ class SignIn extends React.Component {
   }
   renderContent() {
     const { classes } = this.props;
-
+    const { form } = this.state;
     return (
       <main className={classes.main}>
         <CssBaseline />
@@ -84,11 +98,18 @@ class SignIn extends React.Component {
           <form className={classes.form}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input id="email" name="email" autoComplete="email" autoFocus />
+              <Input id="email" name="email" autoComplete="email" autoFocus value={form.username}
+                onChange={e => this.setState({
+                  form: { ...this.state.form, username: e.currentTarget.value }
+                })} />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
-              <Input name="password" type="password" id="password" autoComplete="current-password" />
+              <Input name="password" type="password" id="password" autoComplete="current-password" value={form.password}
+                onChange={e => this.setState({
+                  form: { ...this.state.form, password: e.currentTarget.value }
+                })} />
+
             </FormControl>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

@@ -28,6 +28,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { styles } from "./DashboardStyles";
 import { clearToken } from '../api';
 import { AppRoute } from '../AppRouter';
+import { ShowWithRight, Rights } from '../userSession';
 
 
 class Dashboard extends React.Component {
@@ -95,9 +96,12 @@ class Dashboard extends React.Component {
               open={Boolean(this.state.anchorEl)}
               onClose={this.handleUserMenuClose}
             >
-              <MenuItem component={Link} to="/users/settings" onClick={this.handleUserMenuClose}>
-                Settings
+              <ShowWithRight right={Rights.MyMeal}>
+                <MenuItem component={Link} to="/users/settings" onClick={this.handleUserMenuClose}>
+                  Settings
                 </MenuItem>
+              </ShowWithRight>
+
               <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
             </Menu>
           </Toolbar>
