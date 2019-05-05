@@ -1,14 +1,20 @@
 import 'whatwg-fetch'
 import Promise from "bluebird";
 
-let apiToken = undefined;
+// let apiToken = undefined;
 
 export function setToken(value) {
-    apiToken = value;
+    // apiToken = value;
+    localStorage.setItem("apiToken", value);
 }
 
 export function hasToken(){
-    return !!apiToken;
+    // return !!apiToken;
+    return !!getToken();
+}
+
+export function getToken(){
+    return localStorage.getItem("apiToken");
 }
 
 const headers = {
@@ -39,10 +45,10 @@ function handleCatchError(error) {
 }
 
 function getHeader(){
-    if(apiToken) {
+    if(hasToken()) {
         return {
             ...headers,
-            'Authorization': 'Bearer ' +apiToken,
+            'Authorization': 'Bearer ' + getToken(),
         }
     }
 

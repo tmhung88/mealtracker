@@ -13,7 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { post, setToken } from '../api';
-import { BrowserRouter as Router, Route, Link, Switch, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { Loading } from '../common/loading/Loading';
 
 const styles = theme => ({

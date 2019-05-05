@@ -16,29 +16,6 @@ class AppRouter extends React.Component{
     return (
       <Router>
         <div>
-          <nav style={{ position: "fixed", bottom: 0, zIndex: 1000000 }}>
-            <ul>
-              <li>
-                <Link to="/users/login">Login</Link>
-              </li>
-              <li>
-                <Link to="/users/register">Register</Link>
-              </li>
-              <li>
-                <Link to="/meals/new">New Meal</Link>
-              </li>
-
-              <li>
-                <Link to="/meals">Meals</Link>
-              </li>
-              <li>
-                <Link to="/users">Users</Link>
-              </li>
-              <li>
-                <Link to="/users/settings">User Settings</Link>
-              </li>
-            </ul>
-          </nav>
           <Switch>
             <Route path="/users/login" component={Login} />
             <Route path="/users/register" component={Register} />
