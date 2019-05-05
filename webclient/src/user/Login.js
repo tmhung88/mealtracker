@@ -16,6 +16,8 @@ import { post, setToken } from '../api';
 import { withRouter } from "react-router-dom";
 import { Loading } from '../common/loading/Loading';
 import userSession, { Rights } from '../userSession';
+import { Link } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom'
 
 const styles = theme => ({
   main: {
@@ -47,6 +49,10 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  link: {
+    marginTop: theme.spacing.unit * 1,
+    display:"inline-block",
+  }
 });
 
 class SignIn extends React.Component {
@@ -125,6 +131,9 @@ class SignIn extends React.Component {
             >
               Sign in
             </Button>
+            <Link className={classes.link} component={RouterLink} to="/users/register">
+              Register new User
+            </Link>
           </form>
         </Paper>
       </main>
