@@ -2,11 +2,11 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-import UserTable from './UserTable';
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LoadingOverlay from 'react-loading-overlay';
 import { get } from '../api';
 import { withPage } from '../AppPage';
+import { EnhancedTable } from '../common/table/Table';
 
 const styles = theme => ({
     button: {
@@ -14,6 +14,11 @@ const styles = theme => ({
         marginLeft: 0,
     },
 })
+
+const columns = [
+    { id: 'email', numeric: false, disablePadding: true, label: 'Email' },
+    { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
+];
 
 class UserList extends React.Component {
     state = { dataLoaded: false, data: [] };
@@ -34,7 +39,11 @@ class UserList extends React.Component {
                     active={!this.state.dataLoaded}
                     spinner
                 >
-                    <UserTable rows={this.state.data} />
+                    <EnhancedTable
+                        onRowSelect={(id)=> {
+                            this.props.history.push(`/users/${id}/update`);
+                        }}
+                        rows={this.state.data} columns={columns} tableName="Users" />
                 </LoadingOverlay>
             </div>
             <Button component={Link} to="/users/new"
