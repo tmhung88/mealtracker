@@ -15,12 +15,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { MainListItems } from './ListItems';
+import { BrowserRouter as Router, Route, Link, Switch, withRouter } from "react-router-dom";
 import Register from "../user/Register";
 import NewMeal from "../meal/NewMeal";
 import UpdateMeal from "../meal/UpdateMeal";
 import MealList from "../meal/MealList";
+import AllMealList from "../meal/AllMealList";
 import UserList from "../user/UserList";
 import UserSettings from "../user/UserSettings";
 import UpdateUser from "../user/UpdateUser";
@@ -52,7 +53,7 @@ class Dashboard extends React.Component {
   };
   render() {
     const { classes } = this.props;
-
+    console.log(this.props.location.pathname);
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -110,7 +111,9 @@ class Dashboard extends React.Component {
             </IconButton>
           </div>
           <Divider />
-          <List>{mainListItems}</List>
+          <List>
+            <MainListItems selectedPathName={this.props.location.pathname}/>
+          </List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
@@ -118,6 +121,7 @@ class Dashboard extends React.Component {
             <Route path="/meals/new" component={NewMeal} />
             <Route path="/meals/:id/update" component={UpdateMeal} />
             <Route path="/meals" exact component={MealList} />
+            <Route path="/meals/all" exact component={AllMealList} />
             <Route path="/users" exact component={UserList} />
             <Route path="/users/:id/update" exact component={UpdateUser} />
             <Route path="/users/new" exact component={NewUser} />
@@ -133,4 +137,4 @@ Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Dashboard);
+export default  withRouter(withStyles(styles)(Dashboard));

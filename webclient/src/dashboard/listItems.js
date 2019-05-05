@@ -10,19 +10,26 @@ function ListItemLink(props) {
     return <ListItem button component={Link} {...props} />;
 }
 
-export const mainListItems = (
+export const MainListItems = ({selectedPathName}) => (
     <div>
-        <ListItemLink to="/meals">
+        <ListItemLink to="/meals" selected={selectedPathName === "/meals"}>
             <ListItemIcon>
                 <FastFoodIcon />
             </ListItemIcon>
             <ListItemText primary="Meals" />
         </ListItemLink>
-        <ListItemLink to="/users">
+        <ListItemLink to="/meals/all" selected={selectedPathName === "/meals/all"}>
+            <ListItemIcon>
+                <FastFoodIcon />
+            </ListItemIcon>
+            <ListItemText primary="All Meals" />
+        </ListItemLink>
+        <ListItemLink to="/users" selected={selectedPathName === "/users"}>
             <ListItemIcon>
                 <PeopleIcon />
             </ListItemIcon>
             <ListItemText primary="Users" />
         </ListItemLink>
+
     </div>
 );
