@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Login from "./user/Login";
 import Dashboard from "./dashboard/Dashboard";
 import Register from "./user/Register";
+import NotFound from "./NotFound";
 
 class AppRouter extends React.Component{
   state = { error: false }
@@ -19,6 +20,7 @@ class AppRouter extends React.Component{
           <Switch>
             <Route path="/users/login" component={Login} />
             <Route path="/users/register" component={Register} />
+            <Route path="/not-found" component={NotFound} />
             <Route path="/*" component={Dashboard} />
           </Switch>
 

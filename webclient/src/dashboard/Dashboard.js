@@ -14,7 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { MainListItems } from './ListItems';
-import { Route, Link, Switch, withRouter } from "react-router-dom";
+import { Route, Link, Switch, withRouter, Redirect } from "react-router-dom";
 import NewMeal from "../meal/NewMeal";
 import UpdateMeal from "../meal/UpdateMeal";
 import MealList from "../meal/MealList";
@@ -50,7 +50,7 @@ class Dashboard extends React.Component {
     this.setState({ anchorEl: event.currentTarget });
   };
 
-  handleLogout = ()=>{
+  handleLogout = () => {
     clearToken();
     this.props.history.push("/users/login");
   }
@@ -115,20 +115,22 @@ class Dashboard extends React.Component {
           </div>
           <Divider />
           <List>
-            <MainListItems selectedPathName={this.props.location.pathname}/>
+            <MainListItems selectedPathName={this.props.location.pathname} />
           </List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Switch>
+            <Route path="/meals" exact component={MealList} />
             <Route path="/meals/new" component={NewMeal} />
             <Route path="/meals/:id/update" component={UpdateMeal} />
-            <Route path="/meals" exact component={MealList} />
             <Route path="/meals/all" exact component={AllMealList} />
             <Route path="/users" exact component={UserList} />
             <Route path="/users/:id/update" exact component={UpdateUser} />
             <Route path="/users/new" exact component={NewUser} />
             <Route path="/users/settings" component={UserSettings} />
+            <Redirect from="/" exact to="/meals" />
+            <Redirect to="/not-found" />
           </Switch>
         </main>
       </div>
@@ -140,4 +142,4 @@ Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default  withRouter(withStyles(styles)(Dashboard));
+export default withRouter(withStyles(styles)(Dashboard));
