@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { put, get } from '../api';
 import { withPage } from '../AppPage';
 import MealForm from './MealForm';
+import queryString from 'query-string'
 
 const styles = theme => ({
     
@@ -62,8 +63,10 @@ class UpdateMeal extends React.Component {
 
     render() {
         const { classes } = this.props;
+        const values = queryString.parse(this.props.location.search)
         return (
             <MealForm 
+                userSelect={!!values["user-select"]}
                 loading={this.state.loading}
                 onMealChange={this.handleMealChange}
                 meal={this.state.meal}

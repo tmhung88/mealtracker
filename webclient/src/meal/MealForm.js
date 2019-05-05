@@ -6,6 +6,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import moment from "moment";
 import Form from '../common/form/Form';
 import UserSelect from '../user/UserSelect';
+import { ShowWithRight, Rights } from '../userSession';
 
 const styles = () => ({
 
@@ -13,6 +14,16 @@ const styles = () => ({
 
 
 class MealForm extends React.Component {
+
+    renderUserSelect() {
+        if (this.props.userSelect) {
+            return <ShowWithRight right={Rights.AllMeal}>
+                <FormControl margin="normal" required fullWidth>
+                    <UserSelect />
+                </FormControl>
+            </ShowWithRight>
+        }
+    }
 
     render() {
         const { classes, renderActionButtons, onMealChange, loading } = this.props;
@@ -90,7 +101,7 @@ class MealForm extends React.Component {
 
                 </FormControl>
                 <FormControl margin="normal" required fullWidth>
-                    
+
                     <TextField
                         id="calories"
                         type="number"
@@ -110,9 +121,7 @@ class MealForm extends React.Component {
                     />
 
                 </FormControl>
-                <FormControl margin="normal" required fullWidth>
-                    <UserSelect />
-                </FormControl>
+                {this.renderUserSelect()}
                 {renderActionButtons()}
             </Form>
         );

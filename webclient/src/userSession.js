@@ -2,9 +2,9 @@ import { hasToken, getToken } from "./api";
 import jwtDecode from "jwt-decode";
 
 export const Rights = {
-    MyMeal: "MyMeal",
-    UserManagement: "UserManagement",
-    AllMeal: "AllMeal",
+    MyMeal: "MY_MEALS",
+    UserManagement: "USER_MANAGEMENT",
+    AllMeal: "MEAL_MANAGEMENT",
 }
 
 export function ShowWithRight({ right, children }) {
