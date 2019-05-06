@@ -26,40 +26,19 @@ const styles = theme => ({
 });
 
 
-function stableSort(array, cmp) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = cmp(a[0], b[0]);
-        if (order !== 0) return order;
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map(el => el[0]);
-}
-
-function getSorting(order, orderBy) {
-    return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
-}
-
-function desc(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-
 export class EnhancedTable extends React.Component {
     state = {
-        order: 'asc',
-        orderBy: 'calories',
         selected: [],
         data: this.props.rows,
-        page: 0,
-        rowsPerPage: 5,
     };
+
+    getPagingInfo() {
+        return this.props.tableState.pagingInfo || tableState.pagingInfo;
+    }
+
+    getOrderInfo() {
+        return this.props.tableState.orderInfo || tableState.orderInfo;
+    }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.rows !== nextProps.rows) {
@@ -70,12 +49,11 @@ export class EnhancedTable extends React.Component {
     handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = 'desc';
-
-        if (this.state.orderBy === property && this.state.order === 'desc') {
+        const orderInfo = this.getOrderInfo();
+        if (orderInfo.orderBy === property && orderInfo.order === 'desc') {
             order = 'asc';
         }
-
-        this.setState({ order, orderBy });
+        this.props.onSort(orderBy, order);
     };
 
     handleSelectAllClick = event => {
@@ -109,20 +87,23 @@ export class EnhancedTable extends React.Component {
     };
 
     handleChangePage = (event, page) => {
-        this.setState({ page });
+        this.props.onPageChange(page);
     };
 
     handleChangeRowsPerPage = event => {
-        this.setState({ rowsPerPage: event.target.value });
+        this.props.onRowsPerPageChange(event.target.value);
+        // this.setState({ rowsPerPage: event.target.value });
     };
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
         const { classes, columns, tableName, onRowSelect } = this.props;
-        const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+        const { data, selected, rowsPerPage, page } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
+        const orderInfo = this.getOrderInfo();
+        const pagingInfo = this.getPagingInfo();
+        console.log("orderInfo",orderInfo);
         return (
             <Paper className={classes.root}>
                 <EnhancedTableToolbar numSelected={selected.length} tableName={tableName} />
@@ -131,16 +112,15 @@ export class EnhancedTable extends React.Component {
                         <EnhancedTableHead
                             columns={columns}
                             numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
+                            order={orderInfo.order}
+                            orderBy={orderInfo.orderBy}
                             onSelectAllClick={this.handleSelectAllClick}
                             onRequestSort={this.handleRequestSort}
                             rowCount={data.length}
                         />
                         <TableBody>
-                            {stableSort(data, getSorting(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map(n => {
+                            {
+                                data.map(n => {
                                     const isSelected = this.isSelected(n.id);
                                     return (
                                         <TableRow
@@ -173,11 +153,11 @@ export class EnhancedTable extends React.Component {
                     </Table>
                 </div>
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={pagingInfo.rowsPerPageOptions}
                     component="div"
-                    count={data.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
+                    count={pagingInfo.total}
+                    rowsPerPage={pagingInfo.rowsPerPage}
+                    page={pagingInfo.pageIndex}
                     backIconButtonProps={{
                         'aria-label': 'Previous Page',
                     }}
@@ -191,6 +171,20 @@ export class EnhancedTable extends React.Component {
         );
     }
 }
+
+const tableState = {
+    pagingInfo: {
+        rowsPerPageOptions: [5, 10, 25],
+        total: 200,
+        rowsPerPage: 5,
+        pageIndex: 0,
+    },
+    orderInfo: {
+        order: 'asc',
+        orderBy: 'calories',
+    }
+}
+
 
 EnhancedTable.propTypes = {
     classes: PropTypes.object.isRequired,

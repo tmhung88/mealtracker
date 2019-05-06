@@ -45,6 +45,7 @@ class AllMealList extends React.Component {
                     active={!this.state.dataLoaded}
                 >
                     <EnhancedTable
+                    tableState={{}}
                         columns={columns}
                         tableName="Meals"
                         onRowSelect={(id) => {

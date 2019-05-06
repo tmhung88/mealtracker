@@ -39,6 +39,7 @@ class UserList extends React.Component {
                     active={!this.state.dataLoaded}
                 >
                     <EnhancedTable
+                    tableState={{}}
                         onRowSelect={(id) => {
                             this.props.history.push(`/users/${id}/update`);
                         }}
