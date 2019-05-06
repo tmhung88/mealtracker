@@ -58,6 +58,16 @@ export function withPage(ComponentToProtect) {
         handleClose = () => {
             this.setState({ snackbarOpen: false });
         }
+
+        goBackOrReplace = (path) => {
+            if (this.props.history.length > 1) {
+                this.props.history.goBack();
+                return;
+            }
+
+            this.props.history.replace(path);
+
+        }
         render() {
             const that = this;
             const api = {
@@ -67,7 +77,7 @@ export function withPage(ComponentToProtect) {
                 deleteRequest: function () { deleteRequest.call(this, ...arguments).catch(that.handleError) },
             }
             return <Fragment>
-                <ComponentToProtect {...this.props} api={api} />
+                <ComponentToProtect {...this.props} api={api} goBackOrReplace={this.goBackOrReplace} />
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',

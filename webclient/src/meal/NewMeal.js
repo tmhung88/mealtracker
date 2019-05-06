@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Link } from "react-router-dom";
 import { withPage } from '../AppPage';
 import MealForm from './MealForm';
 import queryString from 'query-string'
@@ -35,7 +34,7 @@ class NewMeal extends React.Component {
         this.setState({ loading: true });
         try {
             await this.props.api.post("/api/meals", this.state.meal);
-            this.props.history.replace("/meals")
+            this.props.goBackOrReplace("/meal")
         } finally {
             this.setState({ loading: false });
         }
@@ -48,7 +47,7 @@ class NewMeal extends React.Component {
         })
     }
 
-    render() {        
+    render() {
         const { classes } = this.props;
         const values = queryString.parse(this.props.location.search)
         return (
@@ -59,7 +58,7 @@ class NewMeal extends React.Component {
                 meal={this.state.meal}
                 renderActionButtons={() => {
                     return <div>
-                        <Button component={Link} to="/meals"
+                        <Button onClick={() => this.props.goBackOrReplace("/meal")}
                             variant="contained"
                             color="secondary"
                             className={classes.cancel}

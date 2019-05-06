@@ -4,8 +4,8 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from "react-router-dom";
 import { withPage } from '../AppPage';
 import moment from "moment";
-import MealFilter from './MealFilter';
 import ServerPagingTable from '../common/table/ServerPagingTable';
+import UrlMealFilter from './UrlMealFilter';
 
 const styles = theme => ({
     button: {
@@ -23,31 +23,23 @@ const columns = [
 
 
 class MealList extends React.Component {
-    state = { filterString: "" }
-    getDate(field, filter) {
-        return filter[field] ? filter[field].format("YYYY-MM-DD") : null;
-    }
-
-    getTime(field, filter) {
-        return filter[field] ? filter[field].format("HH:mm") : null;
-    }
-
-    buildFilterString(filterInfo) {
-        return `fromDate=${this.getDate("fromDate", filterInfo)}&toDate=${this.getDate("toDate", filterInfo)}&fromTime=${this.getTime("fromTime", filterInfo)}&toTime=${this.getTime("toTime", filterInfo)}`
-    }
     render() {
         const { classes } = this.props;
         return <div>
-            <MealFilter
-                onFilter={(filterInfo) => {
-                    console.log("filter");
-                    this.setState({ filterString: this.buildFilterString(filterInfo) })
+            <UrlMealFilter
+                queryString={this.props.location.search}
+                onQueryStringChange={(queryString) => {
+                    this.props.history.push({
+                        pathname: this.props.location.pathname,
+                        search: queryString,
+                    })
+                    
                 }} />
             <ServerPagingTable
                 columns={columns}
                 tableName="Meals"
                 baseGetUrl="/api/meals"
-                queryString={this.state.filterString}
+                queryString={this.props.location.search}
                 onRowSelect={(id) => {
                     this.props.history.push(`/meals/${id}/update`);
                 }}

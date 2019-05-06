@@ -64,13 +64,7 @@ export let EnhancedTableToolbar = props => {
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
-          ) : (
-              <Tooltip title="Filter list">
-                <IconButton aria-label="Filter list">
-                  <FilterListIcon />
-                </IconButton>
-              </Tooltip>
-            )}
+          ) : undefined}
         </div>
       </Toolbar>
     );

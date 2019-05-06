@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Link } from "react-router-dom";
+
 import { post } from '../api';
 import UserForm from './UserForm';
 import { withPage } from '../AppPage';
@@ -34,7 +34,7 @@ class NewUser extends React.Component {
         this.setState({ loading: true });
         try {
             await post("/api/users", this.state.user);
-            this.props.history.replace("/users")
+            this.props.goBackOrReplace("/users");
         } finally {
             this.setState({ loading: false });
         }
@@ -56,7 +56,7 @@ class NewUser extends React.Component {
             loading={this.state.loading}
             renderActionButtons={() => {
                 return <div>
-                    <Button component={Link} to="/users"
+                    <Button onClick={() => this.props.goBackOrReplace("/users")}
                         variant="contained"
                         color="secondary"
                         className={classes.cancel}

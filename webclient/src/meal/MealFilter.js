@@ -11,13 +11,17 @@ const styles = {
 }
 
 class MealFilter extends React.Component {
+    // state = {
+    //     filter: {
+    //         fromDate: moment().subtract(1, "days"),
+    //         toDate: moment(),
+    //         fromTime: moment().hour(14).minute(0),
+    //         toTime: moment().hour(16).minute(0)
+    //     }
+    // }
+
     state = {
-        filter: {
-            fromDate: moment().subtract(1, "days"),
-            toDate: moment(),
-            fromTime: moment().hour(14).minute(0),
-            toTime: moment().hour(16).minute(0)
-        }
+        filter: this.props.filter || {},
     }
 
     changeDate(field, value) {
