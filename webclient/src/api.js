@@ -46,6 +46,10 @@ function handleError(response) {
         throw new UnauthorizedError("");
     }
 
+    if(response.status !== 200) {
+        throw new Error(response.statusText);
+    }
+
     return response;
 }
 

@@ -21,10 +21,15 @@ const columns = [
 class UserList extends React.Component {
     state = { dataLoaded: false, data: [] };
     async componentDidMount() {
-        const response = await this.props.api.get("/api/users");
-        const json = await response.json();
-        console.log(json);
-        this.setState({ dataLoaded: true, data: json })
+        try {
+            const response = await this.props.api.get("/api/users");
+            const json = await response.json();
+            this.setState({ dataLoaded: true, data: json });
+        }
+        finally {            
+            this.setState({ dataLoaded: true })
+        }
+
     }
     render() {
         const { classes } = this.props;
