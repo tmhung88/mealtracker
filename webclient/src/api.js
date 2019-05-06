@@ -36,8 +36,15 @@ function getFetch() {
 
 export class UnauthorizedError extends Error {}
 export class UnauthenticatedError extends Error {}
+export class ServerError extends Error {
+    constructor(error, errorCode, body){
+        super(error);
+        this.body = body;
+        this.errorCode = errorCode;
+    }
+}
 
-function handleError(response) {
+async function handleError(response) {
     if (response.status === 401) {
         throw new UnauthenticatedError("");
     }
@@ -47,7 +54,8 @@ function handleError(response) {
     }
 
     if(response.status !== 200) {
-        throw new Error(response.statusText);
+        const body = await response.text();
+        throw new ServerError(response.statusText, response.status, body);
     }
 
     return response;

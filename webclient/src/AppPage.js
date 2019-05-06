@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { withRouter } from "react-router-dom";
-import { UnauthorizedError, UnauthenticatedError, get, put, post, deleteRequest } from "./api";
+import { UnauthorizedError, UnauthenticatedError, get, put, post, deleteRequest, ServerError } from "./api";
 import bluebird from "bluebird";
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
@@ -20,17 +20,38 @@ export function withPage(ComponentToProtect) {
 
     return withRouter(class Wrap extends React.Component {
         state = { snackbarOpen: false, errorMessage: "" }
-        handleUnAuth = (error) => {
+        tryGetErrorMessage(serverError) {
+            if (!serverError.body) {
+                return serverError.message;
+            }
+
+            let errorMessage = null;
+            try {
+                const jsonObj = JSON.parse(serverError.body);
+                errorMessage = jsonObj.error.message;
+            } catch{
+                errorMessage = serverError.body;
+            }
+
+            return errorMessage;
+        }
+        handleError = (error) => {
             if (error instanceof UnauthorizedError || error instanceof UnauthenticatedError) {
                 this.props.history.push("/users/login");
                 /**delay to prevent component showing error */
                 return bluebird.delay(1000);
             }
-
-            this.setState({
-                snackbarOpen:true,
-                errorMessage: error.message || JSON.stringify(error),
-            })
+            else if (error instanceof ServerError) {
+                this.setState({
+                    snackbarOpen: true,
+                    errorMessage: this.tryGetErrorMessage(error),
+                })
+            } else {
+                this.setState({
+                    snackbarOpen: true,
+                    errorMessage: error.message || JSON.stringify(error),
+                })
+            }
 
             throw error;
         }
@@ -40,10 +61,10 @@ export function withPage(ComponentToProtect) {
         render() {
             const that = this;
             const api = {
-                get: function () { return get.call(this, ...arguments).catch(that.handleUnAuth) },
-                put: function () { return put.call(this, ...arguments).catch(that.handleUnAuth) },
-                post: function () { return post.call(this, ...arguments).catch(that.handleUnAuth) },
-                deleteRequest: function () { deleteRequest.call(this, ...arguments).catch(that.handleUnAuth) },
+                get: function () { return get.call(this, ...arguments).catch(that.handleError) },
+                put: function () { return put.call(this, ...arguments).catch(that.handleError) },
+                post: function () { return post.call(this, ...arguments).catch(that.handleError) },
+                deleteRequest: function () { deleteRequest.call(this, ...arguments).catch(that.handleError) },
             }
             return <Fragment>
                 <ComponentToProtect {...this.props} api={api} />
