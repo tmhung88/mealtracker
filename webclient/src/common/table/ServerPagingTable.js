@@ -3,6 +3,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { EnhancedTable } from "./Table";
 import { Loading } from "../loading/Loading";
 import { withPage } from "../../AppPage";
+import Bluebird from "bluebird";
 
 const styles = {
 
@@ -10,7 +11,7 @@ const styles = {
 
 class ServerPagingTable extends React.Component {
     state = {
-        dataLoaded: false,
+        loading: true,
         data: [],
         tableState: {
             pagingInfo: {
@@ -31,55 +32,67 @@ class ServerPagingTable extends React.Component {
             const response = await this.props.api.get(baseGetUrl);
             const json = await response.json();
             console.log(json);
-            this.setState({ dataLoaded: true, data: json })
+            this.setState({ loading: false, data: json })
         } catch {
-            this.setState({ dataLoaded: true, data: [] })
+            this.setState({ loading: false, data: [] })
         }
 
     }
 
-    onPageChange = (pageIndex) => {
+    onPageChange = async (pageIndex) => {
+        this.setState({ loading: true });
+        await Bluebird.delay(1000);
         this.setState({
-            tableState:{
+            tableState: {
                 ...this.state.tableState,
                 pagingInfo: {
                     ...this.state.tableState.pagingInfo,
                     pageIndex,
                 }
-            }
+            },
+            loading: false
         })
+
     }
 
-    onRowsPerPageChange = (rowsPerPage) => {
+    onRowsPerPageChange = async (rowsPerPage) => {
+        this.setState({ loading: true });
+        await Bluebird.delay(1000);
         this.setState({
-            tableState:{
+            tableState: {
                 ...this.state.tableState,
                 pagingInfo: {
                     ...this.state.tableState.pagingInfo,
                     rowsPerPage,
                 }
-            }
+            },
+            loading: false
         })
+
     }
 
-    onSort = (orderBy, order) => {
+    onSort = async (orderBy, order) => {
+        this.setState({ loading: true });
+        await Bluebird.delay(1000);
         this.setState({
-            tableState:{
+            tableState: {
                 ...this.state.tableState,
                 orderInfo: {
                     ...this.state.tableState.orderInfo,
                     orderBy,
                     order
                 }
-            }
+            },
+            loading: false
         })
+
     }
     render() {
         const { classes, columns, tableName } = this.props;
         return <div>
             <div className={classes.tableContainer}>
                 <Loading
-                    active={!this.state.dataLoaded}
+                    active={this.state.loading}
                 >
                     <EnhancedTable
                         tableState={this.state.tableState}

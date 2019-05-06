@@ -99,11 +99,11 @@ export class EnhancedTable extends React.Component {
 
     render() {
         const { classes, columns, tableName, onRowSelect } = this.props;
-        const { data, selected, rowsPerPage, page } = this.state;
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-        const orderInfo = this.getOrderInfo();
+        const { data, selected } = this.state;
         const pagingInfo = this.getPagingInfo();
-        console.log("orderInfo",orderInfo);
+        const emptyRows = pagingInfo.rowsPerPage - Math.min(pagingInfo.rowsPerPage, data.length);
+        const orderInfo = this.getOrderInfo();
+        console.log("orderInfo", orderInfo);
         return (
             <Paper className={classes.root}>
                 <EnhancedTableToolbar numSelected={selected.length} tableName={tableName} />

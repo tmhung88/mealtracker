@@ -3,8 +3,7 @@ import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from "react-router-dom";
 import { withPage } from '../AppPage';
-import { EnhancedTable } from '../common/table/Table';
-import { Loading } from '../common/loading/Loading';
+import ServerPagingTable from '../common/table/ServerPagingTable';
 
 const styles = theme => ({
     button: {
@@ -19,33 +18,17 @@ const columns = [
 ];
 
 class UserList extends React.Component {
-    state = { dataLoaded: false, data: [] };
-    async componentDidMount() {
-        try {
-            const response = await this.props.api.get("/api/users");
-            const json = await response.json();
-            this.setState({ dataLoaded: true, data: json });
-        }
-        finally {            
-            this.setState({ dataLoaded: true })
-        }
-
-    }
     render() {
         const { classes } = this.props;
         return <div>
-            <div className={classes.tableContainer}>
-                <Loading
-                    active={!this.state.dataLoaded}
-                >
-                    <EnhancedTable
-                    tableState={{}}
-                        onRowSelect={(id) => {
-                            this.props.history.push(`/users/${id}/update`);
-                        }}
-                        rows={this.state.data} columns={columns} tableName="Users" />
-                </Loading>
-            </div>
+            <ServerPagingTable
+                baseGetUrl="/api/users"
+                onRowSelect={(id) => {
+                    this.props.history.push(`/users/${id}/update`);
+                }}
+
+                columns={columns}
+                tableName="Users" />
             <Button component={Link} to="/users/new"
                 variant="contained" color="primary" className={classes.button}>
                 New User

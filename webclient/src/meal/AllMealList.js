@@ -3,9 +3,8 @@ import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from "react-router-dom";
 import { withPage } from '../AppPage';
-import { EnhancedTable } from '../common/table/Table';
 import moment from "moment";
-import { Loading } from '../common/loading/Loading';
+import ServerPagingTable from '../common/table/ServerPagingTable';
 
 const styles = theme => ({
     button: {
@@ -22,39 +21,19 @@ const columns = [
     { id: 'user', dataField: "calories", numeric: true, disablePadding: false, label: 'User', renderContent(d) { return "Fake user" } },
 ];
 
-
 class AllMealList extends React.Component {
-    state = { dataLoaded: false, data: [] };
-    async componentDidMount() {
-        try {
-            const response = await this.props.api.get("/api/meals/all");
-            const json = await response.json();
-            console.log(json);
-            this.setState({ dataLoaded: true, data: json })
-        } catch {
-            this.setState({ dataLoaded: true, data: [] })
-        }
-
-    }
     render() {
         const { classes } = this.props;
         return <div>
 
-            <div className={classes.tableContainer}>
-                <Loading
-                    active={!this.state.dataLoaded}
-                >
-                    <EnhancedTable
-                    tableState={{}}
-                        columns={columns}
-                        tableName="Meals"
-                        onRowSelect={(id) => {
-                            this.props.history.push(`/meals/${id}/update?user-select=1`);
-                        }}
-                        rows={this.state.data} />
-
-                </Loading>
-            </div>
+            <ServerPagingTable
+                columns={columns}
+                tableName="All Meals"
+                baseGetUrl="/api/meals/all"
+                onRowSelect={(id) => {
+                    this.props.history.push(`/meals/${id}/update?user-select=1`);
+                }}
+                />
             <Button component={Link} to="/meals/new?user-select=1"
                 variant="contained" color="primary" className={classes.button}>
                 New Meal
