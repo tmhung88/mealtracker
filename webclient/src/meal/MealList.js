@@ -23,14 +23,31 @@ const columns = [
 
 
 class MealList extends React.Component {
+    state = { filterString: "" }
+    getDate(field, filter) {
+        return filter[field] ? filter[field].format("YYYY-MM-DD") : null;
+    }
+
+    getTime(field, filter) {
+        return filter[field] ? filter[field].format("HH:mm") : null;
+    }
+
+    buildFilterString(filterInfo) {
+        return `fromDate=${this.getDate("fromDate", filterInfo)}&toDate=${this.getDate("toDate", filterInfo)}&fromTime=${this.getTime("fromTime", filterInfo)}&toTime=${this.getTime("toTime", filterInfo)}`
+    }
     render() {
         const { classes } = this.props;
         return <div>
-            <MealFilter />
+            <MealFilter
+                onFilter={(filterInfo) => {
+                    console.log("filter");
+                    this.setState({ filterString: this.buildFilterString(filterInfo) })
+                }} />
             <ServerPagingTable
                 columns={columns}
                 tableName="Meals"
                 baseGetUrl="/api/meals"
+                queryString={this.state.filterString}
                 onRowSelect={(id) => {
                     this.props.history.push(`/meals/${id}/update`);
                 }}

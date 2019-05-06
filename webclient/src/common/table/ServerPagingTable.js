@@ -3,7 +3,6 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { EnhancedTable } from "./Table";
 import { Loading } from "../loading/Loading";
 import { withPage } from "../../AppPage";
-import Bluebird from "bluebird";
 
 const styles = {
 
@@ -26,30 +25,55 @@ class ServerPagingTable extends React.Component {
             }
         }
     };
-    async componentDidMount() {
-        const baseGetUrl = this.props.baseGetUrl;
+
+    componentDidUpdate(prevProps) {
+        if (this.props.queryString !== prevProps.queryString) {
+            this.requestData();
+        }
+    }
+
+    buildPagingQuery(pagingInfo){
+        return `rowsPerPage=${pagingInfo.rowsPerPage}&pageIndex=${pagingInfo.pageIndex}`;
+    }
+
+    buildOrderQUery(orderInfo){
+        return `order=${orderInfo.order}&orderBy=${orderInfo.orderBy}`;
+    }
+
+    buildQueryString(tableState){
+        return `${this.buildPagingQuery(tableState.pagingInfo)}&${this.buildOrderQUery(tableState.orderInfo)}`;
+    }
+
+    async requestData(tableState=this.state.tableState) {
+        const { baseGetUrl, queryString } = this.props;
+
         try {
-            const response = await this.props.api.get(baseGetUrl);
+            this.setState({ loading: true })
+            const response = await this.props.api.get(`${baseGetUrl}?${queryString || ""}&${this.buildQueryString(tableState)}`);
             const json = await response.json();
             console.log(json);
             this.setState({ loading: false, data: json })
         } catch {
             this.setState({ loading: false, data: [] })
         }
+    }
 
+    async componentDidMount() {
+        await this.requestData();
     }
 
     onPageChange = async (pageIndex) => {
         this.setState({ loading: true });
-        await Bluebird.delay(1000);
+        const newTableState = {
+            ...this.state.tableState,
+            pagingInfo: {
+                ...this.state.tableState.pagingInfo,
+                pageIndex,
+            }
+        };
+        await this.requestData(newTableState);
         this.setState({
-            tableState: {
-                ...this.state.tableState,
-                pagingInfo: {
-                    ...this.state.tableState.pagingInfo,
-                    pageIndex,
-                }
-            },
+            tableState: newTableState,
             loading: false
         })
 
@@ -57,15 +81,16 @@ class ServerPagingTable extends React.Component {
 
     onRowsPerPageChange = async (rowsPerPage) => {
         this.setState({ loading: true });
-        await Bluebird.delay(1000);
+        const newTableState = {
+            ...this.state.tableState,
+            pagingInfo: {
+                ...this.state.tableState.pagingInfo,
+                rowsPerPage,
+            }
+        }
+        await this.requestData(newTableState);
         this.setState({
-            tableState: {
-                ...this.state.tableState,
-                pagingInfo: {
-                    ...this.state.tableState.pagingInfo,
-                    rowsPerPage,
-                }
-            },
+            tableState: newTableState,
             loading: false
         })
 
@@ -73,16 +98,17 @@ class ServerPagingTable extends React.Component {
 
     onSort = async (orderBy, order) => {
         this.setState({ loading: true });
-        await Bluebird.delay(1000);
+        const newTableState = {
+            ...this.state.tableState,
+            orderInfo: {
+                ...this.state.tableState.orderInfo,
+                orderBy,
+                order
+            }
+        };
+        await this.requestData(newTableState);
         this.setState({
-            tableState: {
-                ...this.state.tableState,
-                orderInfo: {
-                    ...this.state.tableState.orderInfo,
-                    orderBy,
-                    order
-                }
-            },
+            tableState: newTableState,
             loading: false
         })
 
