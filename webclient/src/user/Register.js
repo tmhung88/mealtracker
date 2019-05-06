@@ -8,6 +8,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom'
@@ -15,6 +16,7 @@ import validate from "validate.js";
 import _ from "lodash";
 import { Loading } from '../common/loading/Loading';
 import { post } from '../api';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
   main: {
@@ -63,6 +65,10 @@ class Register extends React.Component {
       password: false,
     },
     loading: false,
+    emailDuplication: {
+      valid: true,
+      validating: false,
+    }
   }
 
   constructConstraint(constraints, dirty) {
@@ -94,7 +100,12 @@ class Register extends React.Component {
       }
     }, dirty);
 
-    return validate(user, constraints);
+    let result = validate(user, constraints);
+    if (!this.state.emailDuplication.valid) {
+      result = result || {};
+      result.email = "Email Duplication";
+    }
+    return result;
   }
 
   handleSubmit = async (e) => {
@@ -116,6 +127,25 @@ class Register extends React.Component {
   }
 
   handleFieldChange(fieldName, value) {
+    if (fieldName === "email") {
+      this.setState({
+        emailDuplication: {
+          ...this.state.emailDuplication,
+          validating: true,
+        }
+      })
+
+      setTimeout(() => {
+        this.setState({
+          emailDuplication: {
+            ...this.state.emailDuplication,
+            validating: false,
+            valid: true,
+          }
+        })
+      }, 1000);
+
+    }
     this.setState({
       user: {
         ...this.state.user,
@@ -133,6 +163,17 @@ class Register extends React.Component {
     </Loading>
   }
 
+  renderEmailAdorment() {
+    const { emailDuplication } = this.state;
+    if (emailDuplication.validating) {
+      return <CircularProgress size={15} />;
+    }
+
+    if (!emailDuplication.didValidation) {
+      return null;
+    }
+  }
+
   renderContent() {
     const { classes } = this.props;
     const { user } = this.state;
@@ -147,7 +188,15 @@ class Register extends React.Component {
           <form className={classes.form}>
             <FormControl margin="normal" required fullWidth error={!!validationResult.email}>
               <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input id="email" name="email" autoComplete="email" autoFocus value={user.email}
+              <Input id="email" name="email"
+                autoComplete="email"
+                autoFocus
+                endAdornment={(
+                  <InputAdornment position="end">
+                    {this.renderEmailAdorment()}
+                  </InputAdornment>
+                )}
+                value={user.email}
                 onChange={e => this.handleFieldChange("email", e.currentTarget.value)}
               />
               <FormHelperText>{validationResult.email}</FormHelperText>
