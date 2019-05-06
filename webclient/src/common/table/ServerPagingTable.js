@@ -32,24 +32,24 @@ class ServerPagingTable extends React.Component {
         }
     }
 
-    buildPagingQuery(pagingInfo){
+    buildPagingQuery(pagingInfo) {
         return `rowsPerPage=${pagingInfo.rowsPerPage}&pageIndex=${pagingInfo.pageIndex}`;
     }
 
-    buildOrderQUery(orderInfo){
+    buildOrderQUery(orderInfo) {
         return `order=${orderInfo.order}&orderBy=${orderInfo.orderBy}`;
     }
 
-    buildQueryString(tableState){
+    buildQueryString(tableState) {
         return `${this.buildPagingQuery(tableState.pagingInfo)}&${this.buildOrderQUery(tableState.orderInfo)}`;
     }
 
-    async requestData(tableState=this.state.tableState) {
-        const { baseGetUrl, queryString } = this.props;
+    async requestData(tableState = this.state.tableState) {
+        const { baseUrl, queryString } = this.props;
 
         try {
             this.setState({ loading: true })
-            const response = await this.props.api.get(`${baseGetUrl}?${queryString || ""}&${this.buildQueryString(tableState)}`);
+            const response = await this.props.api.get(`${baseUrl}?${queryString || ""}&${this.buildQueryString(tableState)}`);
             const json = await response.json();
             console.log(json);
             this.setState({ loading: false, data: json })
@@ -113,6 +113,15 @@ class ServerPagingTable extends React.Component {
         })
 
     }
+
+    handleDelete = async (selectedIds) => {
+        this.setState({ loading: true });
+        console.log("selectedIds", selectedIds)
+        await this.props.api.delete(this.props.baseUrl, { ids: selectedIds });
+        await this.requestData();
+        this.setState({ loading: false });
+    }
+
     render() {
         const { classes, columns, tableName } = this.props;
         return <div>
@@ -121,6 +130,7 @@ class ServerPagingTable extends React.Component {
                     active={this.state.loading}
                 >
                     <EnhancedTable
+                        onDelete={this.handleDelete}
                         tableState={this.state.tableState}
                         columns={columns}
                         tableName={tableName}
@@ -128,7 +138,8 @@ class ServerPagingTable extends React.Component {
                         onPageChange={this.onPageChange}
                         onRowsPerPageChange={this.onRowsPerPageChange}
                         onSort={this.onSort}
-                        rows={this.state.data} />
+                        rows={this.state.data}
+                        onRefresh={() => this.requestData()} />
 
                 </Loading>
             </div>

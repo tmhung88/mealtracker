@@ -22,7 +22,7 @@ class UserList extends React.Component {
         const { classes } = this.props;
         return <div>
             <ServerPagingTable
-                baseGetUrl="/api/users"
+                baseUrl="/api/users"
                 onRowSelect={(id) => {
                     this.props.history.push(`/users/${id}/update`);
                 }}

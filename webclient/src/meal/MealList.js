@@ -38,7 +38,7 @@ class MealList extends React.Component {
             <ServerPagingTable
                 columns={columns}
                 tableName="Meals"
-                baseGetUrl="/api/meals"
+                baseUrl="/api/meals"
                 queryString={this.props.location.search}
                 onRowSelect={(id) => {
                     this.props.history.push(`/meals/${id}/update`);

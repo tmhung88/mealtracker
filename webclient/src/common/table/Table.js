@@ -42,7 +42,7 @@ export class EnhancedTable extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props.rows !== nextProps.rows) {
-            this.setState({ data: nextProps.rows });
+            this.setState({ data: nextProps.rows, selected: [] });
         }
     }
 
@@ -106,7 +106,12 @@ export class EnhancedTable extends React.Component {
         console.log("orderInfo", orderInfo);
         return (
             <Paper className={classes.root}>
-                <EnhancedTableToolbar numSelected={selected.length} tableName={tableName} />
+                <EnhancedTableToolbar
+                    numSelected={selected.length}
+                    tableName={tableName}
+                    onDelete={() => this.props.onDelete(this.state.selected)}
+                    onRefresh={this.props.onRefresh}
+                     />
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle" >
                         <EnhancedTableHead

@@ -74,7 +74,7 @@ export function withPage(ComponentToProtect) {
                 get: function () { return get.call(this, ...arguments).catch(that.handleError) },
                 put: function () { return put.call(this, ...arguments).catch(that.handleError) },
                 post: function () { return post.call(this, ...arguments).catch(that.handleError) },
-                deleteRequest: function () { deleteRequest.call(this, ...arguments).catch(that.handleError) },
+                delete: function () { deleteRequest.call(this, ...arguments).catch(that.handleError) },
             }
             return <Fragment>
                 <ComponentToProtect {...this.props} api={api} goBackOrReplace={this.goBackOrReplace} />

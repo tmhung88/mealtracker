@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
@@ -60,11 +61,15 @@ export let EnhancedTableToolbar = props => {
         <div className={classes.actions}>
           {numSelected > 0 ? (
             <Tooltip title="Delete">
-              <IconButton aria-label="Delete">
+              <IconButton aria-label="Delete" onClick={props.onDelete}>
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
-          ) : undefined}
+          ) : <Tooltip title="Refresh">
+              <IconButton aria-label="Refresh" onClick={props.onRefresh}>
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>}
         </div>
       </Toolbar>
     );
