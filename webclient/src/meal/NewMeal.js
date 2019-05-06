@@ -26,14 +26,28 @@ class NewMeal extends React.Component {
             datetime: new Date(),
             calories: 0,
             text: "Meal Info",
+            user: null,
         },
         loading: false,
+    }
+
+    buildSubmitData() {
+        const { user, ...mealWithoutUser } = this.state.meal;
+        if (this.hasUserSelect()) {
+            mealWithoutUser.userId = (this.state.meal.user || {}).key;
+        }
+
+        return mealWithoutUser;
+    }
+
+    hasUserSelect() {
+        return !!queryString.parse(this.props.location.search)["user-select"];
     }
     handleSubmit = async (e) => {
         e.preventDefault();
         this.setState({ loading: true });
         try {
-            await this.props.api.post("/api/meals", this.state.meal);
+            await this.props.api.post("/api/meals", this.buildSubmitData());
             this.props.goBackOrReplace("/meal")
         } finally {
             this.setState({ loading: false });
@@ -49,10 +63,9 @@ class NewMeal extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const values = queryString.parse(this.props.location.search)
         return (
             <MealForm
-                userSelect={!!values["user-select"]}
+                userSelect={this.hasUserSelect()}
                 loading={this.state.loading}
                 onMealChange={this.handleMealChange}
                 meal={this.state.meal}

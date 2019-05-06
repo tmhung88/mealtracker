@@ -1,6 +1,5 @@
 import React from "react";
 import withStyles from '@material-ui/core/styles/withStyles';
-import moment from "moment";
 import MealFilter from "./MealFilter";
 import queryString from 'query-string';
 import datetimeHelper from "../datetimeHelper";

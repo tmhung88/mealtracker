@@ -19,7 +19,15 @@ class MealForm extends React.Component {
         if (this.props.userSelect) {
             return <ShowWithRight right={Rights.AllMeal}>
                 <FormControl margin="normal" required fullWidth>
-                    <UserSelect />
+                    <UserSelect
+                        user={this.props.meal.user}
+                        onUserChange={(user) => {
+                            this.props.onMealChange({
+                                ...this.props.meal,
+                                user: user,
+                            })
+                        }}
+                    />
                 </FormControl>
             </ShowWithRight>
         }

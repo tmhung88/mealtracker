@@ -153,19 +153,13 @@ const components = {
 };
 
 class UserSelect extends React.Component {
-    state = {
-        single: null,
-        multi: null,
+    handleChange = value => {
+        console.log(value);
+        this.props.onUserChange(value);
     };
 
-    handleChange = name => value => {
-        this.setState({
-            [name]: value,
-        });
-    };
-
-    handleLoadOptions = async () => {
-        const response = await get("/api/users");
+    handleLoadOptions = async (inputValue) => {
+        const response = await get(`/api/users/select?search=${inputValue}`);
         const json = await response.json();
         return json.map(f => ({ key: f.id, label: f.email }))
     }
@@ -197,8 +191,8 @@ class UserSelect extends React.Component {
                     }}
                     defaultOptions={[{ key: "me", label: "Me" }]}
                     components={components}
-                    value={this.state.single}
-                    onChange={this.handleChange('single')}
+                    value={this.props.user}
+                    onChange={this.handleChange}
                     loadOptions={this.handleLoadOptions}
                     placeholder="Search and select user"
                     isClearable
