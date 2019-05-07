@@ -83,9 +83,9 @@ class SignIn extends React.Component {
         this.navigateToProperPage();
       } catch (error) {
         if (error instanceof BadRequestError) {
-          console.log("BadRequestError", error.body.error.errorFields);
+          console.log("BadRequestError", error.body.error);
           this.setState({
-            serverErrorFields: error.body.error.errorFields,
+            serverValidationError: error.body.error,
           })
         }else {
           throw error;
@@ -117,7 +117,7 @@ class SignIn extends React.Component {
           </Typography>
           <form className={classes.form}>
             <ValidationForm
-              serverErrorFields={this.state.serverErrorFields}
+              serverValidationError={this.state.serverValidationError}
               constraints={{
                 username: {
                   email: true,
@@ -127,16 +127,16 @@ class SignIn extends React.Component {
               data={this.state.form}
               onDataChange={(data) => this.setState({ form: data })}
             >
-              {({ onFieldChange, data, isValid, validationResult }) => {
+              {({ onFieldChange, data, isValid, validationFields, validationMessage }) => {
                 return (<Fragment>
-                  <FormControl margin="normal" required fullWidth error={!!validationResult.username}>
+                  <FormControl margin="normal" required fullWidth error={!!validationFields.username}>
                     <InputLabel htmlFor="email">Email Address</InputLabel>
                     <Input id="email" name="email" autoComplete="email" autoFocus
                       value={data.username}
                       onChange={e => onFieldChange("username", e.currentTarget.value)} />
-                    <FormHelperText>{validationResult.username}</FormHelperText>
+                    <FormHelperText>{validationFields.username}</FormHelperText>
                   </FormControl>
-                  <FormControl margin="normal" required fullWidth error={!!validationResult.password}>
+                  <FormControl margin="normal" required fullWidth error={!!validationFields.password}>
                     <InputLabel htmlFor="password">Password</InputLabel>
                     <Input name="password" type="password" id="password" autoComplete="current-password" value={data.password}
                       onChange={e => onFieldChange("password", e.currentTarget.value)} />
@@ -146,6 +146,7 @@ class SignIn extends React.Component {
                     control={<Checkbox value="remember" color="primary" />}
                     label="Remember me"
                   />
+                  {validationMessage ? <FormHelperText error>{validationMessage}</FormHelperText> : undefined}
                   <Button
                     type="submit"
                     fullWidth
@@ -163,6 +164,7 @@ class SignIn extends React.Component {
                   >
                     Sign in
                   </Button>
+                  
                   <Link className={classes.link} component={RouterLink} to="/users/register">
                     Register new User
                   </Link>

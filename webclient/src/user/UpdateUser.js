@@ -49,7 +49,7 @@ class UpdateUser extends React.Component {
             } catch (error) {
                 if (error instanceof BadRequestError) {
                     this.setState({
-                        serverErrorFields: error.body.error.errorFields,
+                        serverValidationError: error.body.error,
                     })
                 }
             } finally {
@@ -71,7 +71,7 @@ class UpdateUser extends React.Component {
         const { classes } = this.props;
         return (
             <UserForm
-                serverErrorFields={this.state.serverErrorFields}
+                serverValidationError={this.state.serverValidationError}
                 loading={this.state.loading}
                 onUserChange={this.handleUserChange}
                 user={this.state.user}

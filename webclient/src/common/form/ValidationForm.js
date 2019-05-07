@@ -18,27 +18,27 @@ class ValidationForm extends React.Component {
         })
         this.state = {
             dirty,
-            serverValidationResult: this.constructValidationErrorFromServer(this.props.serverErrorFields),
+            serverValidationResult: this.constructValidationErrorFromServer(this.props.serverValidationError),
         }
     }
 
-    constructValidationErrorFromServer(serverErrorFields) {
-        if (!serverErrorFields) {
+    constructValidationErrorFromServer(serverValidationError) {
+        if (!serverValidationError) {
             return {};
         }
 
-        const validationResult = {};
-        serverErrorFields.forEach(v => {
-            validationResult[v.name] = v.message;
+        const validationFields = {};
+        serverValidationError.errorFields.forEach(v => {
+            validationFields[v.name] = v.message;
         });
 
-        return validationResult;
+        return { validationFields, validationMessage: serverValidationError.message };
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.serverErrorFields !== this.props.serverErrorFields) {
+        if (nextProps.serverValidationError !== this.props.serverValidationError) {
             this.setState({
-                serverValidationResult: this.constructValidationErrorFromServer(nextProps.serverErrorFields),
+                serverValidationResult: this.constructValidationErrorFromServer(nextProps.serverValidationError),
             })
         }
     }
@@ -95,13 +95,15 @@ class ValidationForm extends React.Component {
 
     render() {
         const { children, data } = this.props;
-        const validationResult = { ...this.validate(), ...this.state.serverValidationResult };
+        const { validationFields, validationMessage } = this.state.serverValidationResult;
+        const validationResult = { ...this.validate(), ...validationFields };
         return <Fragment>
             {children({
                 onFieldChange: this.handleFieldChange,
                 data: data,
                 isValid: this.isValid,
-                validationResult: validationResult,
+                validationFields: validationResult,
+                validationMessage: validationMessage,
             })}
         </Fragment>
     }

@@ -61,7 +61,7 @@ class Register extends React.Component {
       password: "",
     },
     loading: false,
-    serverErrorFields: null,
+    serverValidationError: null,
   }
 
   handleSubmit = async (e) => {
@@ -73,9 +73,9 @@ class Register extends React.Component {
         this.props.history.replace("/users/login");
       } catch (error) {
         if (error instanceof BadRequestError) {
-          console.log("BadRequestError", error.body.error.errorFields);
+          console.log("BadRequestError", error.body.error);
           this.setState({
-            serverErrorFields: error.body.error.errorFields,
+            serverValidationError: error.body.error,
           })
         } else {
           throw error;
@@ -84,7 +84,7 @@ class Register extends React.Component {
         this.setState({ loading: false });
       }
     })
-    
+
   }
 
   render() {
@@ -104,7 +104,7 @@ class Register extends React.Component {
         </Typography>
           <form className={classes.form}>
             <ValidationForm
-              serverErrorFields={this.state.serverErrorFields}
+              serverValidationError={this.state.serverValidationError}
               constraints={{
                 email: {
                   email: true,
@@ -121,9 +121,9 @@ class Register extends React.Component {
               data={this.state.user}
               onDataChange={(user) => this.setState({ user: user })}
             >
-              {({ onFieldChange, data, isValid, validationResult }) => {
+              {({ onFieldChange, data, isValid, validationFields, validationMessage }) => {
                 return <Fragment>
-                  <FormControl margin="normal" required fullWidth error={!!validationResult.email}>
+                  <FormControl margin="normal" required fullWidth error={!!validationFields.email}>
                     <InputLabel htmlFor="email">Email Address</InputLabel>
                     <Input id="email" name="email"
                       autoComplete="email"
@@ -135,15 +135,16 @@ class Register extends React.Component {
                       value={data.email}
                       onChange={e => onFieldChange("email", e.currentTarget.value)}
                     />
-                    <FormHelperText>{validationResult.email}</FormHelperText>
+                    <FormHelperText>{validationFields.email}</FormHelperText>
                   </FormControl>
-                  <FormControl margin="normal" required fullWidth error={!!validationResult.password}>
+                  <FormControl margin="normal" required fullWidth error={!!validationFields.password}>
                     <InputLabel htmlFor="password">Password</InputLabel>
                     <Input name="password" type="password" id="password" autoComplete="new-password" value={data.password}
                       onChange={e => onFieldChange("password", e.currentTarget.value)}
                     />
-                    <FormHelperText>{validationResult.password}</FormHelperText>
+                    <FormHelperText>{validationFields.password}</FormHelperText>
                   </FormControl>
+                  {validationMessage ? <FormHelperText error>{validationMessage}</FormHelperText> : undefined}
                   <Button
                     type="submit"
                     fullWidth
@@ -151,6 +152,7 @@ class Register extends React.Component {
                     color="primary"
                     className={classes.submit}
                     onClick={(e) => {
+                      e.preventDefault();
                       if (!isValid()) {
                         return;
                       }

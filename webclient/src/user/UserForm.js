@@ -15,7 +15,7 @@ const styles = () => ({
 class UserForm extends React.Component {
 
     render() {
-        const { classes, renderActionButtons, onUserChange, loading, serverErrorFields } = this.props;
+        const { classes, renderActionButtons, onUserChange, loading, serverValidationError } = this.props;
         const user = this.props.user || {
             calories: 0,
             email: "",
@@ -23,7 +23,7 @@ class UserForm extends React.Component {
         return (
             <Form formName="User" loading={loading}>
                 <ValidationForm
-                    serverErrorFields={serverErrorFields}
+                    serverValidationError={serverValidationError}
                     constraints={{
                         email: {
                             email: true,
@@ -33,12 +33,13 @@ class UserForm extends React.Component {
                     data={user}
                     onDataChange={(user) => onUserChange(user)}
                 >
-                    {({ onFieldChange, data, isValid, validationResult }) => {
+                    {({ onFieldChange, data, isValid, validationFields, validationMessage }) => {
                         return (<Fragment>
-                            <FormControl margin="normal" required fullWidth error={!!validationResult.email}>
+                            <FormControl margin="normal" required fullWidth error={!!validationFields.email}>
                                 <TextField
+                                    error={!!validationFields.email}
                                     id="mail"
-                                    label="Mail"
+                                    label="Email"
                                     className={classes.textField}
                                     margin="normal"
                                     value={data.email || ""}
@@ -46,7 +47,7 @@ class UserForm extends React.Component {
                                         onFieldChange("email", e.currentTarget.value);
                                     }}
                                 />
-                                <FormHelperText>{validationResult.email}</FormHelperText>
+                                <FormHelperText>{validationFields.email}</FormHelperText>
                             </FormControl>
                             <FormControl margin="normal" required fullWidth>
                                 <TextField
@@ -65,6 +66,7 @@ class UserForm extends React.Component {
                                 />
 
                             </FormControl>
+                            {validationMessage ? <FormHelperText error>{validationMessage}</FormHelperText> : undefined}
                             {renderActionButtons(isValid)}
                         </Fragment>)
                     }}
