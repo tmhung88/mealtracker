@@ -75,7 +75,7 @@ export class Login extends React.Component {
 
     try {
       this.setState({ loading: true })
-      const response = await this.props.api.post("/api/session", this.state.form);
+      const response = await this.props.api.post("/v1/session", this.state.form);
       const json = await response.json();
       this.props.userSession.setToken(json.token);
       this.navigateToProperPage();
@@ -105,7 +105,6 @@ export class Login extends React.Component {
   }
   renderContent() {
     const { classes } = this.props;
-    const { form } = this.state;
     return (
       <main className={classes.main}>
         <CssBaseline />

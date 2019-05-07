@@ -53,7 +53,7 @@ describe("#Login", () => {
 
             submit(wrapper, "un", "ps");
 
-            expect(postApi).toBeCalledWith("/api/session", {
+            expect(postApi).toBeCalledWith("/v1/session", {
                 email: "un",
                 password: "ps",
             })

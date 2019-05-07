@@ -29,7 +29,7 @@ class AllMealList extends React.Component {
             <ServerPagingTable
                 columns={columns}
                 tableName="All Meals"
-                baseUrl="/api/meals/all"
+                baseUrl="/v1/meals/all"
                 onRowSelect={(id) => {
                     this.props.history.push(`/meals/${id}/update?user-select=1`);
                 }}

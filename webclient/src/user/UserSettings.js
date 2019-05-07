@@ -19,7 +19,7 @@ class UserSettings extends React.Component {
 
     async componentDidMount() {
         try {
-            const response = await this.props.api.get(`/api/users/settings`);
+            const response = await this.props.api.get(`/v1/users/settings`);
             const json = await response.json();
             this.setState({
                 userSettings: json,
@@ -34,7 +34,7 @@ class UserSettings extends React.Component {
         e.preventDefault();
         this.setState({ loading: true });
         try {
-            await this.props.api.put(`/api/users/settings`, this.state.userSettings);
+            await this.props.api.put(`/v1/users/settings`, this.state.userSettings);
         } finally {
             this.setState({ loading: false });
         }

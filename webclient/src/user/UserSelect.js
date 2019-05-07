@@ -161,7 +161,7 @@ class UserSelect extends React.Component {
 
     handleLoadOptions = async (inputValue) => {
         return this.props.handleErrorContext(async () => {
-            const response = await get(`/api/users/select?search=${inputValue}`);
+            const response = await get(`/v1/users/select?search=${inputValue}`);
             const json = await response.json();
             return json.map(f => ({ key: f.id, label: f.email }))
         });

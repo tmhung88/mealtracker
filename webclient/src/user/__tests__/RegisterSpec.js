@@ -80,7 +80,7 @@ describe("#Register", () => {
 
             await submit(wrapper, "email1","fullname1", "password1");
 
-            expect(postApi).toBeCalledWith("/api/users", {
+            expect(postApi).toBeCalledWith("/v1/users", {
                 email: "email1",
                 fullName: "fullname1",
                 password: "password1",

@@ -68,7 +68,7 @@ export class Register extends React.Component {
     e.preventDefault();
     this.setState({ loading: true });
       try {
-        await this.props.api.post("/api/users", this.state.user);
+        await this.props.api.post("/v1/users", this.state.user);
         this.props.history.replace("/users/login");
       } catch (error) {
         if (error instanceof BadRequestError) {

@@ -39,7 +39,7 @@ class NewMeal extends React.Component {
             e.preventDefault();
             this.setState({ loading: true });
             try {
-                await this.props.api.post("/api/meals", this.state.meal);
+                await this.props.api.post("/v1/meals", this.state.meal);
                 this.props.goBackOrReplace("/meal")
             } finally {
                 this.setState({ loading: false });

@@ -33,7 +33,7 @@ class UpdateMeal extends React.Component {
     async componentDidMount() {
         this.props.handleErrorContext(async () => {
             try {
-                let url = `/api/meals/${this.props.match.params.id}`;
+                let url = `/v1/meals/${this.props.match.params.id}`;
                 if (this.hasUserSelect()) {
                     url += "/all";
                 }
@@ -65,7 +65,7 @@ class UpdateMeal extends React.Component {
             e.preventDefault();
             this.setState({ loading: true });
             try {
-                await this.props.api.put(`/api/meals/${this.state.meal.id}`, this.state.meal);
+                await this.props.api.put(`/v1/meals/${this.state.meal.id}`, this.state.meal);
                 this.props.goBackOrReplace("/meal")
             } finally {
                 this.setState({ loading: false });

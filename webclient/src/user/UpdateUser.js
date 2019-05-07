@@ -29,7 +29,7 @@ class UpdateUser extends React.Component {
     }
     async componentDidMount() {
         try {
-            const response = await this.props.api.get(`/api/users/${this.props.match.params.id}`);
+            const response = await this.props.api.get(`/v1/users/${this.props.match.params.id}`);
             const json = await response.json();
             this.setState({
                 user: json,
@@ -50,7 +50,7 @@ class UpdateUser extends React.Component {
             e.preventDefault();
             this.setState({ loading: true });
             try {
-                await this.props.api.put(`/api/users/${this.state.user.id}`, this.state.user);
+                await this.props.api.put(`/v1/users/${this.state.user.id}`, this.state.user);
                 this.props.goBackOrReplace("/users");
             } catch (error) {
                 if (error instanceof BadRequestError) {

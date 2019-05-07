@@ -32,7 +32,7 @@ class NewUser extends React.Component {
         this.props.handleErrorContext(async () => {
             this.setState({ loading: true });
             try {
-                await post("/api/users", this.state.user);
+                await post("/v1/users", this.state.user);
                 this.props.goBackOrReplace("/users");
             } catch (error) {
                 if (error instanceof BadRequestError) {
