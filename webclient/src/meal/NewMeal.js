@@ -26,18 +26,9 @@ class NewMeal extends React.Component {
             datetime: new Date(),
             calories: 0,
             text: "Meal Info",
-            user: null,
+            userId: null,
         },
         loading: false,
-    }
-
-    buildSubmitData() {
-        const { user, ...mealWithoutUser } = this.state.meal;
-        if (this.hasUserSelect()) {
-            mealWithoutUser.userId = (this.state.meal.user || {}).key;
-        }
-
-        return mealWithoutUser;
     }
 
     hasUserSelect() {
@@ -48,7 +39,7 @@ class NewMeal extends React.Component {
             e.preventDefault();
             this.setState({ loading: true });
             try {
-                await this.props.api.post("/api/meals", this.buildSubmitData());
+                await this.props.api.post("/api/meals", this.state.meal);
                 this.props.goBackOrReplace("/meal")
             } finally {
                 this.setState({ loading: false });
@@ -57,6 +48,7 @@ class NewMeal extends React.Component {
     };
 
     handleMealChange = (meal) => {
+        console.log(meal);
         this.setState({
             meal: meal,
         })
@@ -70,7 +62,7 @@ class NewMeal extends React.Component {
                 loading={this.state.loading}
                 onMealChange={this.handleMealChange}
                 meal={this.state.meal}
-                renderActionButtons={() => {
+                renderActionButtons={(isValid) => {
                     return <div>
                         <Button onClick={() => this.props.goBackOrReplace("/meal")}
                             variant="contained"
@@ -84,7 +76,14 @@ class NewMeal extends React.Component {
                             variant="contained"
                             color="primary"
                             className={classes.add}
-                            onClick={this.handleSubmit}
+                            onClick={(e)=>{
+                                e.preventDefault();
+                                if(!isValid()){
+                                    return;
+                                }
+
+                                this.handleSubmit(e);
+                            }}
                         >
                             Add
                         </Button>

@@ -7,7 +7,7 @@ import MealForm from './MealForm';
 import queryString from 'query-string'
 
 const styles = theme => ({
-    
+
     update: {
         marginTop: theme.spacing.unit * 3,
         marginLeft: theme.spacing.unit * 3,
@@ -41,16 +41,7 @@ class UpdateMeal extends React.Component {
                 this.setState({ loading: false });
             }
         })
-        
-    }
 
-    buildSubmitData() {
-        const { user, ...mealWithoutUser } = this.state.meal;
-        if (this.hasUserSelect()) {
-            mealWithoutUser.userId = (this.state.meal.user || {}).key;
-        }
-
-        return mealWithoutUser;
     }
 
     hasUserSelect() {
@@ -62,7 +53,7 @@ class UpdateMeal extends React.Component {
             e.preventDefault();
             this.setState({ loading: true });
             try {
-                await this.props.api.put(`/api/meals/${this.state.meal.id}`, this.buildSubmitData());
+                await this.props.api.put(`/api/meals/${this.state.meal.id}`, this.state.meal);
                 this.props.goBackOrReplace("/meal")
             } finally {
                 this.setState({ loading: false });
@@ -80,12 +71,12 @@ class UpdateMeal extends React.Component {
     render() {
         const { classes } = this.props;
         return (
-            <MealForm 
+            <MealForm
                 userSelect={this.hasUserSelect()}
                 loading={this.state.loading}
                 onMealChange={this.handleMealChange}
                 meal={this.state.meal}
-                renderActionButtons={() => {
+                renderActionButtons={(isValid) => {
                     return <div>
                         <Button onClick={() => this.props.goBackOrReplace("/meal")}
                             variant="contained"
@@ -99,7 +90,14 @@ class UpdateMeal extends React.Component {
                             variant="contained"
                             color="primary"
                             className={classes.update}
-                            onClick={this.handleSubmit}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (!isValid()) {
+                                    return;
+                                }
+
+                                this.handleSubmit(e);
+                            }}
                         >
                             Update
                         </Button>

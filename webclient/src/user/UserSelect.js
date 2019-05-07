@@ -15,7 +15,7 @@ import { withPage } from '../AppPage';
 const styles = theme => ({
     root: {
         flexGrow: 1,
-        minHeight: 100,
+        // minHeight: 100,
     },
     input: {
         display: 'flex',
@@ -165,7 +165,7 @@ class UserSelect extends React.Component {
             const json = await response.json();
             return json.map(f => ({ key: f.id, label: f.email }))
         });
-        
+
     }
 
     render() {

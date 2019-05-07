@@ -66,25 +66,26 @@ class ValidationForm extends React.Component {
     }
 
     handleFieldChange = (fieldName, value) => {
-        this.setState({
-            dirty: {
-                ...this.state.dirty,
-                [fieldName]: true,
+        this.handleFieldsChange({ [fieldName]: value });
+    }
+
+
+
+    handleFieldsChange = (obj) => {
+        let dirty = this.state.dirty;
+        let serverValidationResult = this.state.serverValidationResult;
+        let data = this.props.data;
+        _.keys(obj).forEach((key) => {
+            dirty = { ...dirty, [key]: true };
+            if ((serverValidationResult || {})[key]) {
+                const newServerValidationResult = { ...serverValidationResult };
+                delete newServerValidationResult[key];
             }
-        });
-
-        if ((this.state.serverValidationResult || {})[fieldName]) {
-            const newServerValidationResult = { ...this.state.serverValidationResult };
-            delete newServerValidationResult[fieldName];
-            this.setState({
-                serverValidationResult: newServerValidationResult,
-            })
-        }
-
-        this.props.onDataChange({
-            ...this.props.data,
-            [fieldName]: value,
+            data = { ...data, [key]: obj[key] };
         })
+
+        this.setState({ dirty, serverValidationResult });
+        this.props.onDataChange(data);
     }
 
     isValid = () => {
@@ -100,6 +101,7 @@ class ValidationForm extends React.Component {
         return <Fragment>
             {children({
                 onFieldChange: this.handleFieldChange,
+                onFieldsChange: this.handleFieldsChange,
                 data: data,
                 isValid: this.isValid,
                 validationFields: validationResult,
