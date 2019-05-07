@@ -6,6 +6,8 @@ import { withPage } from '../AppPage';
 import moment from "moment";
 import ServerPagingTable from '../common/table/ServerPagingTable';
 import UrlMealFilter from './UrlMealFilter';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Alert from './Alert';
 
 const styles = theme => ({
     button: {
@@ -23,9 +25,29 @@ const columns = [
 
 
 class MealList extends React.Component {
+    state = { alertInfo: { alerted: false, settingCalories: 0, totalCalories: 0 } };
+    renderAlert() {
+        const { alertInfo } = this.state;
+        if (alertInfo.alerted) {
+            return <Alert
+            >{`You have consumed ${alertInfo.totalCalories} calroies today that exceeds your daily limit (${alertInfo.settingCalories})`}</Alert>
+        }
+    }
+
+    componentDidMount() {
+        this.props.handleErrorContext(async () => {
+            const response = await this.props.api.get(`/api/meals/alert?date=${moment().format("yyyy-MM-dd")}`);
+            const json = await response.json();
+            console.log(json);
+            this.setState({
+                alertInfo: json,
+            })
+        })
+    }
     render() {
         const { classes } = this.props;
         return <div>
+            {this.renderAlert()}
             <UrlMealFilter
                 queryString={this.props.location.search}
                 onQueryStringChange={(queryString) => {
@@ -33,8 +55,9 @@ class MealList extends React.Component {
                         pathname: this.props.location.pathname,
                         search: queryString,
                     })
-                    
+
                 }} />
+
             <ServerPagingTable
                 columns={columns}
                 tableName="Meals"

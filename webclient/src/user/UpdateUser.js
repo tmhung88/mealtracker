@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { withPage } from '../AppPage';
 import UserForm from './UserForm';
-import { BadRequestError } from '../api';
+import { BadRequestError, NotFoundRequestError } from '../api';
 
 const styles = theme => ({
     update: {
@@ -34,6 +34,12 @@ class UpdateUser extends React.Component {
             this.setState({
                 user: json,
             })
+        } catch (error) {
+            if (error instanceof NotFoundRequestError) {
+                this.setState({ user: null });
+            } else {
+                throw error;
+            }
         } finally {
             this.setState({ loading: false });
         }
@@ -51,13 +57,15 @@ class UpdateUser extends React.Component {
                     this.setState({
                         serverValidationError: error.body.error,
                     })
+                } else {
+                    throw error;
                 }
             } finally {
                 this.setState({ loading: false });
             }
             console.log("finished");
         })
-        
+
     };
 
 
@@ -71,6 +79,7 @@ class UpdateUser extends React.Component {
         const { classes } = this.props;
         return (
             <UserForm
+                notFound={!this.state.user}
                 serverValidationError={this.state.serverValidationError}
                 loading={this.state.loading}
                 onUserChange={this.handleUserChange}

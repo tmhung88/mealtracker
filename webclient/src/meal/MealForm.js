@@ -9,6 +9,7 @@ import UserSelect from '../user/UserSelect';
 import { ShowWithRight, Rights } from '../userSession';
 import ValidationForm from '../common/form/ValidationForm';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import NotFoundForm from '../common/form/NotFoundForm';
 
 const styles = () => ({
 
@@ -51,13 +52,11 @@ class MealForm extends React.Component {
     }
 
     render() {
-        const { classes, renderActionButtons, onMealChange, loading, serverValidationError } = this.props;
-        const meal = this.props.meal || {
-            datetime: new Date(),
-            calories: 0,
-            text: "",
-            userId: "",
-        };
+        const { classes, renderActionButtons, onMealChange, loading, serverValidationError, notFound } = this.props;
+        const meal = this.props.meal;
+        if(notFound) {
+            return <NotFoundForm formName="Meal"/>
+        }
         return (
             <Form formName="Meal" loading={loading} >
                 <ValidationForm

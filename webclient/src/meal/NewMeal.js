@@ -58,6 +58,7 @@ class NewMeal extends React.Component {
         const { classes } = this.props;
         return (
             <MealForm
+                
                 userSelect={this.hasUserSelect()}
                 loading={this.state.loading}
                 onMealChange={this.handleMealChange}

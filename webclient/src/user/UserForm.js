@@ -6,6 +6,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Form from '../common/form/Form';
 import ValidationForm from '../common/form/ValidationForm';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import NotFoundForm from '../common/form/NotFoundForm';
 
 const styles = () => ({
 
@@ -15,11 +16,14 @@ const styles = () => ({
 class UserForm extends React.Component {
 
     render() {
-        const { classes, renderActionButtons, onUserChange, loading, serverValidationError } = this.props;
+        const { classes, renderActionButtons, onUserChange, loading, serverValidationError,notFound } = this.props;
         const user = this.props.user || {
             calories: 0,
             email: "",
         };
+        if(notFound) {
+            return <NotFoundForm formName="User"/>
+        }
         return (
             <Form formName="User" loading={loading}>
                 <ValidationForm

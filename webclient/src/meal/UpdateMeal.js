@@ -5,6 +5,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { withPage } from '../AppPage';
 import MealForm from './MealForm';
 import queryString from 'query-string'
+import { NotFoundRequestError } from '../api';
 
 const styles = theme => ({
 
@@ -42,6 +43,12 @@ class UpdateMeal extends React.Component {
                 this.setState({
                     meal: json,
                 })
+            } catch (error) {
+                if (error instanceof NotFoundRequestError) {
+                    this.setState({ meal: null });
+                } else {
+                    throw error;
+                }
             } finally {
                 this.setState({ loading: false });
             }
@@ -77,7 +84,7 @@ class UpdateMeal extends React.Component {
         const { classes } = this.props;
         return (
             <MealForm
-                
+                notFound={!this.state.meal}
                 userSelect={this.hasUserSelect()}
                 loading={this.state.loading}
                 onMealChange={this.handleMealChange}

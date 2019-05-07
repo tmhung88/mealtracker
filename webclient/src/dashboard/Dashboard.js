@@ -8,6 +8,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
+import Badge from '@material-ui/core/Badge';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -88,7 +89,7 @@ class Dashboard extends React.Component {
               Dashboard
             </Typography>
             <IconButton color="inherit" onClick={this.handleUserMenuClick} >
-              <AccountCircleIcon />
+              <AccountCircleIcon />              
             </IconButton>
             <Menu
               id="simple-menu"

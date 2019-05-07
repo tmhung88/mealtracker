@@ -48,6 +48,10 @@ export class BadRequestError extends ServerError {
     
 }
 
+export class NotFoundRequestError extends ServerError {
+    
+}
+
 async function handleError(response) {
     if (response.status === 401) {
         throw new UnauthenticatedError("");
@@ -60,6 +64,11 @@ async function handleError(response) {
     if(response.status === 400) {
         const body = await response.json();
         throw new BadRequestError(response.statusText, response.status, body);
+    }
+
+    if(response.status === 404) {
+        const body = await response.text();
+        throw new NotFoundRequestError(response.statusText, response.status, body);
     }
 
     if(response.status !== 200) {
