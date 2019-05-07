@@ -1,4 +1,4 @@
-import { hasToken, getToken } from "./api";
+import { hasToken, getToken, setToken } from "./api";
 import jwtDecode from "jwt-decode";
 
 export const Rights = {
@@ -16,6 +16,9 @@ export function ShowWithRight({ right, children }) {
 }
 
 class UserSession {
+    setToken(token){
+        setToken(token);
+    }
     isLoggedIn() {
         return hasToken();
     }

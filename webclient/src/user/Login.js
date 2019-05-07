@@ -1,43 +1,41 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
-import { post, setToken, BadRequestError } from '../api';
-import { Loading } from '../common/loading/Loading';
-import userSession, { Rights } from '../userSession';
-import { Link } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom'
-import ValidationForm from '../common/form/ValidationForm';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import { withPage } from '../AppPage';
+import React, { Fragment } from "react";
+import PropTypes from "prop-types";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import withStyles from "@material-ui/core/styles/withStyles";
+import {  BadRequestError, UnauthenticatedError } from "../api";
+import { Loading } from "../common/loading/Loading";
+import  { Rights } from "../userSession";
+import { Link } from "@material-ui/core";
+import { Link as RouterLink } from "react-router-dom"
+import ValidationForm from "../common/form/ValidationForm";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import { withPage } from "../AppPage";
 
 const styles = theme => ({
   main: {
-    width: 'auto',
-    display: 'block', // Fix IE 11 issue.
+    width: "auto",
+    display: "block", // Fix IE 11 issue.
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
     [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
       width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto',
+      marginLeft: "auto",
+      marginRight: "auto",
     },
   },
   paper: {
     marginTop: theme.spacing.unit * 8,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
   },
   avatar: {
@@ -45,7 +43,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing.unit,
   },
   submit: {
@@ -57,16 +55,16 @@ const styles = theme => ({
   }
 });
 
-class SignIn extends React.Component {
+export class Login extends React.Component {
   state = {
-    form: { username: "", password: "" },
+    form: { email: "", password: "" },
     loading: false,
   }
 
   navigateToProperPage() {
-    if (userSession.hasRight(Rights.MyMeal)) {
+    if (this.props.userSession.hasRight(Rights.MyMeal)) {
       this.props.history.replace("/meals");
-    } else if (userSession.hasRight(Rights.UserManagement)) {
+    } else if (this.props.userSession.hasRight(Rights.UserManagement)) {
       this.props.history.replace("/users");
     } else {
       this.props.history.replace("/meals/all");
@@ -74,28 +72,31 @@ class SignIn extends React.Component {
   }
   handleSubmit = async (e) => {
     e.preventDefault();
-    this.props.handleErrorContext(async () => {
-      try {
-        this.setState({ loading: true })
-        const response = await post("/api/users/login", this.state.form);
-        const json = await response.json();
-        setToken(json.token);
-        this.navigateToProperPage();
-      } catch (error) {
-        if (error instanceof BadRequestError) {
-          console.log("BadRequestError", error.body.error);
-          this.setState({
-            serverValidationError: error.body.error,
-          })
-        }else {
-          throw error;
-        }
-      } finally {
-        this.setState({ loading: false })
+
+    try {
+      this.setState({ loading: true })
+      const response = await this.props.api.post("/api/session", this.state.form);
+      const json = await response.json();
+      this.props.userSession.setToken(json.token);
+      this.navigateToProperPage();
+
+    } catch (error) {
+      if (error instanceof BadRequestError) {
+        this.setState({
+          serverValidationError: error.body.error,
+        })
+      } else if(error instanceof UnauthenticatedError){
+        this.setState({
+          serverValidationError: {
+            message: "Wrong Email or Password",
+          }
+        })
+      } else {
+        this.props.handleError(error);
       }
-    })
-
-
+    } finally {
+      this.setState({ loading: false })
+    }
   }
   render() {
     return <Loading active={this.state.loading}>
@@ -119,7 +120,7 @@ class SignIn extends React.Component {
             <ValidationForm
               serverValidationError={this.state.serverValidationError}
               constraints={{
-                username: {
+                email: {
                   email: true,
                   presence: true,
                 },
@@ -129,12 +130,12 @@ class SignIn extends React.Component {
             >
               {({ onFieldChange, data, isValid, validationFields, validationMessage }) => {
                 return (<Fragment>
-                  <FormControl margin="normal" required fullWidth error={!!validationFields.username}>
+                  <FormControl margin="normal" required fullWidth error={!!validationFields.email}>
                     <InputLabel htmlFor="email">Email Address</InputLabel>
                     <Input id="email" name="email" autoComplete="email" autoFocus
-                      value={data.username}
-                      onChange={e => onFieldChange("username", e.currentTarget.value)} />
-                    <FormHelperText>{validationFields.username}</FormHelperText>
+                      value={data.email}
+                      onChange={e => onFieldChange("email", e.currentTarget.value)} />
+                    <FormHelperText>{validationFields.email}</FormHelperText>
                   </FormControl>
                   <FormControl margin="normal" required fullWidth error={!!validationFields.password}>
                     <InputLabel htmlFor="password">Password</InputLabel>
@@ -142,10 +143,6 @@ class SignIn extends React.Component {
                       onChange={e => onFieldChange("password", e.currentTarget.value)} />
 
                   </FormControl>
-                  <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
-                  />
                   {validationMessage ? <FormHelperText error>{validationMessage}</FormHelperText> : undefined}
                   <Button
                     type="submit"
@@ -153,18 +150,18 @@ class SignIn extends React.Component {
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                    onClick={(e) => {
+                    onClick={ async (e) => {
                       e.preventDefault();
                       if (!isValid()) {
                         return;
                       }
 
-                      this.handleSubmit(e);
+                      await this.handleSubmit(e);
                     }}
                   >
                     Sign in
                   </Button>
-                  
+
                   <Link className={classes.link} component={RouterLink} to="/users/register">
                     Register new User
                   </Link>
@@ -179,8 +176,8 @@ class SignIn extends React.Component {
   }
 }
 
-SignIn.propTypes = {
+Login.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withPage(withStyles(styles)(SignIn));
+export default withPage(withStyles(styles)(Login));

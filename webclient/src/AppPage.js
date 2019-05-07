@@ -15,6 +15,7 @@ import amber from '@material-ui/core/colors/amber';
 import IconButton from '@material-ui/core/IconButton';
 import WarningIcon from '@material-ui/icons/Warning';
 import { withStyles } from '@material-ui/core/styles';
+import userSession from "./userSession";
 
 export function withPage(ComponentToProtect) {
 
@@ -74,7 +75,7 @@ export function withPage(ComponentToProtect) {
 
         }
 
-        handleErrorContext=(func)=>{
+        handleErrorContext = (func) => {
             return Promise.resolve(func()).catch(this.handleError);
         }
 
@@ -86,7 +87,13 @@ export function withPage(ComponentToProtect) {
                 delete: deleteRequest,
             }
             return <Fragment>
-                <ComponentToProtect {...this.props} api={api} goBackOrReplace={this.goBackOrReplace} handleErrorContext={this.handleErrorContext} />
+                <ComponentToProtect
+                    {...this.props}
+                    userSession={userSession} 
+                    api={api} 
+                    goBackOrReplace={this.goBackOrReplace} 
+                    handleError={this.handleError}
+                    handleErrorContext={this.handleErrorContext} />
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',

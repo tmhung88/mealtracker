@@ -28,7 +28,7 @@ class ValidationForm extends React.Component {
         }
 
         const validationFields = {};
-        serverValidationError.errorFields.forEach(v => {
+        (serverValidationError.errorFields || []).forEach(v => {
             validationFields[v.name] = v.message;
         });
 
