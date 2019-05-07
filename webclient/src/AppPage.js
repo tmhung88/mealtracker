@@ -26,12 +26,17 @@ export function withPage(ComponentToProtect) {
             }
 
             let errorMessage = null;
-            try {
-                const jsonObj = JSON.parse(serverError.body);
-                errorMessage = jsonObj.error.message;
-            } catch{
-                errorMessage = serverError.body;
+            if (typeof serverError.body === "string") {
+                try {
+                    const jsonObj = JSON.parse(serverError.body);
+                    errorMessage = jsonObj.error.message;
+                } catch{
+                    errorMessage = serverError.body;
+                }
+            } else {
+                errorMessage = serverError.body.error.message;
             }
+
 
             return errorMessage;
         }

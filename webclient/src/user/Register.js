@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,11 +12,11 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom'
-import validate from "validate.js";
-import _ from "lodash";
 import { Loading } from '../common/loading/Loading';
-import { post } from '../api';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { BadRequestError } from '../api';
+
+import ValidationForm from '../common/form/ValidationForm';
+import { withPage } from '../AppPage';
 
 const styles = theme => ({
   main: {
@@ -60,124 +60,37 @@ class Register extends React.Component {
       email: "",
       password: "",
     },
-    dirty: {
-      email: false,
-      password: false,
-    },
     loading: false,
-    emailDuplication: {
-      valid: true,
-      validating: false,
-    }
-  }
-
-  constructConstraint(constraints, dirty) {
-    _.keys(dirty).forEach(key => {
-      if (!dirty[key]) {
-        constraints = {
-          ...constraints,
-          [key]: undefined,
-        };
-      }
-    })
-
-    return constraints;
-  }
-
-  validate() {
-    const { dirty, user } = this.state;
-    const constraints = this.constructConstraint({
-      email: {
-        email: true,
-        presence: true,
-      },
-      password: {
-        presence: true,
-        length: {
-          minimum: 6,
-          message: "must be at least 6 characters"
-        }
-      }
-    }, dirty);
-
-    let result = validate(user, constraints);
-    if (!this.state.emailDuplication.valid) {
-      result = result || {};
-      result.email = "Email Duplication";
-    }
-    return result;
+    serverValidationError: null,
   }
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    this.setState({ dirty: {} }, async () => {
-      const validationResult = this.validate();
-      if (validationResult) {
-        return;
-      }
 
-      this.setState({ loading: true });
-      try {
-        await post("/api/users/register", this.state.user);
-        this.props.history.replace("/users/login");
-      } finally {
-        this.setState({ loading: false });
-      }
-    })
-  }
-
-  handleFieldChange(fieldName, value) {
-    if (fieldName === "email") {
-      this.setState({
-        emailDuplication: {
-          ...this.state.emailDuplication,
-          validating: true,
-        }
-      })
-
-      setTimeout(() => {
+    this.setState({ loading: true });
+    try {
+      await this.props.api.post("/api/users/register", this.state.user);
+      this.props.history.replace("/users/login");
+    } catch (error) {
+      if (error instanceof BadRequestError) {
+        console.log("BadRequestError", error.body.error.errorFields);
         this.setState({
-          emailDuplication: {
-            ...this.state.emailDuplication,
-            validating: false,
-            valid: true,
-          }
+          serverValidationError: error.body.error.errorFields,
         })
-      }, 1000);
-
-    }
-    this.setState({
-      user: {
-        ...this.state.user,
-        [fieldName]: value,
-      },
-      dirty: {
-        ...this.state.dirty,
-        [fieldName]: true,
       }
-    });
+    } finally {
+      this.setState({ loading: false });
+    }
   }
+
   render() {
     return <Loading active={this.state.loading}>
       {this.renderContent()}
     </Loading>
   }
 
-  renderEmailAdorment() {
-    const { emailDuplication } = this.state;
-    if (emailDuplication.validating) {
-      return <CircularProgress size={15} />;
-    }
-
-    if (!emailDuplication.didValidation) {
-      return null;
-    }
-  }
-
   renderContent() {
     const { classes } = this.props;
-    const { user } = this.state;
-    const validationResult = this.validate() || {};
     return (
       <main className={classes.main}>
         <CssBaseline />
@@ -186,38 +99,68 @@ class Register extends React.Component {
             New User
         </Typography>
           <form className={classes.form}>
-            <FormControl margin="normal" required fullWidth error={!!validationResult.email}>
-              <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input id="email" name="email"
-                autoComplete="email"
-                autoFocus
-                endAdornment={(
-                  <InputAdornment position="end">
-                    {this.renderEmailAdorment()}
-                  </InputAdornment>
-                )}
-                value={user.email}
-                onChange={e => this.handleFieldChange("email", e.currentTarget.value)}
-              />
-              <FormHelperText>{validationResult.email}</FormHelperText>
-            </FormControl>
-            <FormControl margin="normal" required fullWidth error={!!validationResult.password}>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input name="password" type="password" id="password" autoComplete="new-password" value={user.password}
-                onChange={e => this.handleFieldChange("password", e.currentTarget.value)}
-              />
-              <FormHelperText>{validationResult.password}</FormHelperText>
-            </FormControl>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={this.handleSubmit}
+            <ValidationForm
+              serverValidationError={this.state.serverValidationError}
+              constraints={{
+                email: {
+                  email: true,
+                  presence: true,
+                },
+                password: {
+                  presence: true,
+                  length: {
+                    minimum: 6,
+                    message: "must be at least 6 characters"
+                  }
+                }
+              }}
+              data={this.state.user}
+              onDataChange={(user) => this.setState({ user: user })}
             >
-              Register
-          </Button>
+              {({ onFieldChange, data, isValid, validationResult }) => {
+                return <Fragment>
+                  <FormControl margin="normal" required fullWidth error={!!validationResult.email}>
+                    <InputLabel htmlFor="email">Email Address</InputLabel>
+                    <Input id="email" name="email"
+                      autoComplete="email"
+                      autoFocus
+                      endAdornment={(
+                        <InputAdornment position="end">
+                        </InputAdornment>
+                      )}
+                      value={data.email}
+                      onChange={e => onFieldChange("email", e.currentTarget.value)}
+                    />
+                    <FormHelperText>{validationResult.email}</FormHelperText>
+                  </FormControl>
+                  <FormControl margin="normal" required fullWidth error={!!validationResult.password}>
+                    <InputLabel htmlFor="password">Password</InputLabel>
+                    <Input name="password" type="password" id="password" autoComplete="new-password" value={data.password}
+                      onChange={e => onFieldChange("password", e.currentTarget.value)}
+                    />
+                    <FormHelperText>{validationResult.password}</FormHelperText>
+                  </FormControl>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={(e) => {
+                      if (!isValid()) {
+                        return;
+                      }
+
+                      this.handleSubmit(e);
+                    }}
+                  >
+                    Register
+                  </Button>
+                </Fragment>
+              }}
+            </ValidationForm>
+
+
             <Link className={classes.link} component={RouterLink} to="/users/login">
               Or Login
             </Link>
@@ -232,4 +175,4 @@ Register.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Register);
+export default withPage(withStyles(styles)(Register));
