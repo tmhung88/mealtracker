@@ -6,7 +6,6 @@ import { withPage } from '../AppPage';
 import MealForm from './MealForm';
 import queryString from 'query-string'
 
-
 const styles = theme => ({
     add: {
         marginTop: theme.spacing.unit * 3,
@@ -19,13 +18,12 @@ const styles = theme => ({
     }
 });
 
-
-class NewMeal extends React.Component {
+export class NewMeal extends React.Component {
     state = {
         meal: {
             datetime: new Date(),
             calories: 0,
-            text: "Meal Info",
+            text: "",
             userId: null,
         },
         loading: false,
@@ -34,21 +32,19 @@ class NewMeal extends React.Component {
     hasUserSelect() {
         return !!queryString.parse(this.props.location.search)["user-select"];
     }
-    handleSubmit = async (e) => {
-        this.props.handleErrorContext(async () => {
-            e.preventDefault();
-            this.setState({ loading: true });
-            try {
-                await this.props.api.post("/v1/meals", this.state.meal);
-                this.props.goBackOrReplace("/meal")
-            } finally {
-                this.setState({ loading: false });
-            }
-        })
+    handleSubmit = async () => {
+        this.setState({ loading: true });
+        try {
+            await this.props.api.post("/v1/meals", this.state.meal);
+            this.props.goBackOrReplace("/meals")
+        } catch (e) {
+            this.props.handleError(e);
+        } finally {
+            this.setState({ loading: false });
+        }
     };
 
     handleMealChange = (meal) => {
-        console.log(meal);
         this.setState({
             meal: meal,
         })
@@ -58,14 +54,13 @@ class NewMeal extends React.Component {
         const { classes } = this.props;
         return (
             <MealForm
-                
                 userSelect={this.hasUserSelect()}
                 loading={this.state.loading}
                 onMealChange={this.handleMealChange}
                 meal={this.state.meal}
                 renderActionButtons={(isValid) => {
                     return <div>
-                        <Button onClick={() => this.props.goBackOrReplace("/meal")}
+                        <Button onClick={() => this.props.goBackOrReplace("/meals")}
                             variant="contained"
                             color="secondary"
                             className={classes.cancel}
@@ -77,13 +72,13 @@ class NewMeal extends React.Component {
                             variant="contained"
                             color="primary"
                             className={classes.add}
-                            onClick={(e)=>{
+                            onClick={(e) => {
                                 e.preventDefault();
-                                if(!isValid()){
+                                if (!isValid()) {
                                     return;
                                 }
 
-                                this.handleSubmit(e);
+                                this.handleSubmit();
                             }}
                         >
                             Add
@@ -92,8 +87,6 @@ class NewMeal extends React.Component {
                 }} />
         );
     }
-
-
 }
 
 NewMeal.propTypes = {

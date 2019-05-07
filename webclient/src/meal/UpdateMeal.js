@@ -70,7 +70,6 @@ class UpdateMeal extends React.Component {
             } finally {
                 this.setState({ loading: false });
             }
-            console.log("finished");
         })
     };
 
