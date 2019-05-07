@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { withPage } from '../AppPage';
 import UserForm from './UserForm';
+import { BadRequestError } from '../api';
 
 const styles = theme => ({
     update: {
@@ -22,7 +23,7 @@ class UpdateUser extends React.Component {
     state = {
         user: {
             calories: 0,
-            email:"NoEmal@mail.com"
+            email: ""
         },
         loading: true,
     }
@@ -44,6 +45,12 @@ class UpdateUser extends React.Component {
         try {
             await this.props.api.put(`/api/users/${this.state.user.id}`, this.state.user);
             this.props.goBackOrReplace("/users");
+        } catch (error) {
+            if (error instanceof BadRequestError) {
+                this.setState({
+                    serverErrorFields: error.body.error.errorFields,
+                })
+            }
         } finally {
             this.setState({ loading: false });
         }
@@ -61,12 +68,13 @@ class UpdateUser extends React.Component {
         const { classes } = this.props;
         return (
             <UserForm
+                serverErrorFields={this.state.serverErrorFields}
                 loading={this.state.loading}
                 onUserChange={this.handleUserChange}
                 user={this.state.user}
-                renderActionButtons={()=>{
+                renderActionButtons={(isValid) => {
                     return <div>
-                    <Button onClick={()=>this.props.goBackOrReplace("/users")}                        
+                        <Button onClick={() => this.props.goBackOrReplace("/users")}
                             variant="contained"
                             color="secondary"
                             className={classes.cancel}
@@ -78,7 +86,15 @@ class UpdateUser extends React.Component {
                             variant="contained"
                             color="primary"
                             className={classes.update}
-                            onClick={this.handleSubmit}
+                            onClick={(e) => {
+                                e.preventDefault();
+
+                                if (!isValid()) {
+                                    return;
+                                }
+
+                                this.handleSubmit(e)
+                            }}
                         >
                             Update
                         </Button>

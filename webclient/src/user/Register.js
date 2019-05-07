@@ -61,7 +61,7 @@ class Register extends React.Component {
       password: "",
     },
     loading: false,
-    serverValidationError: null,
+    serverErrorFields: null,
   }
 
   handleSubmit = async (e) => {
@@ -75,7 +75,7 @@ class Register extends React.Component {
       if (error instanceof BadRequestError) {
         console.log("BadRequestError", error.body.error.errorFields);
         this.setState({
-          serverValidationError: error.body.error.errorFields,
+          serverErrorFields: error.body.error.errorFields,
         })
       }
     } finally {
@@ -100,7 +100,7 @@ class Register extends React.Component {
         </Typography>
           <form className={classes.form}>
             <ValidationForm
-              serverValidationError={this.state.serverValidationError}
+              serverErrorFields={this.state.serverErrorFields}
               constraints={{
                 email: {
                   email: true,

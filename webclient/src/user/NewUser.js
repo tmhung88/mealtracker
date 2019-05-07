@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import { post } from '../api';
+import { post, BadRequestError } from '../api';
 import UserForm from './UserForm';
 import { withPage } from '../AppPage';
 
@@ -23,18 +23,22 @@ const styles = theme => ({
 class NewUser extends React.Component {
     state = {
         user: {
-            datetime: new Date(),
             calories: 0,
-            text: "User Info",
+            email: "",
         },
         loading: false,
     }
     handleSubmit = async (e) => {
-        e.preventDefault();
         this.setState({ loading: true });
         try {
             await post("/api/users", this.state.user);
             this.props.goBackOrReplace("/users");
+        } catch (error) {
+            if (error instanceof BadRequestError) {
+                this.setState({
+                    serverErrorFields: error.body.error.errorFields,
+                })
+            }
         } finally {
             this.setState({ loading: false });
         }
@@ -51,10 +55,11 @@ class NewUser extends React.Component {
     render() {
         const { classes } = this.props;
         return <UserForm
+            serverErrorFields={this.state.serverErrorFields}
             onUserChange={this.handleUserChange}
             user={this.state.user}
             loading={this.state.loading}
-            renderActionButtons={() => {
+            renderActionButtons={(isValid) => {
                 return <div>
                     <Button onClick={() => this.props.goBackOrReplace("/users")}
                         variant="contained"
@@ -68,7 +73,15 @@ class NewUser extends React.Component {
                         variant="contained"
                         color="primary"
                         className={classes.add}
-                        onClick={this.handleSubmit}
+                        onClick={(e) => {
+                            e.preventDefault();
+
+                            if (!isValid()) {
+                                return;
+                            }
+
+                            this.handleSubmit(e)
+                        }}
                     >
                         Add
                         </Button>

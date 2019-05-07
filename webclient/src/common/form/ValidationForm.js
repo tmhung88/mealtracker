@@ -18,17 +18,17 @@ class ValidationForm extends React.Component {
         })
         this.state = {
             dirty,
-            serverValidationResult: this.constructValidationErrorFromServer(this.props.serverValidationError),
+            serverValidationResult: this.constructValidationErrorFromServer(this.props.serverErrorFields),
         }
     }
 
-    constructValidationErrorFromServer(serverValidationError) {
-        if (!serverValidationError) {
+    constructValidationErrorFromServer(serverErrorFields) {
+        if (!serverErrorFields) {
             return {};
         }
 
         const validationResult = {};
-        serverValidationError.forEach(v => {
+        serverErrorFields.forEach(v => {
             validationResult[v.name] = v.message;
         });
 
@@ -36,9 +36,9 @@ class ValidationForm extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.serverValidationError !== this.props.serverValidationError) {
+        if (nextProps.serverErrorFields !== this.props.serverErrorFields) {
             this.setState({
-                serverValidationResult: this.constructValidationErrorFromServer(nextProps.serverValidationError),
+                serverValidationResult: this.constructValidationErrorFromServer(nextProps.serverErrorFields),
             })
         }
     }
