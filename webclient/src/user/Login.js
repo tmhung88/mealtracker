@@ -10,9 +10,9 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {  BadRequestError, UnauthenticatedError } from "../api";
+import { BadRequestError, UnauthenticatedError } from "../api";
 import { Loading } from "../common/loading/Loading";
-import  { Rights } from "../userSession";
+import { Rights } from "../userSession";
 import { Link } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom"
 import ValidationForm from "../common/form/ValidationForm";
@@ -85,7 +85,7 @@ export class Login extends React.Component {
         this.setState({
           serverValidationError: error.body.error,
         })
-      } else if(error instanceof UnauthenticatedError){
+      } else if (error instanceof UnauthenticatedError) {
         this.setState({
           serverValidationError: {
             message: "Wrong Email or Password",
@@ -122,7 +122,7 @@ export class Login extends React.Component {
               constraints={{
                 email: {
                   email: true,
-                  presence: true,
+                  presence: { allowEmpty: false },
                 },
               }}
               data={this.state.form}
@@ -150,7 +150,7 @@ export class Login extends React.Component {
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                    onClick={ async (e) => {
+                    onClick={async (e) => {
                       e.preventDefault();
                       if (!isValid()) {
                         return;

@@ -4,6 +4,8 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import _ from "lodash";
 import validate from "validate.js";
 
+validate.validators.presence.allowEmpty = false;
+
 const styles = theme => ({
 
 });

@@ -6,7 +6,7 @@ import { when } from "jest-when";
 import { Rights } from "../../userSession";
 import { BadRequestError, UnauthenticatedError } from "../../api";
 
-describe.only("#Login", () => {
+describe("#Login", () => {
     const validationSectionParams = {
         onFieldChange: jest.fn(),
         data: {
@@ -17,9 +17,6 @@ describe.only("#Login", () => {
         validationFields: {},
         validationMessage: null,
     }
-
-    afterEach(() => {
-    })
 
     it("should render email and password", () => {
         const wrapper = shallow(<Login classes={{}} />);
