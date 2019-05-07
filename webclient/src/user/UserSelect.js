@@ -192,8 +192,7 @@ class UserSelect extends React.Component {
                         InputLabelProps: {
                             shrink: true,
                         },
-                    }}
-                    defaultOptions={[{ key: "me", label: "Me" }]}
+                    }}                    
                     components={components}
                     value={this.props.user}
                     onChange={this.handleChange}

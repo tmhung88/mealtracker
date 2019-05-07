@@ -32,7 +32,12 @@ class UpdateMeal extends React.Component {
     async componentDidMount() {
         this.props.handleErrorContext(async () => {
             try {
-                const response = await this.props.api.get(`/api/meals/${this.props.match.params.id}`);
+                let url = `/api/meals/${this.props.match.params.id}`;
+                if (this.hasUserSelect()) {
+                    url += "/all";
+                }
+
+                const response = await this.props.api.get(url);
                 const json = await response.json();
                 this.setState({
                     meal: json,
@@ -72,6 +77,7 @@ class UpdateMeal extends React.Component {
         const { classes } = this.props;
         return (
             <MealForm
+                
                 userSelect={this.hasUserSelect()}
                 loading={this.state.loading}
                 onMealChange={this.handleMealChange}

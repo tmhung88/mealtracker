@@ -42,7 +42,7 @@ class MealForm extends React.Component {
         if (this.props.userSelect) {
             return {
                 userId: {
-                    presence: {message: "^User can't be blank"},
+                    presence: { message: "^User can't be blank" },
                 },
             }
         }
@@ -59,7 +59,7 @@ class MealForm extends React.Component {
             userId: "",
         };
         return (
-            <Form formName="Meal" loading={loading}>
+            <Form formName="Meal" loading={loading} >
                 <ValidationForm
                     serverValidationError={serverValidationError}
                     constraints={this.getValidationConstraints()}
