@@ -40,21 +40,24 @@ class UpdateUser extends React.Component {
     }
 
     handleSubmit = async (e) => {
-        e.preventDefault();
-        this.setState({ loading: true });
-        try {
-            await this.props.api.put(`/api/users/${this.state.user.id}`, this.state.user);
-            this.props.goBackOrReplace("/users");
-        } catch (error) {
-            if (error instanceof BadRequestError) {
-                this.setState({
-                    serverErrorFields: error.body.error.errorFields,
-                })
+        this.props.handleErrorContext(async () => {
+            e.preventDefault();
+            this.setState({ loading: true });
+            try {
+                await this.props.api.put(`/api/users/${this.state.user.id}`, this.state.user);
+                this.props.goBackOrReplace("/users");
+            } catch (error) {
+                if (error instanceof BadRequestError) {
+                    this.setState({
+                        serverErrorFields: error.body.error.errorFields,
+                    })
+                }
+            } finally {
+                this.setState({ loading: false });
             }
-        } finally {
-            this.setState({ loading: false });
-        }
-        console.log("finished");
+            console.log("finished");
+        })
+        
     };
 
 

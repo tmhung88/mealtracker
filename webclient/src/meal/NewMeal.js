@@ -44,15 +44,16 @@ class NewMeal extends React.Component {
         return !!queryString.parse(this.props.location.search)["user-select"];
     }
     handleSubmit = async (e) => {
-        e.preventDefault();
-        this.setState({ loading: true });
-        try {
-            await this.props.api.post("/api/meals", this.buildSubmitData());
-            this.props.goBackOrReplace("/meal")
-        } finally {
-            this.setState({ loading: false });
-        }
-        console.log("finished");
+        this.props.handleErrorContext(async () => {
+            e.preventDefault();
+            this.setState({ loading: true });
+            try {
+                await this.props.api.post("/api/meals", this.buildSubmitData());
+                this.props.goBackOrReplace("/meal")
+            } finally {
+                this.setState({ loading: false });
+            }
+        })
     };
 
     handleMealChange = (meal) => {

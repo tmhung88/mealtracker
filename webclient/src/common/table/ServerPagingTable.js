@@ -46,16 +46,17 @@ class ServerPagingTable extends React.Component {
 
     async requestData(tableState = this.state.tableState) {
         const { baseUrl, queryString } = this.props;
-
-        try {
-            this.setState({ loading: true })
-            const response = await this.props.api.get(`${baseUrl}?${queryString || ""}&${this.buildQueryString(tableState)}`);
-            const json = await response.json();
-            console.log(json);
-            this.setState({ loading: false, data: json })
-        } catch {
-            this.setState({ loading: false, data: [] })
-        }
+        await this.props.handleErrorContext(async () => {
+            try {
+                this.setState({ loading: true })
+                const response = await this.props.api.get(`${baseUrl}?${queryString || ""}&${this.buildQueryString(tableState)}`);
+                const json = await response.json();
+                console.log(json);
+                this.setState({ loading: false, data: json })
+            } finally {
+                this.setState({ loading: false })
+            }
+        })
     }
 
     async componentDidMount() {

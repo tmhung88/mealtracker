@@ -10,6 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import AsyncSelect from 'react-select/lib/Async';
 import { get } from '../api';
+import { withPage } from '../AppPage';
 
 const styles = theme => ({
     root: {
@@ -159,9 +160,12 @@ class UserSelect extends React.Component {
     };
 
     handleLoadOptions = async (inputValue) => {
-        const response = await get(`/api/users/select?search=${inputValue}`);
-        const json = await response.json();
-        return json.map(f => ({ key: f.id, label: f.email }))
+        return this.props.handleErrorContext(async () => {
+            const response = await get(`/api/users/select?search=${inputValue}`);
+            const json = await response.json();
+            return json.map(f => ({ key: f.id, label: f.email }))
+        });
+        
     }
 
     render() {
@@ -207,4 +211,4 @@ UserSelect.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(UserSelect);
+export default withPage(withStyles(styles, { withTheme: true })(UserSelect));

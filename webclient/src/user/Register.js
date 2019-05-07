@@ -66,21 +66,25 @@ class Register extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-
-    this.setState({ loading: true });
-    try {
-      await this.props.api.post("/api/users/register", this.state.user);
-      this.props.history.replace("/users/login");
-    } catch (error) {
-      if (error instanceof BadRequestError) {
-        console.log("BadRequestError", error.body.error.errorFields);
-        this.setState({
-          serverErrorFields: error.body.error.errorFields,
-        })
+    this.props.handleErrorContext(async () => {
+      this.setState({ loading: true });
+      try {
+        await this.props.api.post("/api/users/register", this.state.user);
+        this.props.history.replace("/users/login");
+      } catch (error) {
+        if (error instanceof BadRequestError) {
+          console.log("BadRequestError", error.body.error.errorFields);
+          this.setState({
+            serverErrorFields: error.body.error.errorFields,
+          })
+        } else {
+          throw error;
+        }
+      } finally {
+        this.setState({ loading: false });
       }
-    } finally {
-      this.setState({ loading: false });
-    }
+    })
+    
   }
 
   render() {

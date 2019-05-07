@@ -30,15 +30,18 @@ class UpdateMeal extends React.Component {
         loading: true,
     }
     async componentDidMount() {
-        try {
-            const response = await this.props.api.get(`/api/meals/${this.props.match.params.id}`);
-            const json = await response.json();
-            this.setState({
-                meal: json,
-            })
-        } finally {
-            this.setState({ loading: false });
-        }
+        this.props.handleErrorContext(async () => {
+            try {
+                const response = await this.props.api.get(`/api/meals/${this.props.match.params.id}`);
+                const json = await response.json();
+                this.setState({
+                    meal: json,
+                })
+            } finally {
+                this.setState({ loading: false });
+            }
+        })
+        
     }
 
     buildSubmitData() {
@@ -55,15 +58,17 @@ class UpdateMeal extends React.Component {
     }
 
     handleSubmit = async (e) => {
-        e.preventDefault();
-        this.setState({ loading: true });
-        try {
-            await this.props.api.put(`/api/meals/${this.state.meal.id}`, this.buildSubmitData());
-            this.props.goBackOrReplace("/meal")
-        } finally {
-            this.setState({ loading: false });
-        }
-        console.log("finished");
+        this.props.handleErrorContext(async () => {
+            e.preventDefault();
+            this.setState({ loading: true });
+            try {
+                await this.props.api.put(`/api/meals/${this.state.meal.id}`, this.buildSubmitData());
+                this.props.goBackOrReplace("/meal")
+            } finally {
+                this.setState({ loading: false });
+            }
+            console.log("finished");
+        })
     };
 
     handleMealChange = (meal) => {

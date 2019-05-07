@@ -73,16 +73,20 @@ export function withPage(ComponentToProtect) {
             this.props.history.replace(path);
 
         }
+
+        handleErrorContext=(func)=>{
+            return Promise.resolve(func()).catch(this.handleError);
+        }
+
         render() {
-            const that = this;
             const api = {
-                get: function () { return get.call(this, ...arguments).catch(that.handleError) },
-                put: function () { return put.call(this, ...arguments).catch(that.handleError) },
-                post: function () { return post.call(this, ...arguments).catch(that.handleError) },
-                delete: function () { deleteRequest.call(this, ...arguments).catch(that.handleError) },
+                get: get,
+                put: put,
+                post: post,
+                delete: deleteRequest,
             }
             return <Fragment>
-                <ComponentToProtect {...this.props} api={api} goBackOrReplace={this.goBackOrReplace} />
+                <ComponentToProtect {...this.props} api={api} goBackOrReplace={this.goBackOrReplace} handleErrorContext={this.handleErrorContext} />
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',

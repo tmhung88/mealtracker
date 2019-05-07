@@ -29,19 +29,24 @@ class NewUser extends React.Component {
         loading: false,
     }
     handleSubmit = async (e) => {
-        this.setState({ loading: true });
-        try {
-            await post("/api/users", this.state.user);
-            this.props.goBackOrReplace("/users");
-        } catch (error) {
-            if (error instanceof BadRequestError) {
-                this.setState({
-                    serverErrorFields: error.body.error.errorFields,
-                })
+        this.props.handleErrorContext(async () => {
+            this.setState({ loading: true });
+            try {
+                await post("/api/users", this.state.user);
+                this.props.goBackOrReplace("/users");
+            } catch (error) {
+                if (error instanceof BadRequestError) {
+                    this.setState({
+                        serverErrorFields: error.body.error.errorFields,
+                    })
+                } else {
+                    throw error;
+                }
+            } finally {
+                this.setState({ loading: false });
             }
-        } finally {
-            this.setState({ loading: false });
-        }
+        })
+        
         console.log("finished");
     };
 

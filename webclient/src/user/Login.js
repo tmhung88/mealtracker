@@ -13,13 +13,13 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { post, setToken, BadRequestError } from '../api';
-import { withRouter } from "react-router-dom";
 import { Loading } from '../common/loading/Loading';
 import userSession, { Rights } from '../userSession';
 import { Link } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom'
 import ValidationForm from '../common/form/ValidationForm';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import { withPage } from '../AppPage';
 
 const styles = theme => ({
   main: {
@@ -74,22 +74,27 @@ class SignIn extends React.Component {
   }
   handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      this.setState({ loading: true })
-      const response = await post("/api/users/login", this.state.form);
-      const json = await response.json();
-      setToken(json.token);
-      this.navigateToProperPage();
-    } catch (error) {
-      if (error instanceof BadRequestError) {
-        console.log("BadRequestError", error.body.error.errorFields);
-        this.setState({
-          serverErrorFields: error.body.error.errorFields,
-        })
+    this.props.handleErrorContext(async () => {
+      try {
+        this.setState({ loading: true })
+        const response = await post("/api/users/login", this.state.form);
+        const json = await response.json();
+        setToken(json.token);
+        this.navigateToProperPage();
+      } catch (error) {
+        if (error instanceof BadRequestError) {
+          console.log("BadRequestError", error.body.error.errorFields);
+          this.setState({
+            serverErrorFields: error.body.error.errorFields,
+          })
+        }else {
+          throw error;
+        }
+      } finally {
+        this.setState({ loading: false })
       }
-    } finally {
-      this.setState({ loading: false })
-    }
+    })
+
 
   }
   render() {
@@ -176,4 +181,4 @@ SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withRouter(withStyles(styles)(SignIn));
+export default withPage(withStyles(styles)(SignIn));
