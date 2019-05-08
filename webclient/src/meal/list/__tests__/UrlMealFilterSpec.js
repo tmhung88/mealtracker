@@ -32,4 +32,31 @@ describe("#MealList", () => {
             toTime: undefined,
         });
     })
+
+    it("should build querystring onFilter", ()=>{
+        const onQueryStringChange = jest.fn();
+        const wrapper = shallow(<UrlMealFilter queryString="" onQueryStringChange={onQueryStringChange}/>);
+        const filter = wrapper.find(MealFilter);
+        filter.simulate("filter", {
+            fromDate: "2019-05-04",
+            fromTime: "11:00",
+            toDate: "2019-05-03",
+            toTime: "14:00",
+        });
+
+        expect(onQueryStringChange).toHaveBeenCalledWith("fromDate=2019-05-04&toDate=2019-05-03&fromTime=11:00&toTime=14:00");
+    })
+
+    it("should build querystring onFilter when missing field", ()=>{
+        const onQueryStringChange = jest.fn();
+        const wrapper = shallow(<UrlMealFilter queryString="" onQueryStringChange={onQueryStringChange}/>);
+        const filter = wrapper.find(MealFilter);
+        filter.simulate("filter", {
+            fromTime: "11:00",
+            toDate: "2019-05-03",
+            toTime: undefined,
+        });
+
+        expect(onQueryStringChange).toHaveBeenCalledWith("fromDate=&toDate=2019-05-03&fromTime=11:00&toTime=");
+    })
 })

@@ -26,7 +26,7 @@ export class MealFilter extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const {fromDate, toDate, fromTime, toTime} = this.state;
+        const {fromDate, toDate, fromTime, toTime} = this.state.filter;
         return (<main className={classes.main}>
             <Grid container spacing={24}>
                 <Grid item xs={12} sm={6}>
