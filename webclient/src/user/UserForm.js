@@ -30,10 +30,20 @@ class UserForm extends React.Component {
                     serverValidationError={serverValidationError}
                     constraints={{
                         email: {
-                            email: true,
-                            presence: true,
+                          email: true,
+                          presence: { allowEmpty: false },
                         },
-                    }}
+                        fullName: {
+                          presence: { allowEmpty: false },
+                        },
+                        password: {
+                          presence: { allowEmpty: false },
+                          length: {
+                            minimum: 6,
+                            message: "must be at least 6 characters"
+                          }
+                        }
+                      }}
                     data={user}
                     onDataChange={(user) => onUserChange(user)}
                 >

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import { post, BadRequestError } from '../api';
+import {  BadRequestError } from '../api';
 import UserForm from './UserForm';
 import { withPage } from '../AppPage';
 
@@ -20,19 +20,20 @@ const styles = theme => ({
 });
 
 
-class NewUser extends React.Component {
+export class NewUser extends React.Component {
     state = {
         user: {
             calories: 0,
             email: "",
+            fullName:"",
+            password:"",
         },
         loading: false,
     }
     handleSubmit = async (e) => {
-        this.props.handleErrorContext(async () => {
-            this.setState({ loading: true });
+        this.setState({ loading: true });
             try {
-                await post("/v1/users", this.state.user);
+                await this.props.api.post("/v1/users", this.state.user);
                 this.props.goBackOrReplace("/users");
             } catch (error) {
                 if (error instanceof BadRequestError) {
@@ -40,14 +41,12 @@ class NewUser extends React.Component {
                         serverValidationError: error.body.error,
                     })
                 } else {
-                    throw error;
+                    this.props.handleError(error);
                 }
             } finally {
                 this.setState({ loading: false });
             }
-        })
         
-        console.log("finished");
     };
 
     handleUserChange = (user) => {

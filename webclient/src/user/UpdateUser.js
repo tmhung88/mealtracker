@@ -19,11 +19,13 @@ const styles = theme => ({
 });
 
 
-class UpdateUser extends React.Component {
+export class UpdateUser extends React.Component {
     state = {
         user: {
             calories: 0,
-            email: ""
+            email: "",
+            fullName:"",
+            password:"",
         },
         loading: true,
     }
@@ -38,7 +40,7 @@ class UpdateUser extends React.Component {
             if (error instanceof NotFoundRequestError) {
                 this.setState({ user: null });
             } else {
-                throw error;
+                this.props.handleError(error);
             }
         } finally {
             this.setState({ loading: false });
@@ -46,11 +48,9 @@ class UpdateUser extends React.Component {
     }
 
     handleSubmit = async (e) => {
-        this.props.handleErrorContext(async () => {
-            e.preventDefault();
-            this.setState({ loading: true });
+        this.setState({ loading: true });
             try {
-                await this.props.api.put(`/v1/users/${this.state.user.id}`, this.state.user);
+                await this.props.api.put(`/v1/users/${this.props.match.params.id}`, this.state.user);
                 this.props.goBackOrReplace("/users");
             } catch (error) {
                 if (error instanceof BadRequestError) {
@@ -58,14 +58,11 @@ class UpdateUser extends React.Component {
                         serverValidationError: error.body.error,
                     })
                 } else {
-                    throw error;
+                    this.props.handleError(error);
                 }
             } finally {
                 this.setState({ loading: false });
             }
-            console.log("finished");
-        })
-
     };
 
 
