@@ -52,7 +52,7 @@ class ServerPagingTable extends React.Component {
                 const response = await this.props.api.get(`${baseUrl}?${queryString || ""}&${this.buildQueryString(tableState)}`);
                 const json = await response.json();
                 console.log(json);
-                this.setState({ loading: false, data: json })
+                this.setState({ loading: false, data: json.data })
             } finally {
                 this.setState({ loading: false })
             }

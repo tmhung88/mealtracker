@@ -1,8 +1,8 @@
 import React from "react";
-import withStyles from '@material-ui/core/styles/withStyles';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
+import withStyles from "@material-ui/core/styles/withStyles";
+import FormControl from "@material-ui/core/FormControl";
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
 import { Button } from "@material-ui/core";
 import moment from "moment";
 
@@ -11,15 +11,6 @@ const styles = {
 }
 
 class MealFilter extends React.Component {
-    // state = {
-    //     filter: {
-    //         fromDate: moment().subtract(1, "days"),
-    //         toDate: moment(),
-    //         fromTime: moment().hour(14).minute(0),
-    //         toTime: moment().hour(16).minute(0)
-    //     }
-    // }
-
     state = {
         filter: this.props.filter || {},
     }

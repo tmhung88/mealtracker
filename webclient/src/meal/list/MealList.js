@@ -18,7 +18,7 @@ const styles = theme => ({
 const columns = [
     { id: "date", dataField: "datetime", numeric: false, disablePadding: true, label: "Date", renderContent(d) { return moment(d).format("DD MMM YYYY") } },
     { id: "time", dataField: "datetime", numeric: false, disablePadding: false, label: "Time", renderContent(d) { return moment(d).format("hh:mm A") } },
-    { id: "text", dataField: "text", numeric: false, disablePadding: false, label: "Text" },
+    { id: "name", dataField: "name", numeric: false, disablePadding: false, label: "Name" },
     { id: "calories", dataField: "calories", numeric: true, disablePadding: false, label: "Calories" },
 ];
 
@@ -62,7 +62,7 @@ export class MealList extends React.Component {
             <ServerPagingTable
                 columns={columns}
                 tableName="Meals"
-                baseUrl="/v1/meals"
+                baseUrl="/v1/users/me/meals"
                 queryString={this.props.location.search}
                 onRowSelect={(id) => {
                     this.props.history.push(`/meals/${id}/update`);

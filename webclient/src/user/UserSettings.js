@@ -22,7 +22,7 @@ class UserSettings extends React.Component {
             const response = await this.props.api.get(`/v1/users/settings`);
             const json = await response.json();
             this.setState({
-                userSettings: json,
+                userSettings: json.data,
             })
         } finally {
             this.setState({ loading: false });
