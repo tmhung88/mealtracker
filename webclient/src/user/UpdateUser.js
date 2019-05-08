@@ -34,7 +34,7 @@ export class UpdateUser extends React.Component {
             const response = await this.props.api.get(`/v1/users/${this.props.match.params.id}`);
             const json = await response.json();
             this.setState({
-                user: json,
+                user: json.data,
             })
         } catch (error) {
             if (error instanceof NotFoundRequestError) {

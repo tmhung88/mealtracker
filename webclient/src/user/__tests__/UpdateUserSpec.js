@@ -11,7 +11,7 @@ describe("#UpdateUser", () => {
             const goBackOrReplace = jest.fn();
             const api = {
                 put: jest.fn(),
-                get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({ userData: "user" }) }),
+                get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({ data: { userData: "user" } }) }),
             };
             const handleError = jest.fn();
             const wrapper = shallow(<UpdateUser
@@ -66,8 +66,8 @@ describe("#UpdateUser", () => {
                 goBackOrReplace={goBackOrReplace}
                 match={{ params: { id: "12" } }}
             />);
-    
-    
+
+
             await submit(wrapper);
             expect(handleError).toHaveBeenCalledWith({ error: true });
         })
@@ -77,7 +77,7 @@ describe("#UpdateUser", () => {
             const goBackOrReplace = jest.fn();
             const api = {
                 put: jest.fn(),
-                get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({ userData: "user" }) }),
+                get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({ data:{userData: "user"} }) }),
             };
             const handleError = jest.fn();
             const wrapper = shallow(<UpdateUser

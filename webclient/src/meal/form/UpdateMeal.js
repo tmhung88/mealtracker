@@ -36,7 +36,7 @@ export class UpdateMeal extends React.Component {
             const response = await this.props.api.get(url);
             const json = await response.json();
             this.setState({
-                meal: json,
+                meal: json.data,
             })
         } catch (error) {
             if (error instanceof NotFoundRequestError) {

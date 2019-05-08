@@ -47,7 +47,7 @@ describe("#UpdateMeal", () => {
 
         await Bluebird.delay(10);
         const mealForm = wrapper.find(MealForm);
-        expect(mealForm.prop("meal")).toEqual({ data: "any" });
+        expect(mealForm.prop("meal")).toEqual("any");
         expect(api.get).toHaveBeenCalledWith("/abc/12");
     })
 

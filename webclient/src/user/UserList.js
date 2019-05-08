@@ -17,7 +17,7 @@ const columns = [
     { id: 'calories', dataField: "calories", numeric: true, disablePadding: false, label: 'Calories' },
 ];
 
-class UserList extends React.Component {
+export class UserList extends React.Component {
     render() {
         const { classes } = this.props;
         return <div>
