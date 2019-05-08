@@ -7,6 +7,12 @@ export const Rights = {
     AllMeal: "MEAL_MANAGEMENT",
 }
 
+export const Roles = {
+    USER_MANAGER: "USER_MANAGER",
+    ADMIN:"ADMIN",
+    REGULAR_USER:"REGULAR_USER",
+}
+
 export function ShowWithRight({ right, children }) {
     if (userSession.hasRight(right)) {
         return children;
@@ -16,6 +22,13 @@ export function ShowWithRight({ right, children }) {
 }
 
 class UserSession {
+    currentRole(){
+        if (!this.isLoggedIn()) {
+            return null;
+        }
+
+        return jwtDecode(getToken()).role || Roles.REGULAR_USER;
+    }
     setToken(token){
         setToken(token);
     }
