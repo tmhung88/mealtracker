@@ -1,10 +1,10 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { MealForm } from "../form/MealForm";
-import NotFoundForm from "../../common/form/NotFoundForm";
+import { MealForm } from "../MealForm";
+import NotFoundForm from "../../../common/form/NotFoundForm";
 import moment from "moment";
-import ValidationForm from "../../common/form/ValidationForm";
-import UserSelect from "../../user/UserSelect";
+import ValidationForm from "../../../common/form/ValidationForm";
+import UserSelect from "../../../user/UserSelect";
 
 describe("#MealForm", () => {
     const data = {

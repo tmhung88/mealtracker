@@ -1,16 +1,14 @@
-/* eslint-disable react/prop-types, react/jsx-handler-names */
-
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
-import { emphasize } from '@material-ui/core/styles/colorManipulator';
-import AsyncSelect from 'react-select/lib/Async';
-import { get } from '../api';
-import { withPage } from '../AppPage';
+import React from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import Paper from "@material-ui/core/Paper";
+import MenuItem from "@material-ui/core/MenuItem";
+import { emphasize } from "@material-ui/core/styles/colorManipulator";
+import AsyncSelect from "react-select/lib/Async";
+import { get } from "../api";
+import { withPage } from "../AppPage";
 
 const styles = theme => ({
     root: {
@@ -18,22 +16,22 @@ const styles = theme => ({
         // minHeight: 100,
     },
     input: {
-        display: 'flex',
+        display: "flex",
         padding: 0,
     },
     valueContainer: {
-        display: 'flex',
-        flexWrap: 'wrap',
+        display: "flex",
+        flexWrap: "wrap",
         flex: 1,
-        alignItems: 'center',
-        overflow: 'hidden',
+        alignItems: "center",
+        overflow: "hidden",
     },
     chip: {
         margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
     },
     chipFocused: {
         backgroundColor: emphasize(
-            theme.palette.type === 'light' ? theme.palette.grey[300] : theme.palette.grey[700],
+            theme.palette.type === "light" ? theme.palette.grey[300] : theme.palette.grey[700],
             0.08,
         ),
     },
@@ -44,12 +42,12 @@ const styles = theme => ({
         fontSize: 16,
     },
     placeholder: {
-        position: 'absolute',
+        position: "absolute",
         left: 2,
         fontSize: 16,
     },
     paper: {
-        position: 'absolute',
+        position: "absolute",
         zIndex: 1,
         marginTop: theme.spacing.unit,
         left: 0,
@@ -175,8 +173,8 @@ class UserSelect extends React.Component {
             input: base => ({
                 ...base,
                 color: theme.palette.text.primary,
-                '& input': {
-                    font: 'inherit',
+                "& input": {
+                    font: "inherit",
                 },
             }),
         };
@@ -188,7 +186,7 @@ class UserSelect extends React.Component {
                     classes={classes}
                     styles={selectStyles}
                     textFieldProps={{
-                        label: 'User',
+                        label: "User",
                         InputLabelProps: {
                             shrink: true,
                         },

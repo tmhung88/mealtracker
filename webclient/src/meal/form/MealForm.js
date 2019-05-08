@@ -152,8 +152,6 @@ export class MealForm extends React.Component {
             </Form>
         );
     }
-
-
 }
 
 MealForm.propTypes = {

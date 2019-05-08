@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import withStyles from '@material-ui/core/styles/withStyles';
-import { withPage } from '../AppPage';
-import Form from '../common/form/Form';
+import React from "react";
+import PropTypes from "prop-types";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import FormControl from "@material-ui/core/FormControl";
+import withStyles from "@material-ui/core/styles/withStyles";
+import { withPage } from "../AppPage";
+import Form from "../common/form/Form";
 
 
 const styles = theme => ({

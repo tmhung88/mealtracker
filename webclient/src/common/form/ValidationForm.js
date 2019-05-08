@@ -4,14 +4,11 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import _ from "lodash";
 import validate from "validate.js";
 
-validate.validators.presence.allowEmpty = false;
-
 const styles = theme => ({
-
 });
 
 
-class ValidationForm extends React.Component {
+export class ValidationForm extends React.Component {
     constructor(props) {
         super(props);
         const dirty = {};
@@ -70,8 +67,6 @@ class ValidationForm extends React.Component {
     handleFieldChange = (fieldName, value) => {
         this.handleFieldsChange({ [fieldName]: value });
     }
-
-
 
     handleFieldsChange = (obj) => {
         let dirty = this.state.dirty;
