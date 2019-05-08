@@ -2,9 +2,9 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link } from "react-router-dom";
-import { withPage } from "../AppPage";
+import { withPage } from "../../AppPage";
 import moment from "moment";
-import ServerPagingTable from "../common/table/ServerPagingTable";
+import ServerPagingTable from "../../common/table/ServerPagingTable";
 import UrlMealFilter from "./UrlMealFilter";
 import Alert from "./Alert";
 

@@ -2,9 +2,9 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from "react-router-dom";
-import { withPage } from '../AppPage';
+import { withPage } from '../../AppPage';
 import moment from "moment";
-import ServerPagingTable from '../common/table/ServerPagingTable';
+import ServerPagingTable from '../../common/table/ServerPagingTable';
 
 const styles = theme => ({
     button: {
@@ -31,10 +31,10 @@ class AllMealList extends React.Component {
                 tableName="All Meals"
                 baseUrl="/v1/meals/all"
                 onRowSelect={(id) => {
-                    this.props.history.push(`/meals/${id}/update?user-select=1`);
+                    this.props.history.push(`/meals/all/${id}/update`);
                 }}
                 />
-            <Button component={Link} to="/meals/new?user-select=1"
+            <Button component={Link} to="/meals/all/new"
                 variant="contained" color="primary" className={classes.button}>
                 New Meal
       </Button>

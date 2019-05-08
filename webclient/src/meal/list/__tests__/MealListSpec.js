@@ -4,7 +4,7 @@ import { MealList } from "../MealList";
 import Bluebird from "bluebird";
 import Alert from "../Alert";
 import moment from "moment";
-import ServerPagingTable from "../../common/table/ServerPagingTable";
+import ServerPagingTable from "../../../common/table/ServerPagingTable";
 import UrlMealFilter from "../UrlMealFilter";
 
 describe("#MealList", () => {

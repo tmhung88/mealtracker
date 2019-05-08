@@ -5,17 +5,16 @@ import MealForm from "../MealForm";
 import Bluebird from "bluebird";
 
 describe("#NewMeal", () => {
-    it("allow user select based on query string", () => {
+    it("allow user select passed from prop", () => {
         const goBackOrReplace = jest.fn();
         const api = { post: jest.fn() };
         const handleError = jest.fn();
-        const location = { search: "?user-select=1" };
         const wrapper = shallow(<NewMeal
             classes={{}}
             api={api}
             handleError={handleError}
-            location={location}
             goBackOrReplace={goBackOrReplace}
+            userSelect
         />);
 
         const mealForm = wrapper.find(MealForm);
@@ -26,13 +25,13 @@ describe("#NewMeal", () => {
         const goBackOrReplace = jest.fn();
         const api = { post: jest.fn() };
         const handleError = jest.fn();
-        const location = { search: "?user-select=1" };
         const wrapper = shallow(<NewMeal
             classes={{}}
             api={api}
             handleError={handleError}
-            location={location}
             goBackOrReplace={goBackOrReplace}
+            baseApiUrl="/v1/users/me/meals"
+            cancelPage="/meals"
         />);
 
         const mealForm = wrapper.find(MealForm);
@@ -40,7 +39,7 @@ describe("#NewMeal", () => {
 
         await submit(wrapper);
 
-        expect(api.post).toHaveBeenCalledWith("/v1/meals", { mealData: "meal" });
+        expect(api.post).toHaveBeenCalledWith("/v1/users/me/meals", { mealData: "meal" });
         expect(goBackOrReplace).toHaveBeenCalledWith("/meals");
     });
 
@@ -49,13 +48,13 @@ describe("#NewMeal", () => {
         const error = new Error("abc");
         const api = { post: jest.fn().mockReturnValue(Promise.reject(error)) };
         const handleError = jest.fn();
-        const location = { search: "?user-select=1" };
         const wrapper = shallow(<NewMeal
             classes={{}}
             api={api}
             handleError={handleError}
-            location={location}
             goBackOrReplace={goBackOrReplace}
+            baseApiUrl="/v1/users/me/meals"
+            cancelpage="/meals"
         />);
         await submit(wrapper);
 
@@ -67,13 +66,13 @@ describe("#NewMeal", () => {
         const error = new Error("abc");
         const api = { post: jest.fn().mockReturnValue(Promise.reject(error)) };
         const handleError = jest.fn();
-        const location = { search: "?user-select=1" };
         const wrapper = shallow(<NewMeal
             classes={{}}
             api={api}
             handleError={handleError}
-            location={location}
             goBackOrReplace={goBackOrReplace}
+            baseApiUrl="/v1/users/me/meals"
+            cancelPage="/meals"
         />);
 
         const mealForm = wrapper.find(MealForm);

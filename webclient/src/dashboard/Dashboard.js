@@ -16,10 +16,15 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { MainListItems } from './ListItems';
 import { Link, Switch, withRouter, Redirect } from "react-router-dom";
-import NewMeal from "../meal/NewMeal";
-import UpdateMeal from "../meal/UpdateMeal";
-import MealList from "../meal/MealList";
-import AllMealList from "../meal/AllMealList";
+
+import MyNewMeal from "../meal/form/my/MyNewMeal";
+import MyUpdateMeal from "../meal/form/my/MyUpdateMeal";
+
+import ManagementNewMeal from "../meal/form/management/ManagementNewMeal";
+import ManagementUpdateMeal from "../meal/form/management/ManagementUpdateMeal";
+
+import MealList from "../meal/list/MealList";
+import AllMealList from "../meal/list/AllMealList";
 import UserList from "../user/UserList";
 import UserSettings from "../user/UserSettings";
 import UpdateUser from "../user/UpdateUser";
@@ -127,10 +132,14 @@ class Dashboard extends React.Component {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Switch>
-            <AppRoute right={Rights.MyMeal} path="/meals" exact component={MealList} />
-            <AppRoute right={Rights.MyMeal} path="/meals/new" component={NewMeal} />
-            <AppRoute right={Rights.MyMeal} path="/meals/:id/update" component={UpdateMeal} />
             <AppRoute right={Rights.AllMeal} path="/meals/all" exact component={AllMealList} />
+            <AppRoute right={Rights.AllMeal} path="/meals/all/new" component={ManagementNewMeal} />
+            <AppRoute right={Rights.AllMeal} path="/meals/all/:id/update" component={ManagementUpdateMeal} />
+
+            <AppRoute right={Rights.MyMeal} path="/meals" exact component={MealList} />
+            <AppRoute right={Rights.MyMeal} path="/meals/new" component={MyNewMeal} />
+            <AppRoute right={Rights.MyMeal} path="/meals/:id/update" component={MyUpdateMeal} />
+
             <AppRoute right={Rights.MyMeal} path="/users/settings" component={UserSettings} />
 
             <AppRoute right={Rights.UserManagement} path="/users" exact component={UserList} />

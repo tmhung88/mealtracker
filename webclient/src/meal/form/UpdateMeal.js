@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { withPage } from '../AppPage';
+import { withPage } from '../../AppPage';
 import MealForm from './MealForm';
 import queryString from 'query-string'
+import { NotFoundRequestError } from '../../api';
 
 const styles = theme => ({
-    add: {
+
+    update: {
         marginTop: theme.spacing.unit * 3,
         marginLeft: theme.spacing.unit * 3,
         paddingLeft: theme.spacing.unit * 4,
@@ -18,30 +20,51 @@ const styles = theme => ({
     }
 });
 
-export class NewMeal extends React.Component {
+
+export class UpdateMeal extends React.Component {
     state = {
         meal: {
             datetime: new Date(),
             calories: 0,
-            text: "",
-            userId: null,
+            text: "Meal Info",
         },
-        loading: false,
+        loading: true,
     }
-
-    hasUserSelect() {
-        return !!queryString.parse(this.props.location.search)["user-select"];
-    }
-    handleSubmit = async () => {
-        this.setState({ loading: true });
+    async componentDidMount() {
         try {
-            await this.props.api.post("/v1/meals", this.state.meal);
-            this.props.goBackOrReplace("/meals")
-        } catch (e) {
-            this.props.handleError(e);
+            let url = `${this.props.baseApiUrl}${this.props.match.params.id}`;
+            const response = await this.props.api.get(url);
+            const json = await response.json();
+            this.setState({
+                meal: json,
+            })
+        } catch (error) {
+            if (error instanceof NotFoundRequestError) {
+                this.setState({ meal: null });
+            } else {
+                throw error;
+            }
         } finally {
             this.setState({ loading: false });
         }
+
+    }
+
+    hasUserSelect() {
+        return !!this.props.userSelect;
+    }
+
+    handleSubmit = async (e) => {
+        this.props.handleErrorContext(async () => {
+            e.preventDefault();
+            this.setState({ loading: true });
+            try {
+                await this.props.api.put(`${this.props.baseApiUrl}/${this.state.meal.id}`, this.state.meal);
+                this.props.goBackOrReplace(this.props.cancelPage)
+            } finally {
+                this.setState({ loading: false });
+            }
+        })
     };
 
     handleMealChange = (meal) => {
@@ -54,13 +77,14 @@ export class NewMeal extends React.Component {
         const { classes } = this.props;
         return (
             <MealForm
+                notFound={!this.state.meal}
                 userSelect={this.hasUserSelect()}
                 loading={this.state.loading}
                 onMealChange={this.handleMealChange}
                 meal={this.state.meal}
                 renderActionButtons={(isValid) => {
                     return <div>
-                        <Button onClick={() => this.props.goBackOrReplace("/meals")}
+                        <Button onClick={() => this.props.goBackOrReplace(this.props.cancelPage)}
                             variant="contained"
                             color="secondary"
                             className={classes.cancel}
@@ -71,27 +95,28 @@ export class NewMeal extends React.Component {
                             type="submit"
                             variant="contained"
                             color="primary"
-                            className={classes.add}
+                            className={classes.update}
                             onClick={(e) => {
                                 e.preventDefault();
                                 if (!isValid()) {
                                     return;
                                 }
 
-                                this.handleSubmit();
+                                this.handleSubmit(e);
                             }}
                         >
-                            Add
+                            Update
                         </Button>
                     </div>
                 }} />
         );
     }
+
+
 }
 
-NewMeal.propTypes = {
+UpdateMeal.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withPage(withStyles(styles)(NewMeal));
-
+export default withPage(withStyles(styles)(UpdateMeal));
