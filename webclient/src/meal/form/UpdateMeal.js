@@ -32,7 +32,7 @@ export class UpdateMeal extends React.Component {
     }
     async componentDidMount() {
         try {
-            let url = `${this.props.baseApiUrl}${this.props.match.params.id}`;
+            let url = `${this.props.baseApiUrl}/${this.props.match.params.id}`;
             const response = await this.props.api.get(url);
             const json = await response.json();
             this.setState({
@@ -55,16 +55,15 @@ export class UpdateMeal extends React.Component {
     }
 
     handleSubmit = async (e) => {
-        this.props.handleErrorContext(async () => {
-            e.preventDefault();
-            this.setState({ loading: true });
+        this.setState({ loading: true });
             try {
-                await this.props.api.put(`${this.props.baseApiUrl}/${this.state.meal.id}`, this.state.meal);
+                await this.props.api.put(`${this.props.baseApiUrl}/${this.props.match.params.id}`, this.state.meal);
                 this.props.goBackOrReplace(this.props.cancelPage)
+            } catch(e){
+                this.props.handleError(e);
             } finally {
                 this.setState({ loading: false });
             }
-        })
     };
 
     handleMealChange = (meal) => {

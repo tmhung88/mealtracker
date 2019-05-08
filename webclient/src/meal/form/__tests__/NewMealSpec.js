@@ -61,7 +61,7 @@ describe("#NewMeal", () => {
         expect(handleError).toHaveBeenCalledWith(error);
     });
 
-    it("Cancel should to to previous page", ()=>{
+    it("Cancel should to to previous page", () => {
         const goBackOrReplace = jest.fn();
         const error = new Error("abc");
         const api = { post: jest.fn().mockReturnValue(Promise.reject(error)) };
