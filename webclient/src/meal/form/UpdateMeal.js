@@ -35,14 +35,19 @@ export class UpdateMeal extends React.Component {
             let url = `${this.props.baseApiUrl}/${this.props.match.params.id}`;
             const response = await this.props.api.get(url);
             const json = await response.json();
+            const {consumer, ...rest} = json.data;
             this.setState({
-                meal: json.data,
+                meal: {
+                    ...rest,
+                    consumerId: consumer && consumer.id,
+                    consumerEmail: consumer && consumer.email,
+                },
             })
         } catch (error) {
             if (error instanceof NotFoundRequestError) {
                 this.setState({ meal: null });
             } else {
-                throw error;
+                this.props.handleError(error);
             }
         } finally {
             this.setState({ loading: false });

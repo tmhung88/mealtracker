@@ -6,11 +6,20 @@ import MealForm from "../MealForm";
 import Bluebird from "bluebird";
 
 describe("#UpdateMeal", () => {
+    const serverMealResponse = {
+        data: {
+            name: "Meal 1",
+            consumer: {
+                id: 123,
+                email: "email1@a.com"
+            }
+        }
+    }
     it("allow user select passed from prop", async () => {
         const goBackOrReplace = jest.fn();
         const api = {
             post: jest.fn(),
-            get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({ data: "any" }) }),
+            get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue(serverMealResponse) }),
         };
         const handleError = jest.fn();
         const wrapper = shallow(<UpdateMeal
@@ -30,7 +39,7 @@ describe("#UpdateMeal", () => {
         const goBackOrReplace = jest.fn();
         const api = {
             post: jest.fn(),
-            get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({ data: "any" }) }),
+            get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue(serverMealResponse) }),
         };
 
         const handleError = jest.fn();
@@ -47,7 +56,46 @@ describe("#UpdateMeal", () => {
 
         await Bluebird.delay(10);
         const mealForm = wrapper.find(MealForm);
-        expect(mealForm.prop("meal")).toEqual("any");
+        expect(mealForm.prop("meal")).toEqual({
+            name: "Meal 1",
+            consumerId: 123,
+            consumerEmail: "email1@a.com"            
+        });
+        expect(api.get).toHaveBeenCalledWith("/abc/12");
+    })
+
+    it("should load data from server without consumer", async () => {
+        const goBackOrReplace = jest.fn();
+        const api = {
+            post: jest.fn(),
+            get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({
+                ...serverMealResponse,
+                data: {
+                    ...serverMealResponse.data,
+                    consumer: null,
+                }
+            }) }),
+        };
+
+        const handleError = jest.fn();
+        const wrapper = shallow(<UpdateMeal
+            classes={{}}
+            api={api}
+            handleError={handleError}
+            goBackOrReplace={goBackOrReplace}
+            userSelect
+            match={{ params: { id: "12" } }}
+            baseApiUrl="/abc"
+            cancelPage="/def"
+        />);
+
+        await Bluebird.delay(10);
+        const mealForm = wrapper.find(MealForm);
+        expect(mealForm.prop("meal")).toEqual({
+            name: "Meal 1",
+            consumerId: null,
+            consumerEmail: null,
+        });
         expect(api.get).toHaveBeenCalledWith("/abc/12");
     })
 
@@ -56,7 +104,7 @@ describe("#UpdateMeal", () => {
         const api = {
             post: jest.fn(),
             put: jest.fn(),
-            get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({ data: "any" }) }),
+            get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue(serverMealResponse) }),
         };
         const handleError = jest.fn();
         const wrapper = shallow(<UpdateMeal

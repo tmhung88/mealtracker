@@ -1,35 +1,34 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import withStyles from '@material-ui/core/styles/withStyles';
+import React, { Fragment } from "react";
+import PropTypes from "prop-types";
+import TextField from "@material-ui/core/TextField";
+import FormControl from "@material-ui/core/FormControl";
+import withStyles from "@material-ui/core/styles/withStyles";
 import moment from "moment";
-import Form from '../../common/form/Form';
-import UserSelect from '../../user/UserSelect';
-import { ShowWithRight, Rights } from '../../userSession';
-import ValidationForm from '../../common/form/ValidationForm';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import NotFoundForm from '../../common/form/NotFoundForm';
+import Form from "../../common/form/Form";
+import UserSelect from "../../user/UserSelect";
+import { ShowWithRight, Rights } from "../../userSession";
+import ValidationForm from "../../common/form/ValidationForm";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import NotFoundForm from "../../common/form/NotFoundForm";
 
 const styles = () => ({
 
 });
 
 
-class MealForm extends React.Component {
+export class MealForm extends React.Component {
 
     renderUserSelect(userId, username, onFieldsChange, errorMessage) {
         if (this.props.userSelect) {
             const user = userId != null ? { key: userId, label: username } : null;
-            console.log(user);
             return <ShowWithRight right={Rights.AllMeal}>
                 <FormControl margin="normal" required fullWidth error={!!errorMessage}>
                     <UserSelect
                         user={user}
                         onUserChange={(user) => {
                             onFieldsChange({
-                                username: user && user.label,
-                                userId: user && user.key
+                                consumerEmail: user && user.label,
+                                consumerId: user && user.key
                             });
                         }}
                     />
@@ -40,46 +39,52 @@ class MealForm extends React.Component {
     }
 
     getValidationConstraints() {
+        let constraints = {
+            name: {
+                presence: { allowEmpty: false },
+            },
+            consumedDate: {
+                presence: { allowEmpty: false },
+            },
+            consumedTime: {
+                presence: { allowEmpty: false },
+            },
+        }
         if (this.props.userSelect) {
-            return {
-                userId: {
+            constraints = {
+                ...constraints,
+                consumerId: {
                     presence: { message: "^User can't be blank" },
                 },
             }
         }
 
-        return null;
+        return constraints;
     }
 
     render() {
         const { classes, renderActionButtons, onMealChange, loading, serverValidationError, notFound } = this.props;
-        const meal = this.props.meal;
-        if(notFound) {
-            return <NotFoundForm formName="Meal"/>
+        if (notFound) {
+            return <NotFoundForm formName="Meal" />
         }
         return (
             <Form formName="Meal" loading={loading} >
                 <ValidationForm
                     serverValidationError={serverValidationError}
                     constraints={this.getValidationConstraints()}
-                    data={meal}
+                    data={this.props.meal}
                     onDataChange={(meal) => onMealChange(meal)}
                 >
                     {({ onFieldChange, onFieldsChange, data, isValid, validationFields, validationMessage }) => {
                         return (<Fragment>
-                            <FormControl margin="normal" required fullWidth>
+                            <FormControl margin="normal" required fullWidth error={!!validationFields.consumedDate}>
                                 <TextField
-                                    id="date"
+                                    id="consumedDate"
                                     label="Date"
                                     type="date"
-                                    value={moment(meal.datetime).format("YYYY-MM-DD")}
+                                    value={data.consumedDate}
                                     onChange={(e) => {
-                                        const value = e.currentTarget.value;
-                                        const dateMoment = value ? moment(value) : moment();
-                                        onFieldChange("datetime", moment(meal.datetime)
-                                            .year(dateMoment.year())
-                                            .month(dateMoment.month())
-                                            .date(dateMoment.date()))
+                                        onFieldChange("consumedDate", e.currentTarget.value)
 
                                     }}
                                     className={classes.textField}
@@ -87,20 +92,16 @@ class MealForm extends React.Component {
                                         shrink: true,
                                     }}
                                 />
+                                <FormHelperText>{validationFields.consumedDate}</FormHelperText>
                             </FormControl>
-                            <FormControl margin="normal" required fullWidth>
+                            <FormControl margin="normal" required fullWidth error={!!validationFields.consumedTime}>
                                 <TextField
-                                    id="time"
+                                    id="consumedTime"
                                     label="Time"
                                     type="time"
-                                    value={moment(meal.datetime).format("HH:mm")}
+                                    value={data.consumedTime}
                                     onChange={(e) => {
-                                        const value = e.currentTarget.value;
-                                        console.log(value);
-                                        const dateMoment = value ? moment(value, "HH:mm") : moment();
-                                        onFieldChange("datetime", moment(meal.datetime)
-                                            .hour(dateMoment.hour())
-                                            .minute(dateMoment.minute()))
+                                        onFieldChange("consumedTime", e.currentTarget.value)
                                     }}
                                     className={classes.textField}
                                     InputLabelProps={{
@@ -110,20 +111,20 @@ class MealForm extends React.Component {
                                         step: 300, // 5 min
                                     }}
                                 />
+                                <FormHelperText>{validationFields.consumedTime}</FormHelperText>
                             </FormControl>
-                            <FormControl margin="normal" required fullWidth>
+                            <FormControl margin="normal" required fullWidth error={!!validationFields.name}>
                                 <TextField
-                                    id="text"
-                                    label="Text"
-                                    multiline
+                                    id="name"
+                                    label="Name"
                                     className={classes.textField}
                                     margin="normal"
-                                    value={meal.text || ""}
+                                    value={data.name}
                                     onChange={e => {
-                                        onFieldChange("text", e.currentTarget.value);
+                                        onFieldChange("name", e.currentTarget.value);
                                     }}
                                 />
-
+                                <FormHelperText>{validationFields.name}</FormHelperText>
                             </FormControl>
                             <FormControl margin="normal" required fullWidth>
                                 <TextField
@@ -135,14 +136,14 @@ class MealForm extends React.Component {
                                         shrink: true,
                                     }}
                                     margin="normal"
-                                    value={meal.calories || 0}
+                                    value={data.calories || 0}
                                     onChange={e => {
                                         onFieldChange("calories", Number.parseInt(e.currentTarget.value, 10));
                                     }}
                                 />
 
                             </FormControl>
-                            {this.renderUserSelect(meal.userId, meal.username, onFieldsChange, validationFields.userId)}
+                            {this.renderUserSelect(data.consumerId, data.consumerEmail, onFieldsChange, validationFields.userId)}
                             {renderActionButtons(isValid)}
                         </Fragment>)
                     }}
