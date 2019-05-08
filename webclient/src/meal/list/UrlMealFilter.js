@@ -1,32 +1,28 @@
 import React from "react";
-import withStyles from '@material-ui/core/styles/withStyles';
+import withStyles from "@material-ui/core/styles/withStyles";
 import MealFilter from "./MealFilter";
-import queryString from 'query-string';
+import queryString from "query-string";
 import datetimeHelper from "../../datetimeHelper";
 
 const styles = {
 
 }
 
-class UrlMealFilter extends React.Component {
-    getDate(field, filter) {
-        return filter[field] ? filter[field].format("YYYY-MM-DD") : "";
-    }
-
-    getTime(field, filter) {
-        return filter[field] ? filter[field].format("HH:mm") : "";
+export class UrlMealFilter extends React.Component {
+    getField(field, filter) {
+        return filter[field] || "";
     }
 
     buildFilterString(filterInfo) {
-        return `fromDate=${this.getDate("fromDate", filterInfo)}&toDate=${this.getDate("toDate", filterInfo)}&fromTime=${this.getTime("fromTime", filterInfo)}&toTime=${this.getTime("toTime", filterInfo)}`
+        return `fromDate=${this.getField("fromDate", filterInfo)}&toDate=${this.getField("toDate", filterInfo)}&fromTime=${this.getField("fromTime", filterInfo)}&toTime=${this.getField("toTime", filterInfo)}`
     }
 
     parseDate(value) {
-        return datetimeHelper.parseDateOrUndefined(value);
+        return datetimeHelper.verifyDateOrUndefined(value);
     }
 
     parseTime(value) {
-        return datetimeHelper.parseTimeOrUndefined(value);
+        return datetimeHelper.verifyTimeOrUndefined(value);
     }
 
     shouldComponentUpdate(nextProps) {

@@ -1,25 +1,25 @@
 import moment from "moment";
 
 class DateTimeHelper {
-    parseWithFormatOrUndefined(value, format){
+    verifyFormatOrUndefined(value, format){
         if(!value) {
             return undefined;
         }
 
         const result = moment(value, format);
         if(result.isValid()) {
-            return result;
+            return result.format(format);
         }
 
         return undefined;
     }
 
-    parseDateOrUndefined(value){
-        return this.parseWithFormatOrUndefined(value);
+    verifyDateOrUndefined(value){
+        return this.verifyFormatOrUndefined(value, "YYYY-MM-DD");
     }
 
-    parseTimeOrUndefined(value){
-        return this.parseWithFormatOrUndefined(value, "HH:mm");
+    verifyTimeOrUndefined(value){
+        return this.verifyFormatOrUndefined(value, "HH:mm");
     }
 }
 

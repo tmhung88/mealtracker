@@ -8,7 +8,6 @@ import ServerPagingTable from "../../../common/table/ServerPagingTable";
 import UrlMealFilter from "../UrlMealFilter";
 
 describe("#MealList", () => {
-
     it("should send correct alert request", async () => {
         const api = {
             get: jest.fn().mockReturnValue({ json: jest.fn().mockReturnValue({ data: { alerted: true, totalCalories: 30, dailyCalorieLimit: 20 } }) })

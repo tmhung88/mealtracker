@@ -10,62 +10,23 @@ const styles = {
 
 }
 
-class MealFilter extends React.Component {
+export class MealFilter extends React.Component {
     state = {
         filter: this.props.filter || {},
     }
 
-    changeDate(field, value) {
-        if (!value) {
-            return this.setState({
-                filter: {
-                    ...this.state.filter,
-                    [field]: null,
-                }
-            })
-        }
-        const dateMoment = moment(value);
-        this.setState({
+    changeField(field, value) {
+        return this.setState({
             filter: {
                 ...this.state.filter,
-                [field]: moment()
-                    .year(dateMoment.year())
-                    .month(dateMoment.month())
-                    .date(dateMoment.date())
+                [field]: value,
             }
         })
-    }
-
-    changeTime(field, value) {
-        if (!value) {
-            return this.setState({
-                filter: {
-                    ...this.state.filter,
-                    [field]: null,
-                }
-            })
-        }
-        const dateMoment = moment(value,"HH:mm");
-        this.setState({
-            filter: {
-                ...this.state.filter,
-                [field]: moment()
-                    .hour(dateMoment.hour())
-                    .minute(dateMoment.minute())
-            }
-        })
-    }
-
-    getDate(field) {
-        return this.state.filter[field] ? this.state.filter[field].format("YYYY-MM-DD") : null;
-    }
-
-    getTime(field) {
-        return this.state.filter[field] ? this.state.filter[field].format("HH:mm") : null;
     }
 
     render() {
         const { classes } = this.props;
+        const {fromDate, toDate, fromTime, toTime} = this.state;
         return (<main className={classes.main}>
             <Grid container spacing={24}>
                 <Grid item xs={12} sm={6}>
@@ -74,9 +35,9 @@ class MealFilter extends React.Component {
                             id="from-date"
                             label="From Date"
                             type="date"
-                            value={this.getDate("fromDate")}
+                            value={fromDate}
                             onChange={(e) => {
-                                this.changeDate("fromDate", e.currentTarget.value)
+                                this.changeField("fromDate", e.currentTarget.value)
                             }}
                             className={classes.textField}
                             InputLabelProps={{
@@ -91,9 +52,9 @@ class MealFilter extends React.Component {
                             id="to-date"
                             label="To Date"
                             type="date"
-                            value={this.getDate("toDate")}
+                            value={toDate}
                             onChange={(e) => {
-                                this.changeDate("toDate", e.currentTarget.value)
+                                this.changeField("toDate", e.currentTarget.value)
                             }}
                             className={classes.textField}
                             InputLabelProps={{
@@ -108,9 +69,9 @@ class MealFilter extends React.Component {
                             id="from-time"
                             label="From Time"
                             type="time"
-                            value={this.getTime("fromTime")}
+                            value={fromTime}
                             onChange={(e) => {
-                                this.changeTime("fromTime", e.currentTarget.value)
+                                this.changeField("fromTime", e.currentTarget.value)
                             }}
                             className={classes.textField}
                             InputLabelProps={{
@@ -128,9 +89,9 @@ class MealFilter extends React.Component {
                             id="to-time"
                             label="To Time"
                             type="time"
-                            value={this.getTime("toTime")}
+                            value={toTime}
                             onChange={(e) => {
-                                this.changeTime("toTime", e.currentTarget.value)
+                                this.changeField("toTime", e.currentTarget.value)
                             }}
                             className={classes.textField}
                             InputLabelProps={{
@@ -144,6 +105,7 @@ class MealFilter extends React.Component {
                 </Grid>
                 <Grid item xs={12} >
                     <Button onClick={() => this.props.onFilter(this.state.filter)}
+                        name="filter"
                         color="primary"
                         variant="contained"
                     >Filter</Button>
