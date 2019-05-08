@@ -6,6 +6,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import {  BadRequestError } from '../api';
 import UserForm from './UserForm';
 import { withPage } from '../AppPage';
+import { Roles } from '../userSession';
 
 const styles = theme => ({
     add: {
@@ -27,6 +28,7 @@ export class NewUser extends React.Component {
             email: "",
             fullName:"",
             password:"",
+            role: Roles.REGULAR_USER,
         },
         loading: false,
     }

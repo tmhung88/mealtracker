@@ -7,8 +7,9 @@ import Form from "../common/form/Form";
 import ValidationForm from "../common/form/ValidationForm";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import NotFoundForm from "../common/form/NotFoundForm";
-import { Roles } from "../userSession";
+import { Roles, roleIdToName } from "../userSession";
 import { InputLabel, Input, Select, MenuItem } from "@material-ui/core";
+import { withPage } from "../AppPage";
 
 const styles = () => ({
 
@@ -21,13 +22,13 @@ export class UserForm extends React.Component {
         const { userSession } = this.props;
         switch (userSession.currentRole()) {
             case Roles.USER_MANAGER: return [
-                <MenuItem key={Roles.REGULAR_USER} value={Roles.REGULAR_USER}>Regular User</MenuItem>,
-                <MenuItem key={Roles.USER_MANAGER} value={Roles.USER_MANAGER}>User Manager</MenuItem>
+                <MenuItem key={Roles.REGULAR_USER} value={Roles.REGULAR_USER}>{roleIdToName(Roles.REGULAR_USER)}</MenuItem>,
+                <MenuItem key={Roles.USER_MANAGER} value={Roles.USER_MANAGER}>{roleIdToName(Roles.USER_MANAGER)}</MenuItem>
             ];
             case Roles.ADMIN: return [
-                <MenuItem key={Roles.REGULAR_USER} value={Roles.REGULAR_USER}>Regular User</MenuItem>,
-                <MenuItem key={Roles.USER_MANAGER} value={Roles.USER_MANAGER}>User Manager</MenuItem>,
-                <MenuItem key={Roles.ADMIN} value={Roles.ADMIN}>Admin</MenuItem>
+                <MenuItem key={Roles.REGULAR_USER} value={Roles.REGULAR_USER}>{roleIdToName(Roles.REGULAR_USER)}</MenuItem>,
+                <MenuItem key={Roles.USER_MANAGER} value={Roles.USER_MANAGER}>{roleIdToName(Roles.USER_MANAGER)}</MenuItem>,
+                <MenuItem key={Roles.ADMIN} value={Roles.ADMIN}>{roleIdToName(Roles.ADMIN)}</MenuItem>
             ];
             default: return [];
         }
@@ -73,6 +74,7 @@ export class UserForm extends React.Component {
                         return (<Fragment>
                             <FormControl margin="normal" required fullWidth error={!!validationFields.email}>
                                 <TextField
+                                    required
                                     error={!!validationFields.email}
                                     id="email"
                                     label="Email"
@@ -101,6 +103,7 @@ export class UserForm extends React.Component {
                             </FormControl>
                             <FormControl margin="normal" required fullWidth>
                                 <TextField
+                                    required
                                     id="dailyCalorieLimit"
                                     type="number"
                                     label="Daily Calorie Limit"
@@ -118,13 +121,11 @@ export class UserForm extends React.Component {
                             <FormControl margin="normal" required fullWidth >
                                 <InputLabel htmlFor="role">Role</InputLabel>
                                 <Select
-                                    id="role"
                                     value={data.role}
-                                    onChange={(e) => { onFieldChange("role", e.currentTarget.value) }}
-                                    inputProps={{
-                                        name: "role",
-                                        id: "role",
-                                    }}
+                                    onChange={(e) => { 
+                                        onFieldChange("role", e.target.value);
+                                     }}
+                                     input={<Input name="role" id="role" />}
                                 >
                                     {this.renderRoleItems()}
                                 </Select>
@@ -144,4 +145,4 @@ UserForm.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(UserForm);
+export default withPage(withStyles(styles)(UserForm));

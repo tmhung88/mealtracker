@@ -4,7 +4,7 @@ import { UserForm } from "../UserForm";
 import NotFoundForm from "../../common/form/NotFoundForm";
 import ValidationForm from "../../common/form/ValidationForm";
 import { Roles } from "../../userSession";
-import { MenuItem } from "@material-ui/core";
+import { MenuItem, Select } from "@material-ui/core";
 
 describe("#UserForm", () => {
     const data = {
@@ -49,7 +49,7 @@ describe("#UserForm", () => {
         expect(validationSection.find(`[id="fullName"]`).prop("value")).toEqual("fullname1");
         expect(validationSection.find(`[id="dailyCalorieLimit"]`).prop("value")).toEqual(10);
         expect(validationSection.find(`[id="password"]`).prop("value")).toEqual("password1");
-        expect(validationSection.find(`[id="role"]`).prop("value")).toEqual(Roles.ADMIN);
+        expect(validationSection.find(Select).prop("value")).toEqual(Roles.ADMIN);
     })
 
 
@@ -58,14 +58,14 @@ describe("#UserForm", () => {
 
         const wrapper = shallow(<UserForm classes={{}} user={data} renderActionButtons={jest.fn()} userSession={userSession} />);
         const validationSection = renderValidationForm(wrapper, data)
-        const buildEvent=(value)=> {
-            return {currentTarget: {value}};
+        const buildEvent = (value) => {
+            return { currentTarget: { value } };
         }
         expect(validationSection.find(`[id="email"]`).simulate("change", buildEvent("email2")));
         expect(validationSection.find(`[id="fullName"]`).simulate("change", buildEvent("name2")));
         expect(validationSection.find(`[id="dailyCalorieLimit"]`).simulate("change", buildEvent("22")));
         expect(validationSection.find(`[id="password"]`).simulate("change", buildEvent("pass2")));
-        expect(validationSection.find(`[id="role"]`).simulate("change", buildEvent(Roles.REGULAR_USER)));
+        expect(validationSection.find(Select).simulate("change", { target: { value: Roles.REGULAR_USER } }));
 
         expect(validationSectionParams.onFieldChange).toHaveBeenCalledWith("email", "email2");
         expect(validationSectionParams.onFieldChange).toHaveBeenCalledWith("fullName", "name2");

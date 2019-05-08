@@ -13,6 +13,14 @@ export const Roles = {
     REGULAR_USER:"REGULAR_USER",
 }
 
+export const roleIdToName = (role)=>{
+    switch(role) {
+        case Roles.USER_MANAGER: return "User Manager";
+        case Roles.ADMIN: return "Admin";
+        default: return "Regular User"
+    }
+}
+
 export function ShowWithRight({ right, children }) {
     if (userSession.hasRight(right)) {
         return children;
