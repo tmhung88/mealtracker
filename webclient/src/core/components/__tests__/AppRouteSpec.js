@@ -19,7 +19,7 @@ describe("#AppRoute", () => {
             isLoggedIn: jest.fn().mockReturnValue(true),
             hasRight: jest.fn().mockReturnValue(false)
         }
-        const wrapper = shallow(<AppRoute right={Rights.AllMeal} userSession={userSession} />);
+        const wrapper = shallow(<AppRoute right={Rights.MEAL_MANAGEMENT} userSession={userSession} />);
         const rendered = wrapper.find(Route).renderProp("render")({ location: "a" });
         expect(rendered.prop("to")).toEqual({ pathname: '/users/login', state: { from: 'a' } })
     })
@@ -29,7 +29,7 @@ describe("#AppRoute", () => {
             isLoggedIn: jest.fn().mockReturnValue(true),
             hasRight: jest.fn().mockReturnValue(true)
         }
-        const wrapper = shallow(<AppRoute right={Rights.AllMeal} userSession={userSession} component="div" />);
+        const wrapper = shallow(<AppRoute right={Rights.MEAL_MANAGEMENT} userSession={userSession} component="div" />);
         const rendered = wrapper.find(Route).renderProp("render")({ location: "a" });
         expect(rendered.html()).toContain("<div");
     })

@@ -77,8 +77,8 @@ describe("#Login", () => {
         })
 
         it("should navigate to user if has right", async () => {
-            when(userSession.hasRight).calledWith(Rights.MyMeal).mockReturnValue(false);
-            when(userSession.hasRight).calledWith(Rights.UserManagement).mockReturnValue(true);
+            when(userSession.hasRight).calledWith(Rights.MY_MEALS).mockReturnValue(false);
+            when(userSession.hasRight).calledWith(Rights.USER_MANAGEMENT).mockReturnValue(true);
 
             const wrapper = shallow(<Login classes={{}} api={{ post: postApi }} userSession={userSession} history={history} />);
             await submit(wrapper, "un", "ps");

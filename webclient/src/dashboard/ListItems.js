@@ -17,19 +17,19 @@ function ListItemLink(props) {
 
 export const MainListItems = ({selectedPathName}) => (
     <div>
-        <ListItemLink right={Rights.MyMeal} to={Pages.MY_MEALS} selected={selectedPathName === Pages.MY_MEALS}>
+        <ListItemLink right={Rights.MY_MEALS} to={Pages.MY_MEALS} selected={selectedPathName === Pages.MY_MEALS}>
             <ListItemIcon>
                 <FastFoodIcon />
             </ListItemIcon>
             <ListItemText primary="Meals" />
         </ListItemLink>
-        <ListItemLink right={Rights.AllMeal} to={Pages.ALL_MEALS} selected={selectedPathName === Pages.ALL_MEALS}>
+        <ListItemLink right={Rights.MEAL_MANAGEMENT} to={Pages.ALL_MEALS} selected={selectedPathName === Pages.ALL_MEALS}>
             <ListItemIcon>
                 <FastFoodIcon />
             </ListItemIcon>
             <ListItemText primary="All Meals" />
         </ListItemLink>
-        <ListItemLink right={Rights.UserManagement} to={Pages.USERS} selected={selectedPathName === Pages.USERS}>
+        <ListItemLink right={Rights.USER_MANAGEMENT} to={Pages.USERS} selected={selectedPathName === Pages.USERS}>
             <ListItemIcon>
                 <PeopleIcon />
             </ListItemIcon>

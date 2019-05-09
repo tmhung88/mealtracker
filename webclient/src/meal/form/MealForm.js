@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import PropTypes from "prop-types";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -20,7 +19,7 @@ export class MealForm extends React.Component {
     renderUserSelect(userId, username, onFieldsChange, errorMessage) {
         if (this.props.userSelect) {
             const user = userId != null ? { key: userId, label: username } : null;
-            return <ShowWithRight right={Rights.AllMeal}>
+            return <ShowWithRight right={Rights.MEAL_MANAGEMENT}>
                 <FormControl margin="normal" required fullWidth error={!!errorMessage}>
                     <UserSelect
                         user={user}
@@ -159,9 +158,5 @@ export class MealForm extends React.Component {
         );
     }
 }
-
-MealForm.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(MealForm);

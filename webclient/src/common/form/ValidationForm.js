@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import _ from "lodash";
 import validate from "validate.js";
@@ -107,9 +106,5 @@ export class ValidationForm extends React.Component {
         </Fragment>
     }
 }
-
-ValidationForm.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(ValidationForm);

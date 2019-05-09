@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
@@ -97,9 +96,5 @@ export class UserSettings extends React.Component {
         );
     }
 }
-
-UserSettings.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 export default withPage(withStyles(styles)(UserSettings));

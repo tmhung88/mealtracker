@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import UserForm from './UserForm';
@@ -114,12 +113,6 @@ export class UpdateUser extends React.Component {
             />
         );
     }
-
-
 }
-
-UpdateUser.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 export default withPage(withStyles(styles)(UpdateUser));

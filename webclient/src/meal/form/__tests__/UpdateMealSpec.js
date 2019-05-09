@@ -1,6 +1,5 @@
 import React from "react";
 import { shallow } from "enzyme";
-import MealFilter from "../../list/MealFilter";
 import { UpdateMeal } from "../UpdateMeal";
 import MealForm from "../MealForm";
 import Bluebird from "bluebird";

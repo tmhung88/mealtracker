@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import PropTypes from "prop-types";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -64,9 +63,9 @@ export class Login extends React.Component {
   }
 
   navigateToProperPage() {
-    if (this.props.userSession.hasRight(Rights.MyMeal)) {
+    if (this.props.userSession.hasRight(Rights.MY_MEALS)) {
       this.props.history.replace(Pages.MY_MEALS);
-    } else if (this.props.userSession.hasRight(Rights.UserManagement)) {
+    } else if (this.props.userSession.hasRight(Rights.USER_MANAGEMENT)) {
       this.props.history.replace(Pages.USERS);
     } else {
       this.props.history.replace(Pages.ALL_MEALS);
@@ -176,9 +175,5 @@ export class Login extends React.Component {
     );
   }
 }
-
-Login.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default withPage(withStyles(styles)(Login));

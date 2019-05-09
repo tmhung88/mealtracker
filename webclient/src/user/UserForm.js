@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import PropTypes from "prop-types";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -141,9 +140,5 @@ export class UserForm extends React.Component {
         );
     }
 }
-
-UserForm.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 export default withPage(withStyles(styles)(UserForm));

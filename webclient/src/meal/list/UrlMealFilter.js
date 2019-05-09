@@ -31,7 +31,6 @@ export class UrlMealFilter extends React.Component {
 
     render() {
         const filterRaw = queryString.parse(this.props.queryString || "");
-        console.log(filterRaw);
 
         const filter = {
             fromDate: this.parseDate(filterRaw.fromDate),

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import MealForm from './MealForm';
@@ -90,10 +89,6 @@ export class NewMeal extends React.Component {
         );
     }
 }
-
-NewMeal.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 export default withPage(withStyles(styles)(NewMeal));
 

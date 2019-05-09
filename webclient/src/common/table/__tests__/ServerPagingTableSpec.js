@@ -58,7 +58,7 @@ describe("#ServerPagingTable", () => {
             delete: jest.fn().mockResolvedValue({}),
         }
         const handleError = jest.fn();
-        const wrapper = shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} handleError={handleError} />);
+        shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} handleError={handleError} />);
         await Bluebird.delay(10);
         expect(handleError).toHaveBeenCalledWith({ error: "any" });
     })

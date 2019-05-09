@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -32,9 +31,5 @@ class NotFoundForm extends React.Component {
         );
     }
 }
-
-NotFoundForm.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 export default withPage(withStyles(styles)(NotFoundForm));

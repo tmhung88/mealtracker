@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -101,7 +100,7 @@ class Dashboard extends React.Component {
               open={Boolean(this.state.anchorEl)}
               onClose={this.handleUserMenuClose}
             >
-              <ShowWithRight right={Rights.MyMeal}>
+              <ShowWithRight right={Rights.MY_MEALS}>
                 <MenuItem component={Link} to={Pages.MY_SETTINGS} onClick={this.handleUserMenuClose}>
                   Settings
                 </MenuItem>
@@ -131,19 +130,19 @@ class Dashboard extends React.Component {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Switch>
-            <AppRoute right={Rights.AllMeal} path={Pages.ALL_MEALS} exact component={AllMealList} />
-            <AppRoute right={Rights.AllMeal} path={Pages.ALL_NEW_MEAL} component={ManagementNewMeal} />
-            <AppRoute right={Rights.AllMeal} path={Pages.ALL_UPDATE_MEAL} component={ManagementUpdateMeal} />
+            <AppRoute right={Rights.MEAL_MANAGEMENT} path={Pages.ALL_MEALS} exact component={AllMealList} />
+            <AppRoute right={Rights.MEAL_MANAGEMENT} path={Pages.ALL_NEW_MEAL} component={ManagementNewMeal} />
+            <AppRoute right={Rights.MEAL_MANAGEMENT} path={Pages.ALL_UPDATE_MEAL} component={ManagementUpdateMeal} />
 
-            <AppRoute right={Rights.MyMeal} path={Pages.MY_MEALS} exact component={MealList} />
-            <AppRoute right={Rights.MyMeal} path={Pages.MY_NEW_MEAL} component={MyNewMeal} />
-            <AppRoute right={Rights.MyMeal} path={Pages.MY_UPDATE_MEAL} component={MyUpdateMeal} />
+            <AppRoute right={Rights.MY_MEALS} path={Pages.MY_MEALS} exact component={MealList} />
+            <AppRoute right={Rights.MY_MEALS} path={Pages.MY_NEW_MEAL} component={MyNewMeal} />
+            <AppRoute right={Rights.MY_MEALS} path={Pages.MY_UPDATE_MEAL} component={MyUpdateMeal} />
 
-            <AppRoute right={Rights.MyMeal} path={Pages.MY_SETTINGS} component={UserSettings} />
+            <AppRoute right={Rights.MY_MEALS} path={Pages.MY_SETTINGS} component={UserSettings} />
 
-            <AppRoute right={Rights.UserManagement} path={Pages.USERS} exact component={UserList} />
-            <AppRoute right={Rights.UserManagement} path={Pages.UPDATE_USER} exact component={UpdateUser} />
-            <AppRoute right={Rights.UserManagement} path={Pages.NEW_USER} exact component={NewUser} />
+            <AppRoute right={Rights.USER_MANAGEMENT} path={Pages.USERS} exact component={UserList} />
+            <AppRoute right={Rights.USER_MANAGEMENT} path={Pages.UPDATE_USER} exact component={UpdateUser} />
+            <AppRoute right={Rights.USER_MANAGEMENT} path={Pages.NEW_USER} exact component={NewUser} />
             <Redirect from="/" exact to={Pages.MY_MEALS} />
             <Redirect to={Pages.NOT_FOUND} />
           </Switch>
@@ -153,8 +152,5 @@ class Dashboard extends React.Component {
   }
 }
 
-Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default withUserSession(withRouter(withStyles(styles)(Dashboard)));

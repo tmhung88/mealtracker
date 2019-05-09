@@ -2,9 +2,9 @@ import api from "./api";
 import jwtDecode from "jwt-decode";
 
 export const Rights = {
-    MyMeal: "MY_MEALS",
-    UserManagement: "USER_MANAGEMENT",
-    AllMeal: "MEAL_MANAGEMENT",
+    MY_MEALS: "MY_MEALS",
+    USER_MANAGEMENT: "USER_MANAGEMENT",
+    MEAL_MANAGEMENT: "MEAL_MANAGEMENT",
 }
 
 export const Roles = {

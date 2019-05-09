@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import FormControl from "@material-ui/core/FormControl";
@@ -180,9 +179,5 @@ export class Register extends React.Component {
     );
   }
 }
-
-Register.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default withPage(withStyles(styles)(Register));

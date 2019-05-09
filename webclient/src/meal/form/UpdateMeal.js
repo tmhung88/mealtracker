@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { withPage } from '../../core/components/AppPage';
@@ -115,12 +114,6 @@ export class UpdateMeal extends React.Component {
                 }} />
         );
     }
-
-
 }
-
-UpdateMeal.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 export default withPage(withStyles(styles)(UpdateMeal));

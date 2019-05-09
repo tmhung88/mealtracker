@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import TableBase from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -174,10 +173,5 @@ const tableState = {
         orderBy: "calories",
     }
 }
-
-
-Table.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(Table);
