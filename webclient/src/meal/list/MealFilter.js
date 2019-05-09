@@ -85,7 +85,7 @@ export class MealFilter extends React.Component {
         return (<main className={classes.main}>
             <Grid container spacing={24}>
                 <Grid item xs={12} sm={6}>
-                    <FormControl margin="normal" required fullWidth>
+                    <FormControl required fullWidth margin="dense">
                         <TextField
                             id="from-date"
                             label="From Date"
@@ -102,7 +102,7 @@ export class MealFilter extends React.Component {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <FormControl margin="normal" required fullWidth>
+                    <FormControl required fullWidth margin="dense">
                         <TextField
                             id="to-date"
                             label="To Date"
@@ -132,7 +132,7 @@ export class MealFilter extends React.Component {
                     >Yesterday</Button>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <FormControl margin="normal" required fullWidth>
+                    <FormControl required fullWidth margin="dense">
                         <TextField
                             id="from-time"
                             label="From Time"
@@ -152,7 +152,7 @@ export class MealFilter extends React.Component {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <FormControl margin="normal" required fullWidth>
+                    <FormControl required fullWidth margin="dense">
                         <TextField
                             id="to-time"
                             label="To Time"

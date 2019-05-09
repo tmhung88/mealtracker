@@ -14,7 +14,7 @@ describe("#UserSelect", () => {
         const wrapper = shallow(<UserSelect classes={{}} api={api} />);
         const result = await wrapper.find(AsyncSelect).prop("loadOptions")("input-value");
 
-        expect(api.get).toHaveBeenCalledWith("/v1/users/select?search=input-value");
+        expect(api.get).toHaveBeenCalledWith("/v1/users?keyword=input-value");
         expect(result).toEqual([{ key: "id1", label: "email1" }]);
     })
 

@@ -22,9 +22,11 @@ const styles = theme => ({
 export class UpdateMeal extends React.Component {
     state = {
         meal: {
-            datetime: new Date(),
+            consumedDate: null,
+            consumedTime: null,
             calories: 0,
-            text: "Meal Info",
+            name: "",            
+            consumerId: null,
         },
         loading: true,
     }

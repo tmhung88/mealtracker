@@ -25,7 +25,7 @@ const styles = theme => ({
 export class NewUser extends React.Component {
     state = {
         user: {
-            calories: 0,
+            dailyCalorieLimit: 0,
             email: "",
             fullName:"",
             password:"",

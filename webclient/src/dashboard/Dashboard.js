@@ -89,7 +89,6 @@ class Dashboard extends React.Component {
               noWrap
               className={classes.title}
             >
-              Dashboard
             </Typography>
             <IconButton color="inherit" onClick={this.handleUserMenuClick} >
               <AccountCircleIcon />              

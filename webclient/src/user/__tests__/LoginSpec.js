@@ -34,7 +34,7 @@ describe("#Login", () => {
         beforeEach(() => {
             userSession = { setToken: jest.fn(), hasRight: jest.fn().mockReturnValue(true) };
             history = { replace: jest.fn() }
-            postApi = jest.fn().mockReturnValue({ json: jest.fn().mockReturnValue({ token: "abc" }) });
+            postApi = jest.fn().mockReturnValue({ json: jest.fn().mockReturnValue({data: { accessToken: "abc" }}) });
 
         })
 
@@ -54,7 +54,7 @@ describe("#Login", () => {
 
             submit(wrapper, "un", "ps");
 
-            expect(postApi).toBeCalledWith("/v1/session", {
+            expect(postApi).toBeCalledWith("/v1/sessions", {
                 email: "un",
                 password: "ps",
             })
