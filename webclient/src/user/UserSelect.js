@@ -4,7 +4,6 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
-import { emphasize } from "@material-ui/core/styles/colorManipulator";
 import AsyncSelect from "react-select/lib/Async";
 import { withPage } from "../core/components/AppPage";
 import { ApiUrl } from '../constants/ApiUrl';
@@ -12,7 +11,6 @@ import { ApiUrl } from '../constants/ApiUrl';
 const styles = theme => ({
     root: {
         flexGrow: 1,
-        // minHeight: 100,
     },
     input: {
         display: "flex",
@@ -25,15 +23,7 @@ const styles = theme => ({
         alignItems: "center",
         overflow: "hidden",
     },
-    chip: {
-        margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
-    },
-    chipFocused: {
-        backgroundColor: emphasize(
-            theme.palette.type === "light" ? theme.palette.grey[300] : theme.palette.grey[700],
-            0.08,
-        ),
-    },
+    
     noOptionsMessage: {
         padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
     },

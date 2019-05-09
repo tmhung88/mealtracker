@@ -16,9 +16,8 @@ import ValidationForm from "../common/form/ValidationForm";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import { withPage } from "../core/components/AppPage";
 import { BadRequestError, UnauthenticatedError } from "../core/api";
-import { Rights } from "../core/userSession";
 import { ApiUrl } from '../constants/ApiUrl';
-import { Pages } from "../constants/Pages";
+import { Pages, getDefaultPage } from "../constants/Pages";
 
 const styles = theme => ({
   main: {
@@ -63,13 +62,7 @@ export class Login extends React.Component {
   }
 
   navigateToProperPage() {
-    if (this.props.userSession.hasRight(Rights.MY_MEALS)) {
-      this.props.history.replace(Pages.MY_MEALS);
-    } else if (this.props.userSession.hasRight(Rights.USER_MANAGEMENT)) {
-      this.props.history.replace(Pages.USERS);
-    } else {
-      this.props.history.replace(Pages.ALL_MEALS);
-    }
+    this.props.history.replace(getDefaultPage(this.props.userSession));
   }
   handleSubmit = async (e) => {
     e.preventDefault();

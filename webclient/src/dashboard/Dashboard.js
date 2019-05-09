@@ -33,7 +33,7 @@ import { styles } from "./DashboardStyles";
 import AppRoute from '../core/components/AppRoute';
 import { ShowWithRight, Rights } from '../core/userSession';
 import { withUserSession } from '../core/components/AppPage';
-import { Pages } from "../constants/Pages";
+import { Pages, getDefaultPage } from "../constants/Pages";
 
 class Dashboard extends React.Component {
   state = {
@@ -143,7 +143,7 @@ class Dashboard extends React.Component {
             <AppRoute right={Rights.USER_MANAGEMENT} path={Pages.USERS} exact component={UserList} />
             <AppRoute right={Rights.USER_MANAGEMENT} path={Pages.UPDATE_USER} exact component={UpdateUser} />
             <AppRoute right={Rights.USER_MANAGEMENT} path={Pages.NEW_USER} exact component={NewUser} />
-            <Redirect from="/" exact to={Pages.MY_MEALS} />
+            <Redirect from="/" exact to={getDefaultPage(this.props.userSession)} />
             <Redirect to={Pages.NOT_FOUND} />
           </Switch>
         </main>

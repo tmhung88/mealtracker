@@ -68,12 +68,12 @@ describe("#Login", () => {
             expect(userSession.setToken).toBeCalledWith("abc");
         })
 
-        it("should navigate to My Meal page if has right", async () => {
+        it("should navigate to All Meal page if has right", async () => {
             userSession.hasRight.mockReturnValue(true);
             const wrapper = shallow(<Login classes={{}} api={{ post: postApi }} userSession={userSession} history={history} />);
             await submit(wrapper, "un", "ps");
 
-            expect(history.replace).toBeCalledWith("/meals");
+            expect(history.replace).toBeCalledWith("/meals/all");
         })
 
         it("should navigate to user if has right", async () => {

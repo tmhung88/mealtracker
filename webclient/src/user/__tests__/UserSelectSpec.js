@@ -17,4 +17,12 @@ describe("#UserSelect", () => {
         expect(api.get).toHaveBeenCalledWith("/v1/users/select?search=input-value");
         expect(result).toEqual([{ key: "id1", label: "email1" }]);
     })
+
+    it("should raise change event", ()=>{
+        const onUserChange = jest.fn();
+        const wrapper = shallow(<UserSelect classes={{}} onUserChange={onUserChange} />);
+        wrapper.find(AsyncSelect).simulate("change","value1");
+
+        expect(onUserChange).toHaveBeenCalledWith("value1");
+    })
 })

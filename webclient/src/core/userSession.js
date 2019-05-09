@@ -1,4 +1,4 @@
-import api from "./api";
+import globalApi from "./api";
 import jwtDecode from "jwt-decode";
 
 export const Rights = {
@@ -29,30 +29,35 @@ export function ShowWithRight({ right, children }) {
     return null;
 }
 
-class UserSession {
+export class UserSession {
+    constructor(api = globalApi){
+        this.api = api;
+    }   
+
     currentRole(){
         if (!this.isLoggedIn()) {
             return null;
         }
 
-        return jwtDecode(api.getToken()).role || Roles.REGULAR_USER;
+        return jwtDecode(this.api.getToken()).role || Roles.REGULAR_USER;
     }
     setToken(token){
-        api.setToken(token);
+        this.api.setToken(token);
     }
+    
     isLoggedIn() {
-        return api.hasToken();
+        return this.api.hasToken();
     }
 
     logout(){
-        api.clearToken();
+        this.api.clearToken();
     }
 
     hasRight(right) {
         if (!this.isLoggedIn()) {
             return false;
         }
-        const rights = jwtDecode(api.getToken()).privileges || [];
+        const rights = jwtDecode(this.api.getToken()).privileges || [];
         return rights.indexOf(right) >= 0;
     }
 }

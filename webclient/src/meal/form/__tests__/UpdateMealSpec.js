@@ -3,6 +3,7 @@ import { shallow } from "enzyme";
 import { UpdateMeal } from "../UpdateMeal";
 import MealForm from "../MealForm";
 import Bluebird from "bluebird";
+import { NotFoundRequestError } from "../../../core/api";
 
 describe("#UpdateMeal", () => {
     const serverMealResponse = {
@@ -32,6 +33,30 @@ describe("#UpdateMeal", () => {
 
         const mealForm = wrapper.find(MealForm);
         expect(mealForm.prop("userSelect")).toEqual(true);
+    })
+
+    it("should handle data not found", async ()=>{
+        const goBackOrReplace = jest.fn();
+        const api = {
+            post: jest.fn(),
+            get: jest.fn().mockRejectedValue(new NotFoundRequestError())
+        };
+
+        const handleError = jest.fn();
+        const wrapper = shallow(<UpdateMeal
+            classes={{}}
+            api={api}
+            handleError={handleError}
+            goBackOrReplace={goBackOrReplace}
+            userSelect
+            match={{ params: { id: "12" } }}
+            baseApiUrl="/abc"
+            cancelPage="/def"
+        />);
+
+        await Bluebird.delay(10);
+        const mealForm = wrapper.find(MealForm);
+        expect(mealForm.prop("notFound")).toEqual(true);
     })
 
     it("should load data from server", async () => {
