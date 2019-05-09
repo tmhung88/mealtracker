@@ -150,9 +150,8 @@ const components = {
     ValueContainer,
 };
 
-class UserSelect extends React.Component {
+export class UserSelect extends React.Component {
     handleChange = value => {
-        console.log(value);
         this.props.onUserChange(value);
     };
 

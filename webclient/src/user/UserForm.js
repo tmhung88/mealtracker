@@ -45,7 +45,7 @@ export class UserForm extends React.Component {
             email: "",
         };
         if (notFound) {
-            return <NotFoundForm formName="User" />
+            return <NotFoundForm formName="User" backPage="/users" />
         }
         return (
             <Form formName="User" loading={loading}>

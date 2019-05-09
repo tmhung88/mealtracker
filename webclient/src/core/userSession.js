@@ -52,7 +52,7 @@ class UserSession {
         if (!this.isLoggedIn()) {
             return false;
         }
-        const rights = jwtDecode(getToken()).rights || [];
+        const rights = jwtDecode(getToken()).privileges || [];
         return rights.indexOf(right) >= 0;
     }
 }

@@ -62,9 +62,9 @@ export class MealForm extends React.Component {
     }
 
     render() {
-        const { classes, renderActionButtons, onMealChange, loading, serverValidationError, notFound } = this.props;
+        const { classes, renderActionButtons, onMealChange, loading, serverValidationError, notFound, cancelPage } = this.props;
         if (notFound) {
-            return <NotFoundForm formName="Meal" />
+            return <NotFoundForm formName="Meal" backPage={cancelPage} />
         }
         return (
             <Form formName="Meal" loading={loading} >

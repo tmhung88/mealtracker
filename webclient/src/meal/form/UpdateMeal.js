@@ -77,7 +77,7 @@ export class UpdateMeal extends React.Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, cancelPage } = this.props;
         return (
             <MealForm
                 notFound={!this.state.meal}
@@ -85,9 +85,10 @@ export class UpdateMeal extends React.Component {
                 loading={this.state.loading}
                 onMealChange={this.handleMealChange}
                 meal={this.state.meal}
+                cancelPage={cancelPage}
                 renderActionButtons={(isValid) => {
                     return <div>
-                        <Button onClick={() => this.props.goBackOrReplace(this.props.cancelPage)}
+                        <Button onClick={() => this.props.goBackOrReplace(cancelPage)}
                             variant="contained"
                             color="secondary"
                             className={classes.cancel}
