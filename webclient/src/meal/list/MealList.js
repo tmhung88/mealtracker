@@ -7,6 +7,7 @@ import ServerPagingTable from "../../common/table/ServerPagingTable";
 import UrlMealFilter from "./UrlMealFilter";
 import Alert from "./Alert";
 import { withPage } from "../../core/components/AppPage";
+import { DateTimeHelper } from "../../datetimeHelper";
 
 const styles = theme => ({
     button: {
@@ -35,7 +36,7 @@ export class MealList extends React.Component {
 
     async componentDidMount() {
         try {
-            const response = await this.props.api.get(`/v1/users/me/alerts/calorie?date=${moment().format("yyyy-MM-dd")}`);
+            const response = await this.props.api.get(`/v1/users/me/alerts/calorie?date=${moment().format(DateTimeHelper.DATE_FORMAT)}`);
             const json = await response.json();
             this.setState({
                 alertInfo: json.data,

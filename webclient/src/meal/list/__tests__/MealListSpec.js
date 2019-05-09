@@ -6,6 +6,7 @@ import Alert from "../Alert";
 import moment from "moment";
 import ServerPagingTable from "../../../common/table/ServerPagingTable";
 import UrlMealFilter from "../UrlMealFilter";
+import { DateTimeHelper } from "../../../datetimeHelper";
 
 describe("#MealList", () => {
     it("should send correct alert request", async () => {
@@ -22,7 +23,7 @@ describe("#MealList", () => {
 
         await Bluebird.delay(10);
 
-        expect(api.get).toHaveBeenCalledWith(`/v1/users/me/alerts/calorie?date=${moment().format("yyyy-MM-dd")}`)
+        expect(api.get).toHaveBeenCalledWith(`/v1/users/me/alerts/calorie?date=${moment().format(DateTimeHelper.DATE_FORMAT)}`)
     });
 
     it("show alert if alert response return true", async () => {

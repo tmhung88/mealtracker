@@ -33,6 +33,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { styles } from "./DashboardStyles";
 import AppRoute from '../core/components/AppRoute';
 import { ShowWithRight, Rights } from '../core/userSession';
+import { withUserSession } from '../core/components/AppPage';
 
 
 class Dashboard extends React.Component {
@@ -156,4 +157,4 @@ Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withRouter(withStyles(styles)(Dashboard));
+export default withUserSession(withRouter(withStyles(styles)(Dashboard)));

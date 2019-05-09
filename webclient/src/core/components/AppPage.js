@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { withRouter as withRouterFunc } from "react-router-dom";
-import { UnauthorizedError, UnauthenticatedError, get, put, post, deleteRequest, ServerError } from "../api";
+import { UnauthorizedError, UnauthenticatedError, get, put, post, patch, deleteRequest, ServerError } from "../api";
 import bluebird from "bluebird";
 import Snackbar from "@material-ui/core/Snackbar";
 import userSession from "../userSession";
@@ -74,6 +74,7 @@ export function withPage(ComponentToProtect, { withRouter } = {}) {
                 get: get,
                 put: put,
                 post: post,
+                patch: patch,
                 delete: deleteRequest,
             }
             return <Fragment>

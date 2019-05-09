@@ -119,13 +119,13 @@ export class UserForm extends React.Component {
                                 />
                             </FormControl>
                             <FormControl margin="normal" required fullWidth >
-                                <InputLabel htmlFor="role">Role</InputLabel>
-                                <Select
+                                <InputLabel htmlFor="role" shrink>Role</InputLabel>
+                                <Select                                    
                                     value={data.role}
                                     onChange={(e) => { 
                                         onFieldChange("role", e.target.value);
                                      }}
-                                     input={<Input name="role" id="role" />}
+                                     input={<Input name="role" id="role"  />}
                                 >
                                     {this.renderRoleItems()}
                                 </Select>

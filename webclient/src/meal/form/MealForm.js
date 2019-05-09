@@ -82,6 +82,7 @@ export class MealForm extends React.Component {
                                     label="Date"
                                     type="date"
                                     value={data.consumedDate}
+                                    required
                                     onChange={(e) => {
                                         onFieldChange("consumedDate", e.currentTarget.value)
 
@@ -99,6 +100,7 @@ export class MealForm extends React.Component {
                                     label="Time"
                                     type="time"
                                     value={data.consumedTime}
+                                    required
                                     onChange={(e) => {
                                         onFieldChange("consumedTime", e.currentTarget.value)
                                     }}
@@ -117,6 +119,10 @@ export class MealForm extends React.Component {
                                     id="name"
                                     label="Name"
                                     className={classes.textField}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    required
                                     margin="normal"
                                     value={data.name}
                                     onChange={e => {
@@ -128,12 +134,13 @@ export class MealForm extends React.Component {
                             <FormControl margin="normal" required fullWidth>
                                 <TextField
                                     id="calories"
-                                    type="number"
                                     label="Calories"
+                                    type="number"
                                     className={classes.textField}
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
+                                    required
                                     margin="normal"
                                     value={data.calories || 0}
                                     onChange={e => {
@@ -142,7 +149,7 @@ export class MealForm extends React.Component {
                                 />
 
                             </FormControl>
-                            {this.renderUserSelect(data.consumerId, data.consumerEmail, onFieldsChange, validationFields.userId)}
+                            {this.renderUserSelect(data.consumerId, data.consumerEmail, onFieldsChange, validationFields.consumerId)}
                             {renderActionButtons(isValid)}
                         </Fragment>)
                     }}

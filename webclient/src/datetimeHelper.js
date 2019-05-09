@@ -1,6 +1,10 @@
 import moment from "moment";
 
-class DateTimeHelper {
+export class DateTimeHelper {
+
+    static DATE_FORMAT = "YYYY-MM-DD";
+    static TIME_FORMAT = "HH:mm";
+
     verifyFormatOrUndefined(value, format){
         if(!value) {
             return undefined;
@@ -15,11 +19,11 @@ class DateTimeHelper {
     }
 
     verifyDateOrUndefined(value){
-        return this.verifyFormatOrUndefined(value, "YYYY-MM-DD");
+        return this.verifyFormatOrUndefined(value, DateTimeHelper.DATE_FORMAT);
     }
 
     verifyTimeOrUndefined(value){
-        return this.verifyFormatOrUndefined(value, "HH:mm");
+        return this.verifyFormatOrUndefined(value, DateTimeHelper.TIME_FORMAT);
     }
 }
 

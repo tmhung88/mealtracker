@@ -158,7 +158,7 @@ class UserSelect extends React.Component {
 
     handleLoadOptions = async (inputValue) => {
         try {
-            const response = await this.props.get(`/v1/users/select?search=${inputValue}`);
+            const response = await this.props.api.get(`/v1/users/select?search=${inputValue}`);
             const json = (await response.json()).data;
             return json.map(f => ({ key: f.id, label: f.email }))
         } catch (e) {
@@ -187,6 +187,7 @@ class UserSelect extends React.Component {
                     styles={selectStyles}
                     textFieldProps={{
                         label: "User",
+                        required:true,
                         InputLabelProps: {
                             shrink: true,
                         },

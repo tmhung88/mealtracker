@@ -129,6 +129,15 @@ export var post = function (path, data) {
     })).then(handleError).catch(handleCatchError)
 }
 
+export var patch = function (path, data) {
+    return Promise.resolve(getFetch()(path, {
+        method: "PATCH",
+        headers: getHeader(),
+        credentials: 'same-origin',
+        body: stringifyContent(data)
+    })).then(handleError).catch(handleCatchError)
+}
+
 function stringifyContent(data) {
     if (!data) return null;
     if (typeof data == "string") {

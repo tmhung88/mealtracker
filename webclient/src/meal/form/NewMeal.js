@@ -4,6 +4,8 @@ import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 import MealForm from './MealForm';
 import { withPage } from '../../core/components/AppPage';
+import { DateTimeHelper } from '../../datetimeHelper';
+import moment from "moment";
 
 const styles = theme => ({
     add: {
@@ -20,8 +22,8 @@ const styles = theme => ({
 export class NewMeal extends React.Component {
     state = {
         meal: {
-            consumedDate: null,
-            consumedTime: null,
+            consumedDate: moment().format(DateTimeHelper.DATE_FORMAT),
+            consumedTime: moment().format(DateTimeHelper.TIME_FORMAT),
             calories: 0,
             name: "",            
             consumerId: null,

@@ -16,7 +16,7 @@ const styles = theme => ({
 const columns = [
     { id: "email", dataField: "email", numeric: false, label: "Email" },
     { id: "fullName", dataField: "fullName", numeric: false, label: "Full Name" },
-    { id: "dailyCalorieLimit", dataField: "dailyCalorieLimit", numeric: true, label: "Calories" },
+    { id: "dailyCalorieLimit", dataField: "dailyCalorieLimit", numeric: true, label: "Daily Calories Limit" },
     { id: "role", dataField: "role", numeric: true, label: "Role", renderContent(d) { return roleIdToName(d) } },
 ];
 
