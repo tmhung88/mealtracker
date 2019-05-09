@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { withRouter } from "react-router-dom";
-import { UnauthorizedError, UnauthenticatedError, get, put, post, deleteRequest, ServerError } from "./api";
+import { UnauthorizedError, UnauthenticatedError, get, put, post, deleteRequest, ServerError } from "../api";
 import bluebird from "bluebird";
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
@@ -15,10 +15,15 @@ import amber from '@material-ui/core/colors/amber';
 import IconButton from '@material-ui/core/IconButton';
 import WarningIcon from '@material-ui/icons/Warning';
 import { withStyles } from '@material-ui/core/styles';
-import userSession from "./userSession";
+import userSession from "../userSession";
+
+export function withUserSession(ComponentNeedSession){
+    return function (props){
+        return <ComponentNeedSession {...props} userSession={userSession}/>
+    }
+}
 
 export function withPage(ComponentToProtect) {
-
     return withRouter(class Wrap extends React.Component {
         state = { snackbarOpen: false, errorMessage: "" }
         tryGetErrorMessage(serverError) {

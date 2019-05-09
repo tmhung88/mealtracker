@@ -5,7 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PeopleIcon from '@material-ui/icons/People';
 import FastFoodIcon from '@material-ui/icons/Fastfood';
 import { Link } from "react-router-dom";
-import { ShowWithRight, Rights } from '../userSession';
+import { ShowWithRight, Rights } from '../core/userSession';
 
 function ListItemLink(props) {
     

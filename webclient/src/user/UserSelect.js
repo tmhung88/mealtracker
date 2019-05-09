@@ -7,8 +7,7 @@ import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
 import AsyncSelect from "react-select/lib/Async";
-import { get } from "../api";
-import { withPage } from "../AppPage";
+import { withPage } from "../core/components/AppPage";
 
 const styles = theme => ({
     root: {
@@ -158,12 +157,13 @@ class UserSelect extends React.Component {
     };
 
     handleLoadOptions = async (inputValue) => {
-        return this.props.handleErrorContext(async () => {
-            const response = await get(`/v1/users/select?search=${inputValue}`);
+        try {
+            const response = await this.props.get(`/v1/users/select?search=${inputValue}`);
             const json = (await response.json()).data;
             return json.map(f => ({ key: f.id, label: f.email }))
-        });
-
+        } catch (e) {
+            this.props.handleError(e);
+        }
     }
 
     render() {
@@ -190,7 +190,7 @@ class UserSelect extends React.Component {
                         InputLabelProps: {
                             shrink: true,
                         },
-                    }}                    
+                    }}
                     components={components}
                     value={this.props.user}
                     onChange={this.handleChange}

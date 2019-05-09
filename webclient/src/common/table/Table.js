@@ -68,7 +68,7 @@ export class Table extends React.Component {
         const { selected } = this.state;
         const selectedIndex = selected.indexOf(id);
         if (selectedIndex >= 0) {
-            this.setState({ selected: selected.filter(s => s != id) });
+            this.setState({ selected: selected.filter(s => s !== id) });
         } else {
             this.setState({ selected: selected.concat([id]) });
         }

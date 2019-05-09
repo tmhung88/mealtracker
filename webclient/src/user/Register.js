@@ -12,10 +12,10 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { Link } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom"
 import { Loading } from "../common/loading/Loading";
-import { BadRequestError } from "../api";
 
 import ValidationForm from "../common/form/ValidationForm";
-import { withPage } from "../AppPage";
+import { withPage } from "../core/components/AppPage";
+import { BadRequestError } from "../core/api";
 
 const styles = theme => ({
   main: {

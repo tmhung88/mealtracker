@@ -7,9 +7,9 @@ import Form from "../common/form/Form";
 import ValidationForm from "../common/form/ValidationForm";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import NotFoundForm from "../common/form/NotFoundForm";
-import { Roles, roleIdToName } from "../userSession";
 import { InputLabel, Input, Select, MenuItem } from "@material-ui/core";
-import { withPage } from "../AppPage";
+import { withPage } from "../core/components/AppPage";
+import { Roles, roleIdToName } from "../core/userSession";
 
 const styles = () => ({
 

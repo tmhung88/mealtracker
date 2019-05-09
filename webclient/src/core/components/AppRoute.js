@@ -1,32 +1,27 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import userSession from "./userSession";
+import { withUserSession } from "./AppPage";
 
 export class AppRoute extends React.Component {
     render() {
-        const { component: Component, ...rest } = this.props;
+        const { component: Component, right, userSession, ...rest } = this.props;
         return (<Route
             {...rest}
             render={(props) => {
-                if (!userSession.isLoggedIn()) {
+                const isLoggedIn = userSession.isLoggedIn();
+                const noRightPermission = right && !userSession.hasRight(right);
+                if(!isLoggedIn || noRightPermission) {
                     return <Redirect
                         to={{
                             pathname: "/users/login",
                             state: { from: props.location }
                         }}
                     />;
-                }
-
-                if (this.props.right && !userSession.hasRight(this.props.right)) {
-                    return <Redirect
-                        to={{
-                            pathname: "/users/login",
-                            state: { from: props.location }
-                        }}
-                    />;
-                }
+                }                
                 return <Component {...props} />
             }}
         />);
     }
 }
+
+export default withUserSession(AppRoute);

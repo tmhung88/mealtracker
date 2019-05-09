@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { withPage } from '../../AppPage';
 import MealForm from './MealForm';
-import queryString from 'query-string'
+import { withPage } from '../../core/components/AppPage';
 
 const styles = theme => ({
     add: {

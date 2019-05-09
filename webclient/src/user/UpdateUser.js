@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { withPage } from '../AppPage';
 import UserForm from './UserForm';
-import { BadRequestError, NotFoundRequestError } from '../api';
+import { NotFoundRequestError, BadRequestError } from '../core/api';
+import { withPage } from '../core/components/AppPage';
 
 const styles = theme => ({
     update: {

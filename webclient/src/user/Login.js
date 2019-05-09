@@ -10,14 +10,14 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { BadRequestError, UnauthenticatedError } from "../api";
 import { Loading } from "../common/loading/Loading";
-import { Rights } from "../userSession";
 import { Link } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom"
 import ValidationForm from "../common/form/ValidationForm";
 import FormHelperText from "@material-ui/core/FormHelperText";
-import { withPage } from "../AppPage";
+import { withPage } from "../core/components/AppPage";
+import { BadRequestError, UnauthenticatedError } from "../core/api";
+import { Rights } from "../core/userSession";
 
 const styles = theme => ({
   main: {

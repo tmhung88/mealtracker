@@ -3,7 +3,7 @@ import { shallow } from "enzyme";
 import { NewUser } from "../NewUser";
 import UserForm from "../UserForm";
 import Bluebird from "bluebird";
-import { BadRequestError } from "../../api";
+import { BadRequestError } from "../../core/api";
 
 describe("#NewUser", () => {
     it("should submit user data from user form", async () => {

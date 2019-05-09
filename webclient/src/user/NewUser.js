@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import {  BadRequestError } from '../api';
 import UserForm from './UserForm';
-import { withPage } from '../AppPage';
-import { Roles } from '../userSession';
+import { BadRequestError } from '../core/api';
+import { withPage } from '../core/components/AppPage';
+import { Roles } from '../core/userSession';
 
 const styles = theme => ({
     add: {

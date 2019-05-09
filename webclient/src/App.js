@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./user/Login";
 import Dashboard from "./dashboard/Dashboard";
 import Register from "./user/Register";
-import NotFound from "./NotFound";
-import { AppRoute } from "./AppRouter";
+import  AppRoute  from "./core/components/AppRoute";
+import NotFound from "./common/NotFound";
 
 class AppRouter extends React.Component{
   state = { error: false }

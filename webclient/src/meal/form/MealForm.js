@@ -3,13 +3,12 @@ import PropTypes from "prop-types";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import withStyles from "@material-ui/core/styles/withStyles";
-import moment from "moment";
 import Form from "../../common/form/Form";
 import UserSelect from "../../user/UserSelect";
-import { ShowWithRight, Rights } from "../../userSession";
 import ValidationForm from "../../common/form/ValidationForm";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import NotFoundForm from "../../common/form/NotFoundForm";
+import { ShowWithRight, Rights } from "../../core/userSession";
 
 const styles = () => ({
 

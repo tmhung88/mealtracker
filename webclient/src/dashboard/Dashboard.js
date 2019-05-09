@@ -8,7 +8,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Badge from '@material-ui/core/Badge';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -32,9 +31,8 @@ import NewUser from "../user/NewUser";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { styles } from "./DashboardStyles";
-import { clearToken } from '../api';
-import { AppRoute } from '../AppRouter';
-import { ShowWithRight, Rights } from '../userSession';
+import AppRoute from '../core/components/AppRoute';
+import { ShowWithRight, Rights } from '../core/userSession';
 
 
 class Dashboard extends React.Component {
@@ -59,7 +57,7 @@ class Dashboard extends React.Component {
   };
 
   handleLogout = () => {
-    clearToken();
+    this.props.userSession.logout();
     this.props.history.push("/users/login");
   }
   render() {

@@ -3,7 +3,7 @@ import { shallow } from "enzyme";
 import { UpdateUser } from "../UpdateUser";
 import Bluebird from "bluebird";
 import UserForm from "../UserForm";
-import { NotFoundRequestError, BadRequestError } from "../../api";
+import { BadRequestError, NotFoundRequestError } from "../../core/api";
 
 describe("#UpdateUser", () => {
     describe("on Submit", () => {

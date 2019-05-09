@@ -3,7 +3,7 @@ import { shallow } from "enzyme";
 import { Register } from "../Register";
 import ValidationForm from "../../common/form/ValidationForm";
 import { FormHelperText } from "@material-ui/core";
-import { BadRequestError } from "../../api";
+import { BadRequestError } from "../../core/api";
 
 describe("#Register", () => {
     let validationSectionParams = {

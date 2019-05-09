@@ -3,8 +3,8 @@ import { shallow } from "enzyme";
 import { UserForm } from "../UserForm";
 import NotFoundForm from "../../common/form/NotFoundForm";
 import ValidationForm from "../../common/form/ValidationForm";
-import { Roles } from "../../userSession";
 import { MenuItem, Select } from "@material-ui/core";
+import { Roles } from "../../core/userSession";
 
 describe("#UserForm", () => {
     const data = {

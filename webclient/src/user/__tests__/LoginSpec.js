@@ -3,8 +3,9 @@ import { shallow } from "enzyme";
 import { Login } from "../Login";
 import ValidationForm from "../../common/form/ValidationForm";
 import { when } from "jest-when";
-import { Rights } from "../../userSession";
-import { BadRequestError, UnauthenticatedError } from "../../api";
+import { Rights } from "../../core/userSession";
+import { BadRequestError, UnauthenticatedError } from "../../core/api";
+
 
 describe("#Login", () => {
     const validationSectionParams = {
