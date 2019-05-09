@@ -8,7 +8,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
-import { TableToolbar } from "./TableToolbar";
+import  TableToolbar  from "./TableToolbar";
 import { TableHead } from "./TableHead";
 
 const styles = theme => ({
@@ -99,7 +99,7 @@ export class Table extends React.Component {
                     onRefresh={this.props.onRefresh}
                 />
                 <div className={classes.tableWrapper}>
-                    <TableBase className={classes.table} aria-labelledby="tableTitle" >
+                    <TableBase padding="dense" className={classes.table} aria-labelledby="tableTitle" >
                         <TableHead
                             columns={columns}
                             numSelected={selected.length}

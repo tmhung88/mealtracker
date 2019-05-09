@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -73,10 +72,4 @@ export let TableToolbar = props => {
       </Toolbar>
     );
   };
-  
-  TableToolbar.propTypes = {
-    classes: PropTypes.object.isRequired,
-    numSelected: PropTypes.number.isRequired,
-  };
-  
-  TableToolbar = withStyles(toolbarStyles)(TableToolbar);
+  export default withStyles(toolbarStyles)(TableToolbar);

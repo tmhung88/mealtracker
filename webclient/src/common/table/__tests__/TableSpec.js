@@ -6,7 +6,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 import { TableHead } from "../TableHead";
 import { Checkbox } from "@material-ui/core";
-import { TableToolbar } from "../TableToolbar";
+import TableToolbar from "../TableToolbar";
 
 describe("#Table", () => {
     let tableState = {
