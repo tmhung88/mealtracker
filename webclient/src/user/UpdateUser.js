@@ -5,6 +5,8 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import UserForm from './UserForm';
 import { NotFoundRequestError, BadRequestError } from '../core/api';
 import { withPage } from '../core/components/AppPage';
+import { ApiUrl } from '../constants/ApiUrl';
+import { Pages } from '../constants/Pages';
 
 const styles = theme => ({
     update: {
@@ -31,7 +33,7 @@ export class UpdateUser extends React.Component {
     }
     async componentDidMount() {
         try {
-            const response = await this.props.api.get(`/v1/users/${this.props.match.params.id}`);
+            const response = await this.props.api.get(`${ApiUrl.USERS}/${this.props.match.params.id}`);
             const json = await response.json();
             this.setState({
                 user: json.data,
@@ -50,8 +52,8 @@ export class UpdateUser extends React.Component {
     handleSubmit = async (e) => {
         this.setState({ loading: true });
             try {
-                await this.props.api.put(`/v1/users/${this.props.match.params.id}`, this.state.user);
-                this.props.goBackOrReplace("/users");
+                await this.props.api.put(`${ApiUrl.USERS}/${this.props.match.params.id}`, this.state.user);
+                this.props.goBackOrReplace(Pages.USERS);
             } catch (error) {
                 if (error instanceof BadRequestError) {
                     this.setState({
@@ -83,7 +85,7 @@ export class UpdateUser extends React.Component {
                 user={this.state.user}
                 renderActionButtons={(isValid) => {
                     return <div>
-                        <Button onClick={() => this.props.goBackOrReplace("/users")}
+                        <Button onClick={() => this.props.goBackOrReplace(Pages.USERS)}
                             variant="contained"
                             color="secondary"
                             className={classes.cancel}

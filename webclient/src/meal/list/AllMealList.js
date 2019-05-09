@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import ServerPagingTable from "../../common/table/ServerPagingTable";
 import { withPage } from "../../core/components/AppPage";
+import { ApiUrl } from '../../constants/ApiUrl';
+import { Pages } from '../../constants/Pages';
 
 const styles = theme => ({
     button: {
@@ -31,12 +33,12 @@ export class AllMealList extends React.Component {
             <ServerPagingTable
                 columns={columns}
                 tableName="All Meals"
-                baseUrl="/v1/meals"
+                baseUrl={ApiUrl.MEALS}
                 onRowSelect={(id) => {
-                    this.props.history.push(`/meals/all/${id}/update`);
+                    this.props.history.push(Pages.ALL_UPDATE_MEAL.replace(":id",id));
                 }}
             />
-            <Button component={Link} to="/meals/all/new"
+            <Button component={Link} to={Pages.ALL_NEW_MEAL}
                 variant="contained" color="primary" className={classes.button}>
                 New Meal
       </Button>

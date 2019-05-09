@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -8,6 +7,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
 import AsyncSelect from "react-select/lib/Async";
 import { withPage } from "../core/components/AppPage";
+import { ApiUrl } from '../constants/ApiUrl';
 
 const styles = theme => ({
     root: {
@@ -157,7 +157,7 @@ export class UserSelect extends React.Component {
 
     handleLoadOptions = async (inputValue) => {
         try {
-            const response = await this.props.api.get(`/v1/users/select?search=${inputValue}`);
+            const response = await this.props.api.get(`${ApiUrl.USERS_SELECT}?search=${inputValue}`);
             const json = (await response.json()).data;
             return json.map(f => ({ key: f.id, label: f.email }))
         } catch (e) {
@@ -202,10 +202,5 @@ export class UserSelect extends React.Component {
         );
     }
 }
-
-UserSelect.propTypes = {
-    classes: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired,
-};
 
 export default withPage(withStyles(styles, { withTheme: true })(UserSelect));

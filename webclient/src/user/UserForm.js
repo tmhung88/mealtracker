@@ -10,6 +10,7 @@ import NotFoundForm from "../common/form/NotFoundForm";
 import { InputLabel, Input, Select, MenuItem } from "@material-ui/core";
 import { withPage } from "../core/components/AppPage";
 import { Roles, roleIdToName } from "../core/userSession";
+import { Pages } from '../constants/Pages';
 
 const styles = () => ({
 
@@ -45,7 +46,7 @@ export class UserForm extends React.Component {
             email: "",
         };
         if (notFound) {
-            return <NotFoundForm formName="User" backPage="/users" />
+            return <NotFoundForm formName="User" backPage={Pages.USERS} />
         }
         return (
             <Form formName="User" loading={loading}>

@@ -34,7 +34,7 @@ import { styles } from "./DashboardStyles";
 import AppRoute from '../core/components/AppRoute';
 import { ShowWithRight, Rights } from '../core/userSession';
 import { withUserSession } from '../core/components/AppPage';
-
+import { Pages } from "../constants/Pages";
 
 class Dashboard extends React.Component {
   state = {
@@ -59,7 +59,7 @@ class Dashboard extends React.Component {
 
   handleLogout = () => {
     this.props.userSession.logout();
-    this.props.history.push("/users/login");
+    this.props.history.push(Pages.LOGIN);
   }
   render() {
     const { classes } = this.props;
@@ -102,7 +102,7 @@ class Dashboard extends React.Component {
               onClose={this.handleUserMenuClose}
             >
               <ShowWithRight right={Rights.MyMeal}>
-                <MenuItem component={Link} to="/users/settings" onClick={this.handleUserMenuClose}>
+                <MenuItem component={Link} to={Pages.MY_SETTINGS} onClick={this.handleUserMenuClose}>
                   Settings
                 </MenuItem>
               </ShowWithRight>
@@ -131,21 +131,21 @@ class Dashboard extends React.Component {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Switch>
-            <AppRoute right={Rights.AllMeal} path="/meals/all" exact component={AllMealList} />
-            <AppRoute right={Rights.AllMeal} path="/meals/all/new" component={ManagementNewMeal} />
-            <AppRoute right={Rights.AllMeal} path="/meals/all/:id/update" component={ManagementUpdateMeal} />
+            <AppRoute right={Rights.AllMeal} path={Pages.ALL_MEALS} exact component={AllMealList} />
+            <AppRoute right={Rights.AllMeal} path={Pages.ALL_NEW_MEAL} component={ManagementNewMeal} />
+            <AppRoute right={Rights.AllMeal} path={Pages.ALL_UPDATE_MEAL} component={ManagementUpdateMeal} />
 
-            <AppRoute right={Rights.MyMeal} path="/meals" exact component={MealList} />
-            <AppRoute right={Rights.MyMeal} path="/meals/new" component={MyNewMeal} />
-            <AppRoute right={Rights.MyMeal} path="/meals/:id/update" component={MyUpdateMeal} />
+            <AppRoute right={Rights.MyMeal} path={Pages.MY_MEALS} exact component={MealList} />
+            <AppRoute right={Rights.MyMeal} path={Pages.MY_NEW_MEAL} component={MyNewMeal} />
+            <AppRoute right={Rights.MyMeal} path={Pages.MY_UPDATE_MEAL} component={MyUpdateMeal} />
 
-            <AppRoute right={Rights.MyMeal} path="/users/settings" component={UserSettings} />
+            <AppRoute right={Rights.MyMeal} path={Pages.MY_SETTINGS} component={UserSettings} />
 
-            <AppRoute right={Rights.UserManagement} path="/users" exact component={UserList} />
-            <AppRoute right={Rights.UserManagement} path="/users/:id/update" exact component={UpdateUser} />
-            <AppRoute right={Rights.UserManagement} path="/users/new" exact component={NewUser} />
-            <Redirect from="/" exact to="/meals" />
-            <Redirect to="/not-found" />
+            <AppRoute right={Rights.UserManagement} path={Pages.USERS} exact component={UserList} />
+            <AppRoute right={Rights.UserManagement} path={Pages.UPDATE_USER} exact component={UpdateUser} />
+            <AppRoute right={Rights.UserManagement} path={Pages.NEW_USER} exact component={NewUser} />
+            <Redirect from="/" exact to={Pages.MY_MEALS} />
+            <Redirect to={Pages.NOT_FOUND} />
           </Switch>
         </main>
       </div>

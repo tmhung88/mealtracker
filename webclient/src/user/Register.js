@@ -16,6 +16,8 @@ import { Loading } from "../common/loading/Loading";
 import ValidationForm from "../common/form/ValidationForm";
 import { withPage } from "../core/components/AppPage";
 import { BadRequestError } from "../core/api";
+import { ApiUrl } from '../constants/ApiUrl';
+import { Pages } from "../constants/Pages";
 
 const styles = theme => ({
   main: {
@@ -68,8 +70,8 @@ export class Register extends React.Component {
     e.preventDefault();
     this.setState({ loading: true });
       try {
-        await this.props.api.post("/v1/users", this.state.user);
-        this.props.history.replace("/users/login");
+        await this.props.api.post(ApiUrl.USERS, this.state.user);
+        this.props.history.replace(Pages.LOGIN);
       } catch (error) {
         if (error instanceof BadRequestError) {
           console.log("BadRequestError", error.body.error);
@@ -169,9 +171,7 @@ export class Register extends React.Component {
                 </Fragment>
               }}
             </ValidationForm>
-
-
-            <Link className={classes.link} component={RouterLink} to="/users/login">
+            <Link className={classes.link} component={RouterLink} to={Pages.LOGIN}>
               Or Login
             </Link>
           </form>

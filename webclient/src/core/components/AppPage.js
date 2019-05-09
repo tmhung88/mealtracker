@@ -1,10 +1,11 @@
 import React, { Fragment } from "react";
 import { withRouter as withRouterFunc } from "react-router-dom";
-import { UnauthorizedError, UnauthenticatedError, get, put, post, patch, deleteRequest, ServerError } from "../api";
+import api, { UnauthorizedError, UnauthenticatedError, ServerError } from "../api";
 import bluebird from "bluebird";
 import Snackbar from "@material-ui/core/Snackbar";
 import userSession from "../userSession";
 import SnackbarErrorMessage from "./SnackbarErrorMessage";
+import { Pages } from "../../constants/Pages";
 
 export function withUserSession(ComponentNeedSession) {
     return function (props) {
@@ -39,7 +40,7 @@ export function withPage(ComponentToProtect, { withRouter } = {}) {
         }
         handleError = (error) => {
             if (error instanceof UnauthorizedError || error instanceof UnauthenticatedError) {
-                this.props.history.push("/users/login");
+                this.props.history.push(Pages.LOGIN);
                 /**delay to prevent component showing error */
                 return bluebird.delay(1000);
             }
@@ -70,13 +71,6 @@ export function withPage(ComponentToProtect, { withRouter } = {}) {
         }
 
         render() {
-            const api = {
-                get: get,
-                put: put,
-                post: post,
-                patch: patch,
-                delete: deleteRequest,
-            }
             return <Fragment>
                 <ComponentToProtect
                     {...this.props}

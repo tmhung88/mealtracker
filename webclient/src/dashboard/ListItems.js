@@ -6,6 +6,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import FastFoodIcon from '@material-ui/icons/Fastfood';
 import { Link } from "react-router-dom";
 import { ShowWithRight, Rights } from '../core/userSession';
+import { Pages } from '../constants/Pages';
 
 function ListItemLink(props) {
     
@@ -16,19 +17,19 @@ function ListItemLink(props) {
 
 export const MainListItems = ({selectedPathName}) => (
     <div>
-        <ListItemLink right={Rights.MyMeal} to="/meals" selected={selectedPathName === "/meals"}>
+        <ListItemLink right={Rights.MyMeal} to={Pages.MY_MEALS} selected={selectedPathName === Pages.MY_MEALS}>
             <ListItemIcon>
                 <FastFoodIcon />
             </ListItemIcon>
             <ListItemText primary="Meals" />
         </ListItemLink>
-        <ListItemLink right={Rights.AllMeal} to="/meals/all" selected={selectedPathName === "/meals/all"}>
+        <ListItemLink right={Rights.AllMeal} to={Pages.ALL_MEALS} selected={selectedPathName === Pages.ALL_MEALS}>
             <ListItemIcon>
                 <FastFoodIcon />
             </ListItemIcon>
             <ListItemText primary="All Meals" />
         </ListItemLink>
-        <ListItemLink right={Rights.UserManagement} to="/users" selected={selectedPathName === "/users"}>
+        <ListItemLink right={Rights.UserManagement} to={Pages.USERS} selected={selectedPathName === Pages.USERS}>
             <ListItemIcon>
                 <PeopleIcon />
             </ListItemIcon>

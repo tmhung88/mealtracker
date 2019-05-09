@@ -7,6 +7,8 @@ import UserForm from './UserForm';
 import { BadRequestError } from '../core/api';
 import { withPage } from '../core/components/AppPage';
 import { Roles } from '../core/userSession';
+import { ApiUrl } from '../constants/ApiUrl';
+import { Pages } from '../constants/Pages';
 
 const styles = theme => ({
     add: {
@@ -35,8 +37,8 @@ export class NewUser extends React.Component {
     handleSubmit = async (e) => {
         this.setState({ loading: true });
             try {
-                await this.props.api.post("/v1/users", this.state.user);
-                this.props.goBackOrReplace("/users");
+                await this.props.api.post(ApiUrl.USERS, this.state.user);
+                this.props.goBackOrReplace(Pages.USERS);
             } catch (error) {
                 if (error instanceof BadRequestError) {
                     this.setState({
@@ -67,7 +69,7 @@ export class NewUser extends React.Component {
             loading={this.state.loading}
             renderActionButtons={(isValid) => {
                 return <div>
-                    <Button onClick={() => this.props.goBackOrReplace("/users")}
+                    <Button onClick={() => this.props.goBackOrReplace(Pages.USERS)}
                         variant="contained"
                         color="secondary"
                         className={classes.cancel}

@@ -1,25 +1,124 @@
 import 'whatwg-fetch'
-import Promise from "bluebird";
+import localTokenStorage from "./localTokenStorage";
 
-// let apiToken = undefined;
+export class Api {
+    constructor(tokenStorage = localTokenStorage){
+        this.tokenStorage = tokenStorage;
+    }
 
-export function setToken(value) {
-    // apiToken = value;
-    localStorage.setItem("apiToken", value);
+    setToken(value) {
+        return this.tokenStorage.setToken(value);
+    }
+
+    hasToken() {
+        return this.tokenStorage.hasToken();
+    }
+
+    getToken() {
+        return this.tokenStorage.getToken();
+    }
+
+    clearToken() {
+        this.tokenStorage.clearToken();
+    }
+
+    handleError = async (response) => {
+        if (response.status === 401) {
+            throw new UnauthenticatedError("");
+        }
+
+        if (response.status === 402) {
+            throw new UnauthorizedError("");
+        }
+
+        if (response.status === 400) {
+            const body = await response.json();
+            throw new BadRequestError(response.statusText, response.status, body);
+        }
+
+        if (response.status === 404) {
+            const body = await response.text();
+            throw new NotFoundRequestError(response.statusText, response.status, body);
+        }
+
+        if (response.status !== 200) {
+            const body = await response.text();
+            throw new ServerError(response.statusText, response.status, body);
+        }
+
+        return response;
+    }
+
+    handleCatchError(error) {
+        throw error;
+    }
+
+    getHeader() {
+        if (this.hasToken()) {
+            return {
+                ...headers,
+                'Authorization': 'Bearer ' + this.getToken(),
+            }
+        }
+
+        return headers;
+    }
+
+
+    get = function (path) {
+        return Promise.resolve(getFetch()(path, {
+            headers: this.getHeader(),
+            credentials: 'same-origin'
+        })).then(this.handleError).catch(this.handleCatchError);
+    }
+
+    delete = function (path, data) {
+        return Promise.resolve(getFetch()(path, {
+            method: "DELETE",
+            headers: this.getHeader(),
+            credentials: 'same-origin',
+            body: this.stringifyContent(data)
+        })).then(this.handleError).catch(this.handleCatchError)
+    }
+
+    put = function (path, data) {
+        return Promise.resolve(getFetch()(path, {
+            method: "PUT",
+            headers: this.getHeader(),
+            credentials: 'same-origin',
+            body: this.stringifyContent(data)
+        })).then(this.handleError).catch(this.handleCatchError)
+    }
+
+    post = function (path, data) {
+        return Promise.resolve(getFetch()(path, {
+            method: "POST",
+            headers: this.getHeader(),
+            credentials: 'same-origin',
+            body: this.stringifyContent(data)
+        })).then(this.handleError).catch(this.handleCatchError)
+    }
+
+    patch = function (path, data) {
+        return Promise.resolve(getFetch()(path, {
+            method: "PATCH",
+            headers: this.getHeader(),
+            credentials: 'same-origin',
+            body: this.stringifyContent(data)
+        })).then(this.handleError).catch(this.handleCatchError)
+    }
+
+    stringifyContent(data) {
+        if (!data) return null;
+        if (typeof data == "string") {
+            return data;
+        }
+
+        return JSON.stringify(data);
+    }
 }
 
-export function hasToken(){
-    // return !!apiToken;
-    return !!getToken();
-}
-
-export function getToken(){
-    return localStorage.getItem("apiToken");
-}
-
-export function clearToken(){
-    localStorage.removeItem("apiToken");
-}
+export default new Api();
 
 const headers = {
     'Accept': 'application/json, text/plain, */*',
@@ -34,10 +133,10 @@ function getFetch() {
     return fetch;
 }
 
-export class UnauthorizedError extends Error {}
-export class UnauthenticatedError extends Error {}
+export class UnauthorizedError extends Error { }
+export class UnauthenticatedError extends Error { }
 export class ServerError extends Error {
-    constructor(error, statusCode, body){
+    constructor(error, statusCode, body) {
         super(error);
         this.body = body;
         this.statusCode = statusCode;
@@ -45,104 +144,10 @@ export class ServerError extends Error {
 }
 
 export class BadRequestError extends ServerError {
-    
+
 }
 
 export class NotFoundRequestError extends ServerError {
-    
+
 }
 
-async function handleError(response) {
-    if (response.status === 401) {
-        throw new UnauthenticatedError("");
-    }
-
-    if (response.status === 402) {
-        throw new UnauthorizedError("");
-    }
-
-    if(response.status === 400) {
-        const body = await response.json();
-        throw new BadRequestError(response.statusText, response.status, body);
-    }
-
-    if(response.status === 404) {
-        const body = await response.text();
-        throw new NotFoundRequestError(response.statusText, response.status, body);
-    }
-
-    if(response.status !== 200) {
-        const body = await response.text();
-        throw new ServerError(response.statusText, response.status, body);
-    }
-
-    return response;
-}
-
-function handleCatchError(error) {
-    throw error;
-}
-
-function getHeader(){
-    if(hasToken()) {
-        return {
-            ...headers,
-            'Authorization': 'Bearer ' + getToken(),
-        }
-    }
-
-    return headers;
-}
-
-export var get = function (path) {
-
-    return Promise.resolve(getFetch()(path, {
-        headers: getHeader(),
-        credentials: 'same-origin'
-    })).then(handleError).catch(handleCatchError);
-}
-
-export var deleteRequest = function (path, data) {
-    return Promise.resolve(getFetch()(path, {
-        method: "DELETE",
-        headers: getHeader(),
-        credentials: 'same-origin',
-        body: stringifyContent(data)
-    })).then(handleError).catch(handleCatchError)
-}
-
-export var put = function (path, data) {
-    return Promise.resolve(getFetch()(path, {
-        method: "PUT",
-        headers: getHeader(),
-        credentials: 'same-origin',
-        body: stringifyContent(data)
-    })).then(handleError).catch(handleCatchError)
-}
-
-export var post = function (path, data) {
-    return Promise.resolve(getFetch()(path, {
-        method: "POST",
-        headers: getHeader(),
-        credentials: 'same-origin',
-        body: stringifyContent(data)
-    })).then(handleError).catch(handleCatchError)
-}
-
-export var patch = function (path, data) {
-    return Promise.resolve(getFetch()(path, {
-        method: "PATCH",
-        headers: getHeader(),
-        credentials: 'same-origin',
-        body: stringifyContent(data)
-    })).then(handleError).catch(handleCatchError)
-}
-
-function stringifyContent(data) {
-    if (!data) return null;
-    if (typeof data == "string") {
-        return data;
-    }
-
-    return JSON.stringify(data);
-}

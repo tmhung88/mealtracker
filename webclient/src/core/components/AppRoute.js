@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { withUserSession } from "./AppPage";
+import { Pages } from "../../constants/Pages";
 
 export class AppRoute extends React.Component {
     render() {
@@ -13,7 +14,7 @@ export class AppRoute extends React.Component {
                 if(!isLoggedIn || noRightPermission) {
                     return <Redirect
                         to={{
-                            pathname: "/users/login",
+                            pathname: Pages.LOGIN,
                             state: { from: props.location }
                         }}
                     />;

@@ -8,6 +8,8 @@ import UrlMealFilter from "./UrlMealFilter";
 import Alert from "./Alert";
 import { withPage } from "../../core/components/AppPage";
 import { DateTimeHelper } from "../../datetimeHelper";
+import { ApiUrl } from '../../constants/ApiUrl';
+import { Pages } from '../../constants/Pages';
 
 const styles = theme => ({
     button: {
@@ -36,7 +38,7 @@ export class MealList extends React.Component {
 
     async componentDidMount() {
         try {
-            const response = await this.props.api.get(`/v1/users/me/alerts/calorie?date=${moment().format(DateTimeHelper.DATE_FORMAT)}`);
+            const response = await this.props.api.get(`${ApiUrl.ME_ALERT_CALORIES}?date=${moment().format(DateTimeHelper.DATE_FORMAT)}`);
             const json = await response.json();
             this.setState({
                 alertInfo: json.data,
@@ -63,13 +65,13 @@ export class MealList extends React.Component {
             <ServerPagingTable
                 columns={columns}
                 tableName="Meals"
-                baseUrl="/v1/users/me/meals"
+                baseUrl={ApiUrl.ME_MEALS}
                 queryString={this.props.location.search}
                 onRowSelect={(id) => {
-                    this.props.history.push(`/meals/${id}/update`);
+                    this.props.history.push(Pages.MY_UPDATE_MEAL.replace(":id", id));
                 }}
             />
-            <Button component={Link} to="/meals/new"
+            <Button component={Link} to={Pages.MY_NEW_MEAL}
                 variant="contained" color="primary" className={classes.button}>
                 New Meal
       </Button>

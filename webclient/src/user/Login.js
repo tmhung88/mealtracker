@@ -18,6 +18,8 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import { withPage } from "../core/components/AppPage";
 import { BadRequestError, UnauthenticatedError } from "../core/api";
 import { Rights } from "../core/userSession";
+import { ApiUrl } from '../constants/ApiUrl';
+import { Pages } from "../constants/Pages";
 
 const styles = theme => ({
   main: {
@@ -63,11 +65,11 @@ export class Login extends React.Component {
 
   navigateToProperPage() {
     if (this.props.userSession.hasRight(Rights.MyMeal)) {
-      this.props.history.replace("/meals");
+      this.props.history.replace(Pages.MY_MEALS);
     } else if (this.props.userSession.hasRight(Rights.UserManagement)) {
-      this.props.history.replace("/users");
+      this.props.history.replace(Pages.USERS);
     } else {
-      this.props.history.replace("/meals/all");
+      this.props.history.replace(Pages.ALL_MEALS);
     }
   }
   handleSubmit = async (e) => {
@@ -75,7 +77,7 @@ export class Login extends React.Component {
 
     try {
       this.setState({ loading: true })
-      const response = await this.props.api.post("/v1/session", this.state.form);
+      const response = await this.props.api.post(ApiUrl.SESSION, this.state.form);
       const json = await response.json();
       this.props.userSession.setToken(json.token);
       this.navigateToProperPage();
@@ -161,7 +163,7 @@ export class Login extends React.Component {
                     Sign in
                   </Button>
 
-                  <Link className={classes.link} component={RouterLink} to="/users/register">
+                  <Link className={classes.link} component={RouterLink} to={Pages.REGISTER}>
                     Register new User
                   </Link>
                 </Fragment>)

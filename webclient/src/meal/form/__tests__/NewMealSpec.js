@@ -3,6 +3,7 @@ import { shallow } from "enzyme";
 import { NewMeal } from "../NewMeal";
 import MealForm from "../MealForm";
 import Bluebird from "bluebird";
+import { ApiUrl } from "../../../constants/ApiUrl";
 
 describe("#NewMeal", () => {
     it("allow user select passed from prop", () => {
@@ -30,7 +31,7 @@ describe("#NewMeal", () => {
             api={api}
             handleError={handleError}
             goBackOrReplace={goBackOrReplace}
-            baseApiUrl="/v1/users/me/meals"
+            baseApiUrl={ApiUrl.ME_MEALS}
             cancelPage="/meals"
         />);
 

@@ -8,6 +8,7 @@ import Form from "../common/form/Form";
 import { withPage } from "../core/components/AppPage";
 import { FormHelperText } from "@material-ui/core";
 import teal from '@material-ui/core/colors/teal';
+import { ApiUrl } from '../constants/ApiUrl';
 
 const styles = theme => ({
     submit: {
@@ -23,7 +24,7 @@ export class UserSettings extends React.Component {
 
     async componentDidMount() {
         try {
-            const response = await this.props.api.get(`/v1/users/me`);
+            const response = await this.props.api.get(ApiUrl.ME);
             const json = await response.json();
             this.setState({
                 userSettings: json.data,
@@ -39,7 +40,7 @@ export class UserSettings extends React.Component {
         e.preventDefault();
         this.setState({ loading: true });
         try {
-            await this.props.api.patch(`/v1/users/me`, this.state.userSettings);
+            await this.props.api.patch(ApiUrl.ME, this.state.userSettings);
             this.setState({
                 updateSuccessfully: true,
             })

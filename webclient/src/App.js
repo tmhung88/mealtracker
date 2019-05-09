@@ -5,6 +5,7 @@ import Dashboard from "./dashboard/Dashboard";
 import Register from "./user/Register";
 import  AppRoute  from "./core/components/AppRoute";
 import NotFound from "./common/NotFound";
+import { Pages } from "./constants/Pages";
 
 class AppRouter extends React.Component{
   state = { error: false }
@@ -19,9 +20,9 @@ class AppRouter extends React.Component{
       <Router>
         <div>
           <Switch>
-            <Route path="/users/login" component={Login} />
-            <Route path="/users/register" component={Register} />
-            <Route path="/not-found" component={NotFound} />
+            <Route path={Pages.LOGIN} component={Login} />
+            <Route path={Pages.REGISTER} component={Register} />
+            <Route path={Pages.NOT_FOUND} component={NotFound} />
             <AppRoute path="/*" component={Dashboard} />
           </Switch>
 

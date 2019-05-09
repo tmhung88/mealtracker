@@ -1,4 +1,4 @@
-import { hasToken, getToken, setToken, clearToken } from "./api";
+import api from "./api";
 import jwtDecode from "jwt-decode";
 
 export const Rights = {
@@ -35,24 +35,24 @@ class UserSession {
             return null;
         }
 
-        return jwtDecode(getToken()).role || Roles.REGULAR_USER;
+        return jwtDecode(api.getToken()).role || Roles.REGULAR_USER;
     }
     setToken(token){
-        setToken(token);
+        api.setToken(token);
     }
     isLoggedIn() {
-        return hasToken();
+        return api.hasToken();
     }
 
     logout(){
-        clearToken();
+        api.clearToken();
     }
 
     hasRight(right) {
         if (!this.isLoggedIn()) {
             return false;
         }
-        const rights = jwtDecode(getToken()).privileges || [];
+        const rights = jwtDecode(api.getToken()).privileges || [];
         return rights.indexOf(right) >= 0;
     }
 }

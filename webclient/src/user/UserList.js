@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import ServerPagingTable from "../common/table/ServerPagingTable";
 import { withPage } from "../core/components/AppPage";
 import { roleIdToName } from "../core/userSession";
+import { ApiUrl } from '../constants/ApiUrl';
+import { Pages } from '../constants/Pages';
 
 const styles = theme => ({
     button: {
@@ -25,14 +27,14 @@ export class UserList extends React.Component {
         const { classes } = this.props;
         return <div>
             <ServerPagingTable
-                baseUrl="/v1/users"
+                baseUrl={ApiUrl.USERS}
                 onRowSelect={(id) => {
-                    this.props.history.push(`/users/${id}/update`);
+                    this.props.history.push(Pages.UPDATE_USER.replace(":id", id));
                 }}
 
                 columns={columns}
                 tableName="Users" />
-            <Button component={Link} to="/users/new"
+            <Button component={Link} to={Pages.NEW_USER}
                 variant="contained" color="primary" className={classes.button}>
                 New User
       </Button>
