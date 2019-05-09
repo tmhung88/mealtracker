@@ -1,27 +1,26 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import TableBase from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import { TableToolbar } from './TableToolbar';
-import { TableHead } from './TableHead';
-
+import React from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import TableBase from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import Checkbox from "@material-ui/core/Checkbox";
+import { TableToolbar } from "./TableToolbar";
+import { TableHead } from "./TableHead";
 
 const styles = theme => ({
     root: {
-        width: '100%',
+        width: "100%",
         marginTop: theme.spacing.unit * 3,
     },
     table: {
         minWidth: 400,
     },
     tableWrapper: {
-        overflowX: 'auto',
+        overflowX: "auto",
     },
 });
 
@@ -48,10 +47,10 @@ export class Table extends React.Component {
 
     handleRequestSort = (event, property) => {
         const orderBy = property;
-        let order = 'desc';
+        let order = "desc";
         const orderInfo = this.getOrderInfo();
-        if (orderInfo.orderBy === property && orderInfo.order === 'desc') {
-            order = 'asc';
+        if (orderInfo.orderBy === property && orderInfo.order === "desc") {
+            order = "asc";
         }
         this.props.onSort(orderBy, order);
     };
@@ -68,22 +67,11 @@ export class Table extends React.Component {
         event.stopPropagation();
         const { selected } = this.state;
         const selectedIndex = selected.indexOf(id);
-        let newSelected = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, id);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
+        if (selectedIndex >= 0) {
+            this.setState({ selected: selected.filter(s => s != id) });
+        } else {
+            this.setState({ selected: selected.concat([id]) });
         }
-
-        this.setState({ selected: newSelected });
     };
 
     handleChangePage = (event, page) => {
@@ -92,7 +80,6 @@ export class Table extends React.Component {
 
     handleChangeRowsPerPage = event => {
         this.props.onRowsPerPageChange(event.target.value);
-        // this.setState({ rowsPerPage: event.target.value });
     };
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
@@ -103,7 +90,6 @@ export class Table extends React.Component {
         const pagingInfo = this.getPagingInfo();
         const emptyRows = pagingInfo.rowsPerPage - Math.min(pagingInfo.rowsPerPage, data.length);
         const orderInfo = this.getOrderInfo();
-        console.log("orderInfo", orderInfo);
         return (
             <Paper className={classes.root}>
                 <TableToolbar
@@ -111,7 +97,7 @@ export class Table extends React.Component {
                     tableName={tableName}
                     onDelete={() => this.props.onDelete(this.state.selected)}
                     onRefresh={this.props.onRefresh}
-                     />
+                />
                 <div className={classes.tableWrapper}>
                     <TableBase className={classes.table} aria-labelledby="tableTitle" >
                         <TableHead
@@ -130,7 +116,6 @@ export class Table extends React.Component {
                                     return (
                                         <TableRow
                                             hover
-
                                             onClick={() => onRowSelect(n.id)}
                                             role="checkbox"
                                             aria-checked={isSelected}
@@ -151,7 +136,7 @@ export class Table extends React.Component {
                                 })}
                             {emptyRows > 0 && (
                                 <TableRow style={{ height: 49 * emptyRows }}>
-                                    <TableCell colSpan={6} />
+                                    <TableCell colSpan={columns.length + 1} />
                                 </TableRow>
                             )}
                         </TableBody>
@@ -164,10 +149,10 @@ export class Table extends React.Component {
                     rowsPerPage={pagingInfo.rowsPerPage}
                     page={pagingInfo.pageIndex}
                     backIconButtonProps={{
-                        'aria-label': 'Previous Page',
+                        "aria-label": "Previous Page",
                     }}
                     nextIconButtonProps={{
-                        'aria-label': 'Next Page',
+                        "aria-label": "Next Page",
                     }}
                     onChangePage={this.handleChangePage}
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
@@ -185,8 +170,8 @@ const tableState = {
         pageIndex: 0,
     },
     orderInfo: {
-        order: 'asc',
-        orderBy: 'calories',
+        order: "asc",
+        orderBy: "calories",
     }
 }
 
@@ -195,4 +180,4 @@ Table.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-Table = withStyles(styles)(Table);
+export default withStyles(styles)(Table);

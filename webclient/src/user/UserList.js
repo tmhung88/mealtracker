@@ -14,10 +14,10 @@ const styles = theme => ({
 })
 
 const columns = [
-    { id: 'email', dataField: "email", numeric: false, disablePadding: true, label: 'Email' },
-    { id: 'fullName', dataField: "fullName", numeric: false, disablePadding: true, label: 'Full Name' },
-    { id: 'dailyCalorieLimit', dataField: "dailyCalorieLimit", numeric: true, disablePadding: false, label: 'Calories' },
-    { id: 'role', dataField: "role", numeric: true, disablePadding: false, label: 'Role', renderContent(d) { return roleIdToName(d) } },
+    { id: 'email', dataField: "email", numeric: false, label: 'Email' },
+    { id: 'fullName', dataField: "fullName", numeric: false, label: 'Full Name' },
+    { id: 'dailyCalorieLimit', dataField: "dailyCalorieLimit", numeric: true, label: 'Calories' },
+    { id: 'role', dataField: "role", numeric: true, label: 'Role', renderContent(d) { return roleIdToName(d) } },
 ];
 
 export class UserList extends React.Component {

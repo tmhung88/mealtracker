@@ -16,10 +16,10 @@ const styles = theme => ({
 })
 
 const columns = [
-    { id: "date", dataField: "datetime", numeric: false, disablePadding: true, label: "Date", renderContent(d) { return moment(d).format("DD MMM YYYY") } },
-    { id: "time", dataField: "datetime", numeric: false, disablePadding: false, label: "Time", renderContent(d) { return moment(d).format("hh:mm A") } },
-    { id: "name", dataField: "name", numeric: false, disablePadding: false, label: "Name" },
-    { id: "calories", dataField: "calories", numeric: true, disablePadding: false, label: "Calories" },
+    { id: "date", dataField: "datetime", numeric: false, label: "Date", renderContent(d) { return moment(d).format("DD MMM YYYY") } },
+    { id: "time", dataField: "datetime", numeric: false, label: "Time", renderContent(d) { return moment(d).format("hh:mm A") } },
+    { id: "name", dataField: "name", numeric: false, label: "Name" },
+    { id: "calories", dataField: "calories", numeric: true, label: "Calories" },
 ];
 
 

@@ -1,6 +1,6 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Table } from "./Table";
+import Table from "./Table";
 import { Loading } from "../loading/Loading";
 import { withPage } from "../../AppPage";
 
