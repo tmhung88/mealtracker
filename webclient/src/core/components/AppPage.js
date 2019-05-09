@@ -16,7 +16,7 @@ export function withUserSession(ComponentNeedSession) {
 export function withPage(ComponentToProtect, { withRouter } = {}) {
     withRouter = withRouter || withRouterFunc;
     return withRouter(class Wrap extends React.Component {
-        state = { snackbarOpen: false, errorMessage: "" }
+        state = { snackbarOpen: false, errorMessage: "", renderError: false }
         tryGetErrorMessage(serverError) {
             if (!serverError.body) {
                 return serverError.message;
@@ -70,7 +70,20 @@ export function withPage(ComponentToProtect, { withRouter } = {}) {
 
         }
 
+        componentDidCatch(error, info){
+            this.setState({
+                renderError: true,
+            });
+            console.error(error);
+            console.error(info);
+        }
+
         render() {
+            if(this.state.renderError) {
+                return <div>
+                    <span>There are some errors on rendering Page, please try to refresh this Page</span>
+                </div>
+            }
             return <Fragment>
                 <ComponentToProtect
                     {...this.props}

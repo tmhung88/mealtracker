@@ -22,7 +22,7 @@ const columns = [
     { id: "calories", dataField: "calories", numeric: true, label: "Calories" },
     {
         id: "consumerEmail", dataField: "consumer", numeric: true, label: "Consumer Email",
-        renderContent(d) { return d.email }
+        renderContent(d) { return d && d.email }
     },
 ];
 

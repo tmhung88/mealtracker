@@ -28,13 +28,13 @@ describe("#MealList", () => {
             fromDate: "2019-05-04",
             toDate: "2019-05-03",
             fromTime: "11:00",
-            toTime: "14:00",
+            toTime: null,
         }} classes={{}} onFilter={onFilter} />);
 
         expect(wrapper.find(`[id="from-date"]`).prop("value")).toEqual("2019-05-04");
         expect(wrapper.find(`[id="to-date"]`).prop("value")).toEqual("2019-05-03");
         expect(wrapper.find(`[id="from-time"]`).prop("value")).toEqual("11:00");
-        expect(wrapper.find(`[id="to-time"]`).prop("value")).toEqual("14:00");
+        expect(wrapper.find(`[id="to-time"]`).prop("value")).toEqual("");
 
     })
 })
