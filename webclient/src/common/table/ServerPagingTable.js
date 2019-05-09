@@ -1,6 +1,6 @@
 import React from "react";
-import withStyles from '@material-ui/core/styles/withStyles';
-import { EnhancedTable } from "./Table";
+import withStyles from "@material-ui/core/styles/withStyles";
+import { Table } from "./Table";
 import { Loading } from "../loading/Loading";
 import { withPage } from "../../AppPage";
 
@@ -8,7 +8,7 @@ const styles = {
 
 }
 
-class ServerPagingTable extends React.Component {
+export class ServerPagingTable extends React.Component {
     state = {
         loading: true,
         data: [],
@@ -20,7 +20,7 @@ class ServerPagingTable extends React.Component {
                 pageIndex: 0,
             },
             orderInfo: {
-                order: 'asc',
+                order: "asc",
                 orderBy: this.props.columns[0].id,
             }
         }
@@ -46,17 +46,16 @@ class ServerPagingTable extends React.Component {
 
     async requestData(tableState = this.state.tableState) {
         const { baseUrl, queryString } = this.props;
-        await this.props.handleErrorContext(async () => {
-            try {
-                this.setState({ loading: true })
-                const response = await this.props.api.get(`${baseUrl}?${queryString || ""}&${this.buildQueryString(tableState)}`);
-                const json = await response.json();
-                console.log(json);
-                this.setState({ loading: false, data: json.data })
-            } finally {
-                this.setState({ loading: false })
-            }
-        })
+        try {
+            this.setState({ loading: true })
+            const response = await this.props.api.get(`${baseUrl}?${queryString || ""}&${this.buildQueryString(tableState)}`);
+            const json = await response.json();
+            this.setState({ loading: false, data: json.data })
+        } catch (e) {
+            this.props.handleError(e);
+        } finally {
+            this.setState({ loading: false })
+        }
     }
 
     async componentDidMount() {
@@ -94,7 +93,6 @@ class ServerPagingTable extends React.Component {
             tableState: newTableState,
             loading: false
         })
-
     }
 
     onSort = async (orderBy, order) => {
@@ -112,15 +110,19 @@ class ServerPagingTable extends React.Component {
             tableState: newTableState,
             loading: false
         })
-
     }
 
     handleDelete = async (selectedIds) => {
-        this.setState({ loading: true });
-        console.log("selectedIds", selectedIds)
-        await this.props.api.delete(this.props.baseUrl, { ids: selectedIds });
-        await this.requestData();
-        this.setState({ loading: false });
+        try {
+            this.setState({ loading: true });
+            await this.props.api.delete(this.props.baseUrl, { ids: selectedIds });
+            await this.requestData();
+        } catch (e) {
+            this.props.handleError(e);
+        }
+        finally {
+            this.setState({ loading: false });
+        }
     }
 
     render() {
@@ -130,7 +132,7 @@ class ServerPagingTable extends React.Component {
                 <Loading
                     active={this.state.loading}
                 >
-                    <EnhancedTable
+                    <Table
                         onDelete={this.handleDelete}
                         tableState={this.state.tableState}
                         columns={columns}

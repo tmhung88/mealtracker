@@ -36,7 +36,7 @@ const toolbarStyles = theme => ({
   });
   
   
-export let EnhancedTableToolbar = props => {
+export let TableToolbar = props => {
     const { numSelected, classes, tableName } = props;
   
     return (
@@ -74,9 +74,9 @@ export let EnhancedTableToolbar = props => {
     );
   };
   
-  EnhancedTableToolbar.propTypes = {
+  TableToolbar.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired,
   };
   
-  EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
+  TableToolbar = withStyles(toolbarStyles)(TableToolbar);

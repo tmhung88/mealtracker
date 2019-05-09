@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
+import TableBase from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import { EnhancedTableToolbar } from './TableToolbar';
-import { EnhancedTableHead } from './TableHead';
+import { TableToolbar } from './TableToolbar';
+import { TableHead } from './TableHead';
 
 
 const styles = theme => ({
@@ -26,7 +26,7 @@ const styles = theme => ({
 });
 
 
-export class EnhancedTable extends React.Component {
+export class Table extends React.Component {
     state = {
         selected: [],
         data: this.props.rows,
@@ -106,15 +106,15 @@ export class EnhancedTable extends React.Component {
         console.log("orderInfo", orderInfo);
         return (
             <Paper className={classes.root}>
-                <EnhancedTableToolbar
+                <TableToolbar
                     numSelected={selected.length}
                     tableName={tableName}
                     onDelete={() => this.props.onDelete(this.state.selected)}
                     onRefresh={this.props.onRefresh}
                      />
                 <div className={classes.tableWrapper}>
-                    <Table className={classes.table} aria-labelledby="tableTitle" >
-                        <EnhancedTableHead
+                    <TableBase className={classes.table} aria-labelledby="tableTitle" >
+                        <TableHead
                             columns={columns}
                             numSelected={selected.length}
                             order={orderInfo.order}
@@ -155,7 +155,7 @@ export class EnhancedTable extends React.Component {
                                 </TableRow>
                             )}
                         </TableBody>
-                    </Table>
+                    </TableBase>
                 </div>
                 <TablePagination
                     rowsPerPageOptions={pagingInfo.rowsPerPageOptions}
@@ -191,8 +191,8 @@ const tableState = {
 }
 
 
-EnhancedTable.propTypes = {
+Table.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-EnhancedTable = withStyles(styles)(EnhancedTable);
+Table = withStyles(styles)(Table);
