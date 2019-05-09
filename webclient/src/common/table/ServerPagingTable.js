@@ -50,7 +50,16 @@ export class ServerPagingTable extends React.Component {
             this.setState({ loading: true })
             const response = await this.props.api.get(`${baseUrl}?${queryString || ""}&${this.buildQueryString(tableState)}`);
             const json = await response.json();
-            this.setState({ loading: false, data: json.data })
+            if(json.metaData && json.metaData.totalElements) {
+                tableState = {
+                    ...tableState,
+                    pagingInfo: {
+                        ...tableState.pagingInfo,
+                        total: json.metaData.totalElements
+                    }
+                }
+            }
+            this.setState({ loading: false, data: json.data, tableState: tableState })
         } catch (e) {
             this.props.handleError(e);
         } finally {
