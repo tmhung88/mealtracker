@@ -74,6 +74,13 @@ describe("#UserForm", () => {
         expect(validationSectionParams.onFieldChange).toHaveBeenCalledWith("role", Roles.REGULAR_USER);
     })
 
+    it("should not have password constraints when passwordOptional", () => {
+        const userSession = { currentRole: jest.fn().mockReturnValue(Roles.REGULAR_USER) };
+        const wrapper = shallow(<UserForm classes={{}} user={data} renderActionButtons={jest.fn()} userSession={userSession} passwordOptional />);
+        const validationForm = wrapper.find(ValidationForm);
+        expect(validationForm.prop("constraints").password).toEqual(undefined);
+    })
+
     describe("should render role select items based on current role", () => {
         it("regular user", () => {
             const userSession = { currentRole: jest.fn().mockReturnValue(Roles.REGULAR_USER) };

@@ -77,6 +77,7 @@ export class UpdateUser extends React.Component {
         const { classes } = this.props;
         return (
             <UserForm
+                passwordOptional
                 notFound={!this.state.user}
                 serverValidationError={this.state.serverValidationError}
                 loading={this.state.loading}

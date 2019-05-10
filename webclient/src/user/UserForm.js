@@ -36,7 +36,7 @@ export class UserForm extends React.Component {
     }
 
     render() {
-        const { classes, renderActionButtons, onUserChange, loading, serverValidationError, notFound } = this.props;
+        const { classes, renderActionButtons, onUserChange, loading, serverValidationError, notFound, passwordOptional } = this.props;
         const user = this.props.user || {
             dailyCalorieLimit: 0,
             password: "",
@@ -59,7 +59,7 @@ export class UserForm extends React.Component {
                         fullName: {
                             presence: { allowEmpty: false },
                         },
-                        password: {
+                        password: passwordOptional ? undefined : {
                             presence: { allowEmpty: false },
                             length: {
                                 minimum: 6,
@@ -94,7 +94,7 @@ export class UserForm extends React.Component {
                                 />
                                 <FormHelperText>{validationFields.fullName}</FormHelperText>
                             </FormControl>
-                            <FormControl margin="normal" required fullWidth error={!!validationFields.password}>
+                            <FormControl margin="normal" required={!passwordOptional} fullWidth error={!!validationFields.password}>
                                 <InputLabel htmlFor="password">Password</InputLabel>
                                 <Input name="password" type="password" id="password" autoComplete="new-password" value={data.password}
                                     onChange={e => onFieldChange("password", e.currentTarget.value)}
@@ -120,12 +120,12 @@ export class UserForm extends React.Component {
                             </FormControl>
                             <FormControl margin="normal" required fullWidth >
                                 <InputLabel htmlFor="role" shrink>Role</InputLabel>
-                                <Select                                    
+                                <Select
                                     value={data.role}
-                                    onChange={(e) => { 
+                                    onChange={(e) => {
                                         onFieldChange("role", e.target.value);
-                                     }}
-                                     input={<Input name="role" id="role"  />}
+                                    }}
+                                    input={<Input name="role" id="role" />}
                                 >
                                     {this.renderRoleItems()}
                                 </Select>
