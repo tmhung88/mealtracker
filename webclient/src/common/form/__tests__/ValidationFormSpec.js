@@ -53,6 +53,17 @@ describe("#ValidationForm", () => {
         expect(validationFields).toHaveProperty("email");
     })
 
+    it("validationFields with field return as string", () => {
+        const onDataChange = jest.fn();
+        const childrenFunc = jest.fn();
+        const wrapper = shallow(<ValidationForm onDataChange={onDataChange} classes={{}} data={data} constraints={constraints} >{childrenFunc}</ValidationForm>);
+        let { validationFields, isValid } = childrenFunc.mock.calls[0][0];
+        isValid();
+        wrapper.update();
+        ({ validationFields } = childrenFunc.mock.calls[1][0]);
+        expect(validationFields.extra).toEqual("Extra can't be blank")
+    })
+
     it("call isValid force to check constraints all", () => {
         const onDataChange = jest.fn();
         const childrenFunc = jest.fn();

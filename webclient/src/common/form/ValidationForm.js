@@ -59,6 +59,10 @@ export class ValidationForm extends React.Component {
         const constraints = this.constructConstraint(this.props.constraints, dirty);
 
         let result = validate(this.props.data, constraints) || {};
+        /**only get first error message */
+        _.keys(result).forEach(key=>{
+            result[key] = result[key][0];
+        })
 
         return result;
     }
