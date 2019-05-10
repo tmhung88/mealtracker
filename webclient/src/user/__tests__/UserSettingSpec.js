@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 import { UserSettings } from "../UserSettings";
-import { TextField, FormHelperText } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import Bluebird from "bluebird";
 
 describe("#UserSettings", () => {

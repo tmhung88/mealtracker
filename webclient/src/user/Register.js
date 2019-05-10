@@ -16,7 +16,7 @@ import ValidationForm from "../common/form/ValidationForm";
 import { withPage } from "../core/components/AppPage";
 import { BadRequestError } from "../core/api";
 import { ApiUrl } from '../constants/ApiUrl';
-import { Pages } from "../constants/Pages";
+import { Pages, getDefaultPage } from "../constants/Pages";
 
 const styles = theme => ({
   main: {
@@ -68,21 +68,28 @@ export class Register extends React.Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     this.setState({ loading: true });
-      try {
-        await this.props.api.post(ApiUrl.USERS, this.state.user);
-        this.props.history.replace(Pages.LOGIN);
-      } catch (error) {
-        if (error instanceof BadRequestError) {
-          console.log("BadRequestError", error.body.error);
-          this.setState({
-            serverValidationError: error.body.error,
-          })
-        } else {
-          this.props.handleError(error);
-        }
-      } finally {
-        this.setState({ loading: false });
+    try {
+      await this.props.api.post(ApiUrl.USERS, this.state.user);
+      const response = await this.props.api.login(ApiUrl.SESSION, {
+        email: this.state.user.email,
+        password: this.state.user.password,
+      });
+
+      const json = await response.json();
+      this.props.userSession.setToken(json.data.accessToken);
+      this.props.history.replace(getDefaultPage(this.props.userSession));
+      this.props.showSuccessMessage("Register successfully");
+    } catch (error) {
+      if (error instanceof BadRequestError) {
+        this.setState({
+          serverValidationError: error.body.error,
+        })
+      } else {
+        this.props.handleError(error);
       }
+    } finally {
+      this.setState({ loading: false });
+    }
   }
 
   render() {
@@ -128,7 +135,7 @@ export class Register extends React.Component {
                     <InputLabel htmlFor="email">Email Address</InputLabel>
                     <Input id="email" name="email"
                       autoComplete="email"
-                      autoFocus                      
+                      autoFocus
                       value={data.email}
                       onChange={e => onFieldChange("email", e.currentTarget.value)}
                     />
@@ -156,13 +163,13 @@ export class Register extends React.Component {
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                    onClick={(e) => {
+                    onClick={async (e) => {
                       e.preventDefault();
                       if (!isValid()) {
                         return;
                       }
 
-                      this.handleSubmit(e);
+                      await this.handleSubmit(e);
                     }}
                   >
                     Register

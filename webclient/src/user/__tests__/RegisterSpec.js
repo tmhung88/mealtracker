@@ -4,6 +4,7 @@ import { Register } from "../Register";
 import ValidationForm from "../../common/form/ValidationForm";
 import { FormHelperText } from "@material-ui/core";
 import { BadRequestError } from "../../core/api";
+import { ApiUrl } from '../../constants/ApiUrl';
 
 describe("#Register", () => {
     let validationSectionParams = {
@@ -54,12 +55,12 @@ describe("#Register", () => {
         expect(validationSection.find("[name='fullName']").parent().prop("error")).toEqual(false);
     });
 
-    describe("#Submit", ()=>{
+    describe("#Submit", () => {
         let history;
         let postApi;
         beforeEach(() => {
             history = { replace: jest.fn() }
-            postApi = jest.fn().mockReturnValue({ json: jest.fn().mockReturnValue({ token: "abc" }) });
+            postApi = jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({ token: "abc" }) });
 
         })
 
@@ -72,13 +73,14 @@ describe("#Register", () => {
             })
 
             const validationSection = validationForm.renderProp("children")(validationSectionParams);
-            await validationSection.find("[type='submit']").simulate("click", { preventDefault: jest.fn() });
+            await validationSection.find("[type='submit']").prop("onClick")({ preventDefault: jest.fn() });
         }
 
         it("should submmit correct info", async () => {
-            const wrapper = shallow(<Register classes={{}} api={{ post: postApi }} history={history} />);
+            const handleError = jest.fn();
+            const wrapper = shallow(<Register handleError={handleError} classes={{}} api={{ post: postApi }} history={history} />);
 
-            await submit(wrapper, "email1","fullname1", "password1");
+            await submit(wrapper, "email1", "fullname1", "password1");
 
             expect(postApi).toBeCalledWith("/v1/users", {
                 email: "email1",
@@ -87,15 +89,32 @@ describe("#Register", () => {
             })
         })
 
+        it("should login automatically", async () => {
+            const userSession = { setToken: jest.fn(), hasRight: jest.fn().mockReturnValue(true) };
+            const loginApi = jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({ data: { accessToken: "abc" } }) })
+            const showSuccessMessage = jest.fn();
+            const wrapper = shallow(<Register showSuccessMessage={showSuccessMessage}
+                userSession={userSession} classes={{}} api={{ post: postApi, login: loginApi }} history={history} />);
+
+            await submit(wrapper, "email1", "fullname1", "password1");
+            expect(postApi).toBeCalled();
+            expect(loginApi).toHaveBeenCalledWith(ApiUrl.SESSION, {
+                email: "email1",
+                password: "password1",
+            });
+            expect(userSession.setToken).toHaveBeenCalledWith("abc");
+            expect(history.replace).toHaveBeenCalledWith("/meals/all");
+        })
+
         it("should set Server Error if return BadRequest", async () => {
             postApi = jest.fn().mockReturnValue(Promise.reject(new BadRequestError("Error", 401, { error: "errors" })));
             const wrapper = shallow(<Register classes={{}} api={{ post: postApi }} history={history} />);
-            await submit(wrapper, "email1","fullname1", "password1");
+            await submit(wrapper, "email1", "fullname1", "password1");
             const validationForm = wrapper.find(ValidationForm);
             expect(validationForm.prop("serverValidationError")).toEqual("errors");
         })
 
-        it("other errors should be handled", async ()=>{
+        it("other errors should be handled", async () => {
             const error = new Error("");
             postApi = jest.fn().mockReturnValue(Promise.reject(error));
             const handleErrorSpy = jest.fn();
@@ -105,11 +124,11 @@ describe("#Register", () => {
             expect(handleErrorSpy).toBeCalledWith(error);
         })
 
-        it("should not submit if validation failed", async  ()=>{
+        it("should not submit if validation failed", async () => {
             validationSectionParams = {
                 ...validationSectionParams,
                 isValid: jest.fn().mockReturnValue(false),
-            }          
+            }
 
             const handleErrorSpy = jest.fn();
             const wrapper = shallow(<Register classes={{}} api={{ post: postApi }} history={history} handleError={handleErrorSpy} />);
