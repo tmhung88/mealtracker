@@ -69,4 +69,17 @@ describe("#Api", () => {
 
         expect(fetchMock.lastCall()[1].headers["Authorization"]).toEqual("Bearer abc");
     })
+
+    it("login should not send token even token exists", async ()=>{
+        const tokenStorage = {
+            hasToken: jest.fn().mockReturnValue(true),
+            getToken: jest.fn().mockReturnValue("abc"),
+        }
+        api = new Api(tokenStorage);
+
+        fetchMock.mock("*", 200);
+        await api.login("/api", "body text");
+
+        expect(fetchMock.lastCall()[1].headers["Authorization"]).toEqual(undefined);
+    })
 })

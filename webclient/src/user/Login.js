@@ -69,7 +69,7 @@ export class Login extends React.Component {
 
     try {
       this.setState({ loading: true })
-      const response = await this.props.api.post(ApiUrl.SESSION, this.state.form);
+      const response = await this.props.api.login(ApiUrl.SESSION, this.state.form);
       const json = await response.json();
       this.props.userSession.setToken(json.data.accessToken);
       this.navigateToProperPage();

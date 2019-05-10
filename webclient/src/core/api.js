@@ -53,8 +53,8 @@ export class Api {
         throw error;
     }
 
-    getHeader() {
-        if (this.hasToken()) {
+    getHeader(noToken) {
+        if (this.hasToken() && !noToken) {
             return {
                 ...headers,
                 'Authorization': 'Bearer ' + this.getToken(),
@@ -94,6 +94,15 @@ export class Api {
         return Promise.resolve(getFetch()(path, {
             method: "POST",
             headers: this.getHeader(),
+            credentials: 'same-origin',
+            body: this.stringifyContent(data)
+        })).then(this.handleError).catch(this.handleCatchError)
+    }
+
+    login = function (path, data) {
+        return Promise.resolve(getFetch()(path, {
+            method: "POST",
+            headers: this.getHeader(true),
             credentials: 'same-origin',
             body: this.stringifyContent(data)
         })).then(this.handleError).catch(this.handleCatchError)

@@ -30,11 +30,11 @@ describe("#Login", () => {
     describe("#onSubmit", () => {
         let userSession;
         let history;
-        let postApi;
+        let loginApi;
         beforeEach(() => {
             userSession = { setToken: jest.fn(), hasRight: jest.fn().mockReturnValue(true) };
             history = { replace: jest.fn() }
-            postApi = jest.fn().mockReturnValue({ json: jest.fn().mockReturnValue({data: { accessToken: "abc" }}) });
+            loginApi = jest.fn().mockReturnValue({ json: jest.fn().mockReturnValue({data: { accessToken: "abc" }}) });
 
         })
 
@@ -50,11 +50,11 @@ describe("#Login", () => {
         }
 
         it("should submmit email and password", () => {
-            const wrapper = shallow(<Login classes={{}} api={{ post: postApi }} userSession={userSession} history={history} />);
+            const wrapper = shallow(<Login classes={{}} api={{ login: loginApi }} userSession={userSession} history={history} />);
 
             submit(wrapper, "un", "ps");
 
-            expect(postApi).toBeCalledWith("/v1/sessions", {
+            expect(loginApi).toBeCalledWith("/v1/sessions", {
                 email: "un",
                 password: "ps",
             })
@@ -62,7 +62,7 @@ describe("#Login", () => {
 
         it("should set token to userSession if login successfuly", async () => {
 
-            const wrapper = shallow(<Login classes={{}} api={{ post: postApi }} userSession={userSession} history={history} />);
+            const wrapper = shallow(<Login classes={{}} api={{ login: loginApi }} userSession={userSession} history={history} />);
             await submit(wrapper, "un", "ps");
 
             expect(userSession.setToken).toBeCalledWith("abc");
@@ -70,7 +70,7 @@ describe("#Login", () => {
 
         it("should navigate to All Meal page if has right", async () => {
             userSession.hasRight.mockReturnValue(true);
-            const wrapper = shallow(<Login classes={{}} api={{ post: postApi }} userSession={userSession} history={history} />);
+            const wrapper = shallow(<Login classes={{}} api={{ login: loginApi }} userSession={userSession} history={history} />);
             await submit(wrapper, "un", "ps");
 
             expect(history.replace).toBeCalledWith("/meals/all");
@@ -80,23 +80,23 @@ describe("#Login", () => {
             when(userSession.hasRight).calledWith(Rights.MY_MEALS).mockReturnValue(false);
             when(userSession.hasRight).calledWith(Rights.USER_MANAGEMENT).mockReturnValue(true);
 
-            const wrapper = shallow(<Login classes={{}} api={{ post: postApi }} userSession={userSession} history={history} />);
+            const wrapper = shallow(<Login classes={{}} api={{ login: loginApi }} userSession={userSession} history={history} />);
             await submit(wrapper, "un", "ps");
 
             expect(history.replace).toBeCalledWith("/users");
         })
 
         it("should set Server Error if return BadRequest", async () => {
-            postApi = jest.fn().mockReturnValue(Promise.reject(new BadRequestError("Error", 401, { error: "errors" })));
-            const wrapper = shallow(<Login classes={{}} api={{ post: postApi }} userSession={userSession} history={history} />);
+            loginApi = jest.fn().mockReturnValue(Promise.reject(new BadRequestError("Error", 401, { error: "errors" })));
+            const wrapper = shallow(<Login classes={{}} api={{ login: loginApi }} userSession={userSession} history={history} />);
             await submit(wrapper, "un", "ps");
             const validationForm = wrapper.find(ValidationForm);
             expect(validationForm.prop("serverValidationError")).toEqual("errors");
         })
 
         it("should handle if Login Failed (401)", async ()=>{
-            postApi = jest.fn().mockReturnValue(Promise.reject(new UnauthenticatedError("Error")));
-            const wrapper = shallow(<Login classes={{}} api={{ post: postApi }} userSession={userSession} history={history} />);
+            loginApi = jest.fn().mockReturnValue(Promise.reject(new UnauthenticatedError("Error")));
+            const wrapper = shallow(<Login classes={{}} api={{ login: loginApi }} userSession={userSession} history={history} />);
             await submit(wrapper, "un", "ps");
             const validationForm = wrapper.find(ValidationForm);
             expect(validationForm.prop("serverValidationError").message).toEqual("Wrong Email or Password");
@@ -104,9 +104,9 @@ describe("#Login", () => {
 
         it("other errors should be handled", async ()=>{
             const error = new Error("");
-            postApi = jest.fn().mockReturnValue(Promise.reject(error));
+            loginApi = jest.fn().mockReturnValue(Promise.reject(error));
             const handleErrorSpy = jest.fn();
-            const wrapper = shallow(<Login classes={{}} api={{ post: postApi }} userSession={userSession} history={history} handleError={handleErrorSpy} />);
+            const wrapper = shallow(<Login classes={{}} api={{ login: loginApi }} userSession={userSession} history={history} handleError={handleErrorSpy} />);
             await submit(wrapper, "un", "ps");
 
             expect(handleErrorSpy).toBeCalledWith(error);
