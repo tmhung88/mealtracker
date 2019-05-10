@@ -18,8 +18,9 @@ export class TableHead extends React.Component {
         <TableRow>
           <TableCell padding="checkbox">
             <Checkbox
+              disabled={rowCount === 0}
               indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
+              checked={numSelected === rowCount && rowCount > 0}
               onChange={onSelectAllClick}
             />
           </TableCell>

@@ -4,9 +4,18 @@ import { TableHead } from "../TableHead";
 import { Checkbox, TableSortLabel, TableCell } from "@material-ui/core";
 
 describe("#TableHead", () => {
-    it("should check when numSelected = rowCount", ()=>{
+    it("should disable checkbox when rowCount = 0", ()=>{
+        const wrapper = shallow(<TableHead numSelected={2} rowCount={0} columns={[]}/>);
+        expect(wrapper.find(Checkbox).prop("disabled")).toEqual(true);
+    })
+    it("should check when numSelected = rowCount and rowCount > 0", ()=>{
         const wrapper = shallow(<TableHead numSelected={2} rowCount={2} columns={[]}/>);
         expect(wrapper.find(Checkbox).prop("checked")).toEqual(true);
+    })
+
+    it("should uncheck when rowCount = 0", ()=>{
+        const wrapper = shallow(<TableHead numSelected={2} rowCount={0} columns={[]}/>);
+        expect(wrapper.find(Checkbox).prop("checked")).toEqual(false);
     })
 
     it("should uncheck and itermidiate true when numSelected < rowCount", ()=>{
