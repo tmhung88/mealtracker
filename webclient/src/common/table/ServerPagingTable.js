@@ -44,11 +44,24 @@ export class ServerPagingTable extends React.Component {
         return `${this.buildPagingQuery(tableState.pagingInfo)}&${this.buildOrderQUery(tableState.orderInfo)}`;
     }
 
+    getQueryString(){        
+        const queryString = this.props.queryString;
+        if(!queryString) {
+            return "";
+        }
+
+        if(queryString.startsWith("?")) {
+            return queryString.substr(1) + "&";
+        }
+
+        return queryString + "&";
+    }
+
     async requestData(tableState = this.state.tableState) {
-        const { baseUrl, queryString } = this.props;
+        const { baseUrl } = this.props;
         try {
             this.setState({ loading: true })
-            const response = await this.props.api.get(`${baseUrl}?${queryString || ""}&${this.buildQueryString(tableState)}`);
+            const response = await this.props.api.get(`${baseUrl}?${this.getQueryString()}${this.buildQueryString(tableState)}`);
             const json = await response.json();
             if(json.metaData && json.metaData.totalElements) {
                 tableState = {

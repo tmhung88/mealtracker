@@ -24,7 +24,7 @@ describe("#ServerPagingTable", () => {
         expect(wrapper.find(Loading).prop("active")).toEqual(true);
         await Bluebird.delay(10);
 
-        expect(api.get).toHaveBeenCalledWith("/api/list?&rowsPerPage=5&pageIndex=0&order=asc&orderBy=a");
+        expect(api.get).toHaveBeenCalledWith("/api/list?rowsPerPage=5&pageIndex=0&order=asc&orderBy=a");
         const table = wrapper.find(Table);
         expect(table.prop("rows")).toEqual("any-data");
         expect(wrapper.find(Loading).prop("active")).toEqual(false);
@@ -66,18 +66,24 @@ describe("#ServerPagingTable", () => {
     it("should request data when queryString change", async () => {
         const wrapper = shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
         await Bluebird.delay(10);
-        expect(api.get).toHaveBeenCalledWith("/api/list?&rowsPerPage=5&pageIndex=0&order=asc&orderBy=a");
+        expect(api.get).toHaveBeenCalledWith("/api/list?rowsPerPage=5&pageIndex=0&order=asc&orderBy=a");
         api.get.mockClear();
         wrapper.setProps({ queryString: "abc" });
         await Bluebird.delay(10);
         expect(api.get).toHaveBeenCalledWith("/api/list?abc&rowsPerPage=5&pageIndex=0&order=asc&orderBy=a");
     })
 
+    it("should trip question mark on query string", async () => {
+        shallow(<ServerPagingTable queryString="?abc=3" classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
+        await Bluebird.delay(10);
+        expect(api.get).toHaveBeenCalledWith("/api/list?abc=3&rowsPerPage=5&pageIndex=0&order=asc&orderBy=a");
+    })
+
     it("should request on page index changed", async () => {
         const wrapper = shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
         let table = wrapper.find(Table);
         table.simulate("pageChange", 10);
-        expect(api.get).toHaveBeenCalledWith("/api/list?&rowsPerPage=5&pageIndex=10&order=asc&orderBy=a");
+        expect(api.get).toHaveBeenCalledWith("/api/list?rowsPerPage=5&pageIndex=10&order=asc&orderBy=a");
 
         await Bluebird.delay(10);
         table = wrapper.find(Table);
@@ -88,7 +94,7 @@ describe("#ServerPagingTable", () => {
         const wrapper = shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
         let table = wrapper.find(Table);
         table.simulate("rowsPerPageChange", 20);
-        expect(api.get).toHaveBeenCalledWith("/api/list?&rowsPerPage=20&pageIndex=0&order=asc&orderBy=a");
+        expect(api.get).toHaveBeenCalledWith("/api/list?rowsPerPage=20&pageIndex=0&order=asc&orderBy=a");
         await Bluebird.delay(10);
         table = wrapper.find(Table);
         expect(table.prop("tableState").pagingInfo.rowsPerPage).toEqual(20);
@@ -98,7 +104,7 @@ describe("#ServerPagingTable", () => {
         const wrapper = shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
         let table = wrapper.find(Table);
         table.simulate("sort", "abc", "123");
-        expect(api.get).toHaveBeenCalledWith("/api/list?&rowsPerPage=5&pageIndex=0&order=123&orderBy=abc");
+        expect(api.get).toHaveBeenCalledWith("/api/list?rowsPerPage=5&pageIndex=0&order=123&orderBy=abc");
         await Bluebird.delay(10);
         table = wrapper.find(Table);
         expect(table.prop("tableState").orderInfo).toEqual({

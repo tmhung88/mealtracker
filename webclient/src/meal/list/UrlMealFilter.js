@@ -10,11 +10,20 @@ const styles = {
 
 export class UrlMealFilter extends React.Component {
     getField(field, filter) {
-        return filter[field] || "";
+        if (filter[field]) {
+            return `${field}=${filter[field]}`;
+        }
+        return undefined;
     }
 
     buildFilterString(filterInfo) {
-        return `fromDate=${this.getField("fromDate", filterInfo)}&toDate=${this.getField("toDate", filterInfo)}&fromTime=${this.getField("fromTime", filterInfo)}&toTime=${this.getField("toTime", filterInfo)}`
+        return [
+            this.getField("fromDate", filterInfo),
+            this.getField("toDate", filterInfo),
+            this.getField("fromTime", filterInfo),
+            this.getField("toTime", filterInfo),
+
+        ].filter(f => f).join("&");
     }
 
     parseDate(value) {

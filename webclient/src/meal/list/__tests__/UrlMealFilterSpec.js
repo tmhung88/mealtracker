@@ -57,6 +57,6 @@ describe("#MealList", () => {
             toTime: undefined,
         });
 
-        expect(onQueryStringChange).toHaveBeenCalledWith("fromDate=&toDate=2019-05-03&fromTime=11:00&toTime=");
+        expect(onQueryStringChange).toHaveBeenCalledWith("toDate=2019-05-03&fromTime=11:00");
     })
 })
