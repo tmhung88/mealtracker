@@ -37,7 +37,8 @@ export class NewMeal extends React.Component {
         this.setState({ loading: true });
         try {
             await this.props.api.post(this.props.baseApiUrl, this.state.meal);
-            this.props.goBackOrReplace(this.props.cancelPage)
+            this.props.goBackOrReplace(this.props.cancelPage);
+            this.props.showSuccessMessage("Add Meal successfully");
         } catch (e) {
             this.props.handleError(e);
         } finally {

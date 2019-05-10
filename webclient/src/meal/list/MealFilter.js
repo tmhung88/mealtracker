@@ -36,7 +36,7 @@ export class MealFilter extends React.Component {
             filter: {
                 ...this.state.filter,
                 fromDate: moment().format(DateTimeHelper.DATE_FORMAT),
-                toDate: null,
+                toDate: undefined,
             }
         }, ()=>{
             this.props.onFilter(this.state.filter);
@@ -73,6 +73,18 @@ export class MealFilter extends React.Component {
                 ...this.state.filter,
                 fromTime: "18:00",
                 toTime: "21:00",
+            }
+        }, ()=>{
+            this.props.onFilter(this.state.filter);
+        })
+    }
+
+    setWholeTime=()=>{
+        this.setState({
+            filter: {
+                ...this.state.filter,
+                fromTime: undefined,
+                toTime: undefined,
             }
         }, ()=>{
             this.props.onFilter(this.state.filter);
@@ -183,6 +195,12 @@ export class MealFilter extends React.Component {
                         color="secondary"
                         variant="contained"
                     >Dinner</Button>
+
+                    <Button  className={classes.presetFilterButton} onClick={this.setWholeTime}
+                        name="whole-time-filter"
+                        color="secondary"
+                        variant="contained"
+                    >Whole Time</Button>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Button onClick={() => this.props.onFilter(this.state.filter)}

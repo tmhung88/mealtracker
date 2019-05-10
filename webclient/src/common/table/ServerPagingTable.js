@@ -139,6 +139,7 @@ export class ServerPagingTable extends React.Component {
             this.setState({ loading: true });
             await this.props.api.delete(this.props.baseUrl, { ids: selectedIds });
             await this.requestData();
+            this.props.showSuccessMessage("Delete Items successfully");
         } catch (e) {
             this.props.handleError(e);
         }

@@ -53,6 +53,7 @@ export class UpdateUser extends React.Component {
             try {
                 await this.props.api.put(`${ApiUrl.USERS}/${this.props.match.params.id}`, this.state.user);
                 this.props.goBackOrReplace(Pages.USERS);
+                this.props.showSuccessMessage("Update User successfully");
             } catch (error) {
                 if (error instanceof BadRequestError) {
                     this.setState({

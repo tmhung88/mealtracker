@@ -12,7 +12,10 @@ describe("#ServerPagingTable", () => {
         { id: "a", fieldName: "a" }
     ]
 
+    let showSuccessMessage;
+
     beforeEach(() => {
+        showSuccessMessage = jest.fn();
         api = {
             get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({ data: "any-data" }) }),
             delete: jest.fn().mockResolvedValue({}),
@@ -20,7 +23,7 @@ describe("#ServerPagingTable", () => {
     })
 
     it("should request data on mounted", async () => {
-        const wrapper = shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
+        const wrapper = shallow(<ServerPagingTable showSuccessMessage={showSuccessMessage} classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
         expect(wrapper.find(Loading).prop("active")).toEqual(true);
         await Bluebird.delay(10);
 
@@ -44,7 +47,7 @@ describe("#ServerPagingTable", () => {
 
         }
 
-        const wrapper = shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
+        const wrapper = shallow(<ServerPagingTable showSuccessMessage={showSuccessMessage} classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
         await Bluebird.delay(10);
 
         const table = wrapper.find(Table);
@@ -58,13 +61,13 @@ describe("#ServerPagingTable", () => {
             delete: jest.fn().mockResolvedValue({}),
         }
         const handleError = jest.fn();
-        shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} handleError={handleError} />);
+        shallow(<ServerPagingTable showSuccessMessage={showSuccessMessage} classes={{}} api={api} baseUrl={baseUrl} columns={columns} handleError={handleError} />);
         await Bluebird.delay(10);
         expect(handleError).toHaveBeenCalledWith({ error: "any" });
     })
 
     it("should request data when queryString change", async () => {
-        const wrapper = shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
+        const wrapper = shallow(<ServerPagingTable showSuccessMessage={showSuccessMessage} classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
         await Bluebird.delay(10);
         expect(api.get).toHaveBeenCalledWith("/api/list?rowsPerPage=5&pageIndex=0&order=asc&orderBy=a");
         api.get.mockClear();
@@ -74,13 +77,13 @@ describe("#ServerPagingTable", () => {
     })
 
     it("should trip question mark on query string", async () => {
-        shallow(<ServerPagingTable queryString="?abc=3" classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
+        shallow(<ServerPagingTable showSuccessMessage={showSuccessMessage} queryString="?abc=3" classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
         await Bluebird.delay(10);
         expect(api.get).toHaveBeenCalledWith("/api/list?abc=3&rowsPerPage=5&pageIndex=0&order=asc&orderBy=a");
     })
 
     it("should request on page index changed", async () => {
-        const wrapper = shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
+        const wrapper = shallow(<ServerPagingTable showSuccessMessage={showSuccessMessage} classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
         let table = wrapper.find(Table);
         table.simulate("pageChange", 10);
         expect(api.get).toHaveBeenCalledWith("/api/list?rowsPerPage=5&pageIndex=10&order=asc&orderBy=a");
@@ -91,7 +94,7 @@ describe("#ServerPagingTable", () => {
     })
 
     it("should request on rows per page changed",async () => {
-        const wrapper = shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
+        const wrapper = shallow(<ServerPagingTable showSuccessMessage={showSuccessMessage} classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
         let table = wrapper.find(Table);
         table.simulate("rowsPerPageChange", 20);
         expect(api.get).toHaveBeenCalledWith("/api/list?rowsPerPage=20&pageIndex=0&order=asc&orderBy=a");
@@ -101,7 +104,7 @@ describe("#ServerPagingTable", () => {
     })
 
     it("should request on sort", async () => {
-        const wrapper = shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
+        const wrapper = shallow(<ServerPagingTable showSuccessMessage={showSuccessMessage} classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
         let table = wrapper.find(Table);
         table.simulate("sort", "abc", "123");
         expect(api.get).toHaveBeenCalledWith("/api/list?rowsPerPage=5&pageIndex=0&order=123&orderBy=abc");
@@ -114,7 +117,7 @@ describe("#ServerPagingTable", () => {
     });
 
     it("should request delete and reload data", async () => {
-        const wrapper = shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
+        const wrapper = shallow(<ServerPagingTable showSuccessMessage={showSuccessMessage} classes={{}} api={api} baseUrl={baseUrl} columns={columns} />);
         const table = wrapper.find(Table);
         table.simulate("delete", [1, 2, 3]);
         await Bluebird.delay(10);
@@ -128,7 +131,7 @@ describe("#ServerPagingTable", () => {
             delete: jest.fn().mockRejectedValue({ error: "any" }),
         }
         const handleError = jest.fn();
-        const wrapper = shallow(<ServerPagingTable classes={{}} api={api} baseUrl={baseUrl} columns={columns} handleError={handleError} />);
+        const wrapper = shallow(<ServerPagingTable showSuccessMessage={showSuccessMessage} classes={{}} api={api} baseUrl={baseUrl} columns={columns} handleError={handleError} />);
         const table = wrapper.find(Table);
         table.simulate("delete", [1, 2, 3]);
         await Bluebird.delay(10);

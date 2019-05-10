@@ -26,7 +26,9 @@ describe("#NewMeal", () => {
         const goBackOrReplace = jest.fn();
         const api = { post: jest.fn() };
         const handleError = jest.fn();
+        const showSuccessMessage = jest.fn();
         const wrapper = shallow(<NewMeal
+            showSuccessMessage={showSuccessMessage}
             classes={{}}
             api={api}
             handleError={handleError}
@@ -42,6 +44,7 @@ describe("#NewMeal", () => {
 
         expect(api.post).toHaveBeenCalledWith("/v1/users/me/meals", { mealData: "meal" });
         expect(goBackOrReplace).toHaveBeenCalledWith("/meals");
+        expect(showSuccessMessage).toHaveBeenCalledWith("Add Meal successfully");
     });
 
     it("should handle request error", async () => {

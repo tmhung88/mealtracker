@@ -5,21 +5,16 @@ import FormControl from "@material-ui/core/FormControl";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Form from "../common/form/Form";
 import { withPage } from "../core/components/AppPage";
-import { FormHelperText } from "@material-ui/core";
-import teal from '@material-ui/core/colors/teal';
 import { ApiUrl } from '../constants/ApiUrl';
 
 const styles = theme => ({
     submit: {
         marginTop: theme.spacing.unit * 3,
     },
-    sucessMessage: {
-        color: teal[500],
-    }
 });
 
 export class UserSettings extends React.Component {
-    state = { loading: true, userSettings: { dailyCalorieLimit: 0 }, updateSuccessfully: false }
+    state = { loading: true, userSettings: { dailyCalorieLimit: 0 } }
 
     async componentDidMount() {
         try {
@@ -40,9 +35,7 @@ export class UserSettings extends React.Component {
         this.setState({ loading: true });
         try {
             await this.props.api.patch(ApiUrl.ME, this.state.userSettings);
-            this.setState({
-                updateSuccessfully: true,
-            })
+            this.props.showSuccessMessage("Update Settings successfully");
         }
         catch (e) {
             this.props.handleError(e);
@@ -53,7 +46,7 @@ export class UserSettings extends React.Component {
     }
     render() {
         const { classes } = this.props;
-        const { userSettings, updateSuccessfully } = this.state;
+        const { userSettings } = this.state;
         return (
             <Form
                 formName="User Settings"
@@ -81,7 +74,6 @@ export class UserSettings extends React.Component {
                         margin="normal"
                     />
                 </FormControl>
-                <FormHelperText classes={{ root: classes.sucessMessage }}>{updateSuccessfully ? "Update succesfully" : undefined}</FormHelperText>
                 <Button
                     type="submit"
                     fullWidth

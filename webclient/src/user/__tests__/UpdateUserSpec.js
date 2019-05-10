@@ -14,7 +14,9 @@ describe("#UpdateUser", () => {
                 get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({ data: { userData: "user" } }) }),
             };
             const handleError = jest.fn();
+            const showSuccessMessage = jest.fn();
             const wrapper = shallow(<UpdateUser
+                showSuccessMessage={showSuccessMessage}
                 classes={{}}
                 api={api}
                 handleError={handleError}
@@ -29,6 +31,7 @@ describe("#UpdateUser", () => {
             expect(handleError).not.toBeCalled();
             expect(api.put).toHaveBeenCalledWith("/v1/users/12", { userData: "user" });
             expect(goBackOrReplace).toHaveBeenCalledWith("/users");
+            expect(showSuccessMessage).toHaveBeenCalledWith("Update User successfully");
 
         })
 

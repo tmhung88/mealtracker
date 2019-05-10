@@ -31,11 +31,12 @@ describe("#UserSettings", () => {
             patch: jest.fn(),
         }
         const handleError = jest.fn();
-    const wrapper = shallow(<UserSettings classes={{}} api={api} handleError={handleError} />);
+        const showSuccessMessage = jest.fn();
+        const wrapper = shallow(<UserSettings showSuccessMessage={showSuccessMessage} classes={{}} api={api} handleError={handleError} />);
         wrapper.find(TextField).simulate("change", { currentTarget: { value: "100" } });
         wrapper.find(`[type="submit"]`).simulate("click", { preventDefault: jest.fn() });
         await Bluebird.delay();
         expect(api.patch).toHaveBeenCalledWith("/v1/users/me", { dailyCalorieLimit: 100 });
-        expect(wrapper.find(FormHelperText).childAt(0).text()).toContain("Update succesfully");
+        expect(showSuccessMessage).toHaveBeenCalledWith("Update Settings successfully");
     })
 })

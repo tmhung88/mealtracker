@@ -38,6 +38,7 @@ export class NewUser extends React.Component {
             try {
                 await this.props.api.post(ApiUrl.USERS, this.state.user);
                 this.props.goBackOrReplace(Pages.USERS);
+                this.props.showSuccessMessage("Add User successfully");
             } catch (error) {
                 if (error instanceof BadRequestError) {
                     this.setState({

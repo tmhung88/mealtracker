@@ -10,7 +10,9 @@ describe("#NewUser", () => {
         const goBackOrReplace = jest.fn();
         const api = { post: jest.fn() };
         const handleError = jest.fn();
+        const showSuccessMessage = jest.fn();
         const wrapper = shallow(<NewUser
+            showSuccessMessage={showSuccessMessage}
             classes={{}}
             api={api}
             handleError={handleError}
@@ -24,6 +26,7 @@ describe("#NewUser", () => {
         expect(handleError).not.toBeCalled();
         expect(api.post).toHaveBeenCalledWith("/v1/users", { userData: "user" });
         expect(goBackOrReplace).toHaveBeenCalledWith("/users");
+        expect(showSuccessMessage).toHaveBeenCalledWith("Add User successfully");
     })
 
     it("should handle bad request error", async () => {

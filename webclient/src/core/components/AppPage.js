@@ -2,10 +2,10 @@ import React, { Fragment } from "react";
 import { withRouter as withRouterFunc } from "react-router-dom";
 import api, { UnauthorizedError, UnauthenticatedError, ServerError } from "../api";
 import bluebird from "bluebird";
-import Snackbar from "@material-ui/core/Snackbar";
 import userSession from "../userSession";
-import SnackbarErrorMessage from "./SnackbarErrorMessage";
 import { Pages } from "../../constants/Pages";
+import { connect as reduxConnect } from "react-redux";
+import {  showError, showSuccess } from "../actions";
 
 export function withUserSession(ComponentNeedSession) {
     return function (props) {
@@ -13,10 +13,25 @@ export function withUserSession(ComponentNeedSession) {
     }
 }
 
-export function withPage(ComponentToProtect, { withRouter } = {}) {
+export function withPage(ComponentToProtect, { withRouter, connect } = {}) {
     withRouter = withRouter || withRouterFunc;
-    return withRouter(class Wrap extends React.Component {
-        state = { snackbarOpen: false, errorMessage: "", renderError: false }
+    connect = connect || reduxConnect;
+    const mapStateToProps = state => {
+        return {
+        }
+      }
+      
+      const mapDispatchToProps = dispatch => ({
+        showError: message => dispatch(showError(message)),
+        showSuccess: message => dispatch(showSuccess(message)),
+        
+      })
+      
+    return connect(mapStateToProps,mapDispatchToProps)(withRouter(class Wrap extends React.Component {
+        state = {
+            renderError: false,
+        }
+        
         tryGetErrorMessage(serverError) {
             if (!serverError.body) {
                 return serverError.message;
@@ -30,10 +45,10 @@ export function withPage(ComponentToProtect, { withRouter } = {}) {
                 } catch{
                     errorMessage = serverError.body;
                 }
-            } else if(serverError.body.error && serverError.body.error.message) {
+            } else if (serverError.body.error && serverError.body.error.message) {
                 errorMessage = serverError.body.error.message;
             } else {
-                errorMessage =JSON.stringify(serverError.body);
+                errorMessage = JSON.stringify(serverError.body);
             }
 
             return errorMessage;
@@ -45,19 +60,11 @@ export function withPage(ComponentToProtect, { withRouter } = {}) {
                 return bluebird.delay(1000);
             }
             else if (error instanceof ServerError) {
-                this.setState({
-                    snackbarOpen: true,
-                    errorMessage: this.tryGetErrorMessage(error),
-                })
+                this.props.showError(this.tryGetErrorMessage(error));
+                
             } else {
-                this.setState({
-                    snackbarOpen: true,
-                    errorMessage: error.message || JSON.stringify(error),
-                })
+                this.props.showError(error.message || JSON.stringify(error));
             }
-        }
-        handleClose = () => {
-            this.setState({ snackbarOpen: false });
         }
 
         goBackOrReplace = (path) => {
@@ -70,7 +77,7 @@ export function withPage(ComponentToProtect, { withRouter } = {}) {
 
         }
 
-        componentDidCatch(error, info){
+        componentDidCatch(error, info) {
             this.setState({
                 renderError: true,
             });
@@ -78,11 +85,16 @@ export function withPage(ComponentToProtect, { withRouter } = {}) {
             console.error(info);
         }
 
+        showSuccessMessage = (message) => {
+            this.props.showSuccess(message);            
+        }
+
         render() {
-            if(this.state.renderError) {
+            if (this.state.renderError) {
                 return <div>
                     <span>There are some errors on rendering Page, please try to refresh this Page</span>
                 </div>
+
             }
             return <Fragment>
                 <ComponentToProtect
@@ -90,23 +102,10 @@ export function withPage(ComponentToProtect, { withRouter } = {}) {
                     userSession={userSession}
                     api={api}
                     goBackOrReplace={this.goBackOrReplace}
-                    handleError={this.handleError}/>
-                <Snackbar
-                    anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "center",
-                    }}
-                    open={this.state.snackbarOpen}
-                    autoHideDuration={6000}
-                    onClose={this.handleClose}
-                >
-                    <SnackbarErrorMessage
-                        onClose={this.handleClose}
-                        variant="error"
-                        message={this.state.errorMessage}
-                    />
-                </Snackbar>
+                    showSuccessMessage={this.showSuccessMessage}
+                    handleError={this.handleError} />
+                
             </Fragment>;
         }
-    });
+    }));
 }

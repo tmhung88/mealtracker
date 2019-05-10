@@ -6,8 +6,13 @@ import Register from "./user/Register";
 import  AppRoute  from "./core/components/AppRoute";
 import NotFound from "./common/NotFound";
 import { Pages } from "./constants/Pages";
+import { connect } from "react-redux";
+import Snackbar from "@material-ui/core/Snackbar";
+import SnackbarErrorMessage from "./core/components/SnackbarErrorMessage";
+import { closeSnackbar } from "./core/actions";
 
-class AppRouter extends React.Component{
+
+export class App extends React.Component{
   state = { error: false }
   componentDidCatch() {
     this.setState({ error: true });
@@ -16,6 +21,8 @@ class AppRouter extends React.Component{
     if (this.state.error) {
       return <span>Error</span>
     }
+
+    const {snackbarInfo,closeSnackbar} = this.props;
     return (
       <Router>
         <div>
@@ -25,12 +32,35 @@ class AppRouter extends React.Component{
             <Route path={Pages.NOT_FOUND} component={NotFound} />
             <AppRoute path="/*" component={Dashboard} />
           </Switch>
-
-
         </div>
+        <Snackbar
+            anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "center",
+            }}
+            open={snackbarInfo.show}
+            autoHideDuration={6000}
+            onClose={closeSnackbar}
+        >
+            <SnackbarErrorMessage
+                onClose={closeSnackbar}
+                variant={snackbarInfo.variant}
+                message={snackbarInfo.message}
+            />
+        </Snackbar>
       </Router>
     );
   }
 }
 
-export default AppRouter;
+const mapStateToProps = state => {
+  return {
+    snackbarInfo: state.snackbarInfo,
+  }
+}
+
+const mapDispatchToProps = dispatch => ({
+  closeSnackbar: id => dispatch(closeSnackbar(id))
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(App);

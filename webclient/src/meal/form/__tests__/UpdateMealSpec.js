@@ -131,7 +131,9 @@ describe("#UpdateMeal", () => {
             get: jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue(serverMealResponse) }),
         };
         const handleError = jest.fn();
+        const showSuccessMessage = jest.fn();
         const wrapper = shallow(<UpdateMeal
+            showSuccessMessage={showSuccessMessage}
             classes={{}}
             api={api}
             handleError={handleError}
@@ -148,6 +150,7 @@ describe("#UpdateMeal", () => {
 
         expect(api.put).toHaveBeenCalledWith("/v1/users/me/meals/12", { mealData: "meal" });
         expect(goBackOrReplace).toHaveBeenCalledWith("/meals");
+        expect(showSuccessMessage).toHaveBeenCalledWith("Update Meal successfully");
     });
 })
 

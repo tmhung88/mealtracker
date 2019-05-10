@@ -64,6 +64,7 @@ export class UpdateMeal extends React.Component {
             try {
                 await this.props.api.put(`${this.props.baseApiUrl}/${this.props.match.params.id}`, this.state.meal);
                 this.props.goBackOrReplace(this.props.cancelPage)
+                this.props.showSuccessMessage("Update Meal successfully");
             } catch(e){
                 this.props.handleError(e);
             } finally {
