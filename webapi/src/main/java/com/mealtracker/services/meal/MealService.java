@@ -38,7 +38,7 @@ public class MealService {
     }
 
     public void deleteMeals(DeleteMealsInput input) {
-        mealRepository.softDelete(input.getIds());
+        mealRepository.softDelete(input.getIds(), null);
     }
 
     public Meal getMeal(long mealId) {
@@ -47,11 +47,11 @@ public class MealService {
 
     public Page<Meal> listMeals(ListMealsInput input) {
         var pageable = pageableBuilder.build(input);
-        return mealRepository.findByDeleted(false, pageable);
+        return mealRepository.listExistingMeals(pageable);
     }
 
     private Meal getExistingMeal(long mealId) {
-        return mealRepository.findByIdAndDeleted(mealId, false)
+        return mealRepository.findExistingMeal(mealId, null)
                 .orElseThrow(() -> ResourceNotFoundAppException.resourceNotInDb(ResourceName.MEAL));
     }
 }

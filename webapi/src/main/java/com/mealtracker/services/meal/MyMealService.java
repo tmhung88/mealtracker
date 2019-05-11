@@ -36,16 +36,13 @@ public class MyMealService {
     }
 
     public Meal updateMeal(long mealId, MyMealInput input, CurrentUser currentUser) {
-        var existingMeal = getExistingMeal(mealId);
-        if (!currentUser.isOwner(existingMeal)) {
-            throw AuthorizationAppException.notResourceOwner();
-        }
+        var existingMeal = getUserExistingMeal(mealId, currentUser.getId());
         input.merge(existingMeal);
         return mealRepository.save(existingMeal);
     }
 
     public Meal getMeal(long mealId, CurrentUser currentUser) {
-        var existingMeal = getExistingMeal(mealId);
+        var existingMeal = getUserExistingMeal(mealId, currentUser.getId());
         if (!currentUser.isOwner(existingMeal)) {
             throw AuthorizationAppException.notResourceOwner();
         }
@@ -71,7 +68,7 @@ public class MyMealService {
         }
 
         var pageable = pageableBuilder.build(input);
-        return mealRepository.filterUserMeals(currentUser.getId(), input.getFromDate(), input.getToDate(), input.getFromTime(), input.getToTime(), pageable);
+        return mealRepository.filterMyMeals(currentUser.getId(), input.getFromDate(), input.getToDate(), input.getFromTime(), input.getToTime(), pageable);
     }
 
     public int calculateDailyCalories(LocalDate date, CurrentUser currentUser) {
@@ -79,8 +76,8 @@ public class MyMealService {
         return meals.stream().mapToInt(Meal::getCalories).sum();
     }
 
-    private Meal getExistingMeal(long mealId) {
-        return mealRepository.findByIdAndDeleted(mealId, false)
+    private Meal getUserExistingMeal(long mealId, Long consumerId) {
+        return mealRepository.findExistingMeal(mealId, consumerId)
                 .orElseThrow(() -> ResourceNotFoundAppException.resourceNotInDb(ResourceName.MEAL));
     }
 }
