@@ -1,6 +1,7 @@
-package com.mealtracker.payloads;
+package com.mealtracker.payloads.user;
 
 import com.mealtracker.domains.User;
+import com.mealtracker.payloads.SuccessEnvelop;
 import lombok.Value;
 
 @Value

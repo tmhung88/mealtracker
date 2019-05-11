@@ -1,4 +1,4 @@
-package com.mealtracker.payloads;
+package com.mealtracker.services.alert;
 
 import com.mealtracker.validation.LocalDateFormat;
 import lombok.Data;
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
-public class CalorieAlertRequest {
+public class CalorieAlertInput {
 
     @NotNull
     @LocalDateFormat

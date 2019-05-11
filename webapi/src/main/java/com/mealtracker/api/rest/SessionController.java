@@ -1,9 +1,9 @@
 package com.mealtracker.api.rest;
 
 import com.mealtracker.payloads.SuccessEnvelop;
-import com.mealtracker.payloads.session.CreateSessionRequest;
-import com.mealtracker.payloads.session.CreateSessionResponse;
+import com.mealtracker.payloads.user.SessionResponse;
 import com.mealtracker.security.jwt.JwtTokenProvider;
+import com.mealtracker.services.user.SessionInput;
 import com.mealtracker.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,15 +27,15 @@ public class SessionController {
     private UserService userService;
 
     @PostMapping
-    public SuccessEnvelop<CreateSessionResponse> authenticate(@RequestBody CreateSessionRequest createSessionRequest) {
+    public SuccessEnvelop<SessionResponse> authenticate(@RequestBody SessionInput sessionInput) {
         var authenticationToken = new UsernamePasswordAuthenticationToken(
-                createSessionRequest.getEmail(),
-                createSessionRequest.getPassword()
+                sessionInput.getEmail(),
+                sessionInput.getPassword()
         );
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtAccessToken = jwtTokenProvider.generateToken(authentication);
-        return CreateSessionResponse.envelop(jwtAccessToken);
+        return SessionResponse.envelop(jwtAccessToken);
     }
 
 }

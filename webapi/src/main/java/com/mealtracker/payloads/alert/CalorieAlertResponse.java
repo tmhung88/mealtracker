@@ -1,5 +1,6 @@
-package com.mealtracker.payloads;
+package com.mealtracker.payloads.alert;
 
+import com.mealtracker.payloads.SuccessEnvelop;
 import com.mealtracker.services.alert.CalorieAlertOutput;
 import lombok.Value;
 

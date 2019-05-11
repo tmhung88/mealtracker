@@ -12,23 +12,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class ManageUserResponse {
+public class ManageUserInfoResponse {
     private final long id;
     private final String email;
     private final String fullName;
     private final Role role;
     private final long dailyCalorieLimit;
 
-    public static MetaSuccessEnvelop<List<ManageUserResponse>, PaginationMeta> envelop(Page<User> userPage) {
-        var users = userPage.getContent().stream().map(ManageUserResponse::new).collect(Collectors.toList());
+    public static MetaSuccessEnvelop<List<ManageUserInfoResponse>, PaginationMeta> envelop(Page<User> userPage) {
+        var users = userPage.getContent().stream().map(ManageUserInfoResponse::new).collect(Collectors.toList());
         return new MetaSuccessEnvelop<>(users, PaginationMeta.of(userPage));
     }
 
-    public static SuccessEnvelop<ManageUserResponse> envelop(User user) {
-        return new SuccessEnvelop<>(new ManageUserResponse(user));
+    public static SuccessEnvelop<ManageUserInfoResponse> envelop(User user) {
+        return new SuccessEnvelop<>(new ManageUserInfoResponse(user));
     }
 
-    private ManageUserResponse(User user) {
+    private ManageUserInfoResponse(User user) {
         id = user.getId();
         email = user.getEmail();
         fullName = user.getFullName();

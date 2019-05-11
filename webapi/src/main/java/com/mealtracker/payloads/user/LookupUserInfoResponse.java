@@ -10,17 +10,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class LookupResponse {
+public class LookupUserInfoResponse {
     private final long id;
     private final String email;
     private final String fullName;
 
-    public static MetaSuccessEnvelop<List<LookupResponse>, PaginationMeta> envelop(Page<User> userPage) {
-        var users = userPage.getContent().stream().map(LookupResponse::new).collect(Collectors.toList());
+    public static MetaSuccessEnvelop<List<LookupUserInfoResponse>, PaginationMeta> envelop(Page<User> userPage) {
+        var users = userPage.getContent().stream().map(LookupUserInfoResponse::new).collect(Collectors.toList());
         return new MetaSuccessEnvelop<>(users, PaginationMeta.of(userPage));
     }
 
-    public LookupResponse(User user) {
+    public LookupUserInfoResponse(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
         this.fullName = user.getFullName();

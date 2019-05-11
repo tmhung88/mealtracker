@@ -1,9 +1,9 @@
 package com.mealtracker.api.rest;
 
-import com.mealtracker.payloads.CalorieAlertRequest;
-import com.mealtracker.payloads.CalorieAlertResponse;
 import com.mealtracker.payloads.SuccessEnvelop;
+import com.mealtracker.payloads.alert.CalorieAlertResponse;
 import com.mealtracker.security.CurrentUser;
+import com.mealtracker.services.alert.CalorieAlertInput;
 import com.mealtracker.services.alert.CalorieAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ public class MyAlertController {
     private CalorieAlertService calorieAlertService;
 
     @GetMapping("/calorie")
-    public SuccessEnvelop<CalorieAlertResponse> getCalorieAlert(@Valid CalorieAlertRequest request, CurrentUser currentUser) {
+    public SuccessEnvelop<CalorieAlertResponse> getCalorieAlert(@Valid CalorieAlertInput request, CurrentUser currentUser) {
         var calorieAlert = calorieAlertService.getAlert(request.getDate(), currentUser);
         return CalorieAlertResponse.of(calorieAlert);
     }

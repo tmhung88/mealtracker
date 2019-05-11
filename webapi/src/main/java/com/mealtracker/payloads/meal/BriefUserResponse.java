@@ -1,4 +1,4 @@
-package com.mealtracker.payloads;
+package com.mealtracker.payloads.meal;
 
 import com.mealtracker.domains.User;
 import lombok.Data;

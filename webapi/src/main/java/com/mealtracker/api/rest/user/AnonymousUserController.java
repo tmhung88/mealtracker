@@ -2,8 +2,8 @@ package com.mealtracker.api.rest.user;
 
 import com.mealtracker.domains.User;
 import com.mealtracker.payloads.MessageResponse;
-import com.mealtracker.payloads.PublicUserInfoResponse;
 import com.mealtracker.payloads.SuccessEnvelop;
+import com.mealtracker.payloads.user.PublicUserInfoResponse;
 import com.mealtracker.services.user.AnonymousUserService;
 import com.mealtracker.services.user.RegisterUserInput;
 import org.springframework.beans.factory.annotation.Autowired;

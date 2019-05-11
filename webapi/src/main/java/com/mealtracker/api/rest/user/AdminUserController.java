@@ -5,8 +5,8 @@ import com.mealtracker.payloads.MessageResponse;
 import com.mealtracker.payloads.MetaSuccessEnvelop;
 import com.mealtracker.payloads.PaginationMeta;
 import com.mealtracker.payloads.SuccessEnvelop;
-import com.mealtracker.payloads.user.LookupResponse;
-import com.mealtracker.payloads.user.ManageUserResponse;
+import com.mealtracker.payloads.user.LookupUserInfoResponse;
+import com.mealtracker.payloads.user.ManageUserInfoResponse;
 import com.mealtracker.security.CurrentUser;
 import com.mealtracker.services.user.DeleteUsersInput;
 import com.mealtracker.services.user.ListUsersInput;
@@ -46,16 +46,16 @@ public class AdminUserController {
     }
 
     @GetMapping
-    public MetaSuccessEnvelop<List<ManageUserResponse>, PaginationMeta> listUsers(@Valid ListUsersInput input) {
+    public MetaSuccessEnvelop<List<ManageUserInfoResponse>, PaginationMeta> listUsers(@Valid ListUsersInput input) {
         var userPage = adminUserService.listUsers(input);
-        return ManageUserResponse.envelop(userPage);
+        return ManageUserInfoResponse.envelop(userPage);
     }
 
     @GetMapping(params = "keyword")
-    public MetaSuccessEnvelop<List<LookupResponse>, PaginationMeta> lookupUsers(@RequestParam String keyword,
-                                                                                @Valid ListUsersInput input) {
+    public MetaSuccessEnvelop<List<LookupUserInfoResponse>, PaginationMeta> lookupUsers(@RequestParam String keyword,
+                                                                                        @Valid ListUsersInput input) {
         var userPage = adminUserService.lookupUsers(keyword, input);
-        return LookupResponse.envelop(userPage);
+        return LookupUserInfoResponse.envelop(userPage);
     }
 
     @DeleteMapping
@@ -65,9 +65,9 @@ public class AdminUserController {
     }
 
     @GetMapping(value = "/{userId}")
-    public SuccessEnvelop<ManageUserResponse> getUser(@PathVariable Long userId) {
+    public SuccessEnvelop<ManageUserInfoResponse> getUser(@PathVariable Long userId) {
         var user = adminUserService.getUser(userId);
-        return ManageUserResponse.envelop(user);
+        return ManageUserInfoResponse.envelop(user);
     }
 
     @PutMapping(value = "/{userId}")

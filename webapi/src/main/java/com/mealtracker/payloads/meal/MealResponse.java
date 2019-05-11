@@ -1,7 +1,6 @@
 package com.mealtracker.payloads.meal;
 
 import com.mealtracker.domains.Meal;
-import com.mealtracker.payloads.BriefUserResponse;
 import com.mealtracker.payloads.MetaSuccessEnvelop;
 import com.mealtracker.payloads.PaginationMeta;
 import com.mealtracker.payloads.SuccessEnvelop;
