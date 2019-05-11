@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void softDelete(@Param("userIds") List<Long> userIds, @Param("roles") List<Role> roles);
 
     @Query("SELECT user FROM User user WHERE user.deleted = 0 AND user.role IN :roles AND " +
-            "lower(user.email) LIKE lower(:startWith)")
+            "user.email LIKE :startWith")
     Page<User> lookupExistingUsers(@Param("startWith") String startWith,
                                    @Param("roles") List<Role> roles, Pageable pageable);
 

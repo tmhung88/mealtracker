@@ -27,7 +27,7 @@ public class SessionController {
     private UserService userService;
 
     @PostMapping
-    public SuccessEnvelop<SessionResponse> authenticate(@RequestBody SessionInput sessionInput) {
+    public SuccessEnvelop<SessionResponse> generateToken(@RequestBody SessionInput sessionInput) {
         var authenticationToken = new UsernamePasswordAuthenticationToken(
                 sessionInput.getEmail(),
                 sessionInput.getPassword()

@@ -31,16 +31,19 @@ public class UserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     public User addUser(User newUser) {
+        newUser.setEmail(newUser.getEmail().toLowerCase());
         Optional<User> existingUser = userRepository.findByEmail(newUser.getEmail());
         if (existingUser.isPresent()) {
             throw BadRequestAppException.emailTaken(newUser.getEmail());
         }
         newUser.setEncryptedPassword(passwordEncoder.encode(newUser.getPassword()));
 
+
         return userRepository.save(newUser);
     }
 
     public User updateUser(User updatedUser) {
+        updatedUser.setEmail(updatedUser.getEmail().toLowerCase());
         boolean isPasswordChanged = updatedUser.getPassword() != null;
         if (isPasswordChanged) {
             updatedUser.setEncryptedPassword(passwordEncoder.encode(updatedUser.getPassword()));
@@ -57,13 +60,13 @@ public class UserService implements UserDetailsService {
     }
 
     public Page<User> lookupExistingUsers(String keyword, List<Role> includedRoles, Pageable pageable) {
-        var startWith = String.format(START_WITH_TEMPLATE, keyword);
+        var startWith = String.format(START_WITH_TEMPLATE, keyword.toLowerCase());
         return userRepository.lookupExistingUsers(startWith, includedRoles, pageable);
     }
 
 
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email.toLowerCase());
     }
 
     public User getExistingUser(long userId) {
@@ -73,7 +76,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        var user = userRepository.findByEmail(username)
+        var user = userRepository.findByEmail(username.toLowerCase())
                 .orElseThrow(AuthenticationAppException::usernameNotFound);
         if (user.isDeleted()) {
             throw AuthenticationAppException.accountDeleted();

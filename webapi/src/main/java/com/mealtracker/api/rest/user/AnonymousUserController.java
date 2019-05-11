@@ -33,7 +33,7 @@ public class AnonymousUserController {
     }
 
     @GetMapping(params = "email")
-    public SuccessEnvelop<PublicUserInfoResponse> findUserByEmail(@RequestParam String email) {
+    public SuccessEnvelop<PublicUserInfoResponse> getUser(@RequestParam String email) {
         User user = anonymousUserService.getByEmail(email);
         return PublicUserInfoResponse.of(user);
     }
