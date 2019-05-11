@@ -3,7 +3,7 @@ package com.mealtracker.services.meal;
 import com.mealtracker.services.pagination.PageableOrder;
 import com.mealtracker.services.pagination.PageableParams;
 import com.mealtracker.services.pagination.SortableProperty;
-import com.mealtracker.validation.ValidString;
+import com.mealtracker.validation.ValueInList;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
@@ -14,10 +14,10 @@ import java.util.List;
 @Data
 public class ListMealsInput implements PageableParams {
 
-    @ValidString(values = {"name", "consumedDate", "consumedTime", "calories"})
+    @ValueInList(value = {"name", "consumedDate", "consumedTime", "calories"})
     private String orderBy = "consumedDate";
 
-    @ValidString(values = {"asc", "desc"})
+    @ValueInList(value = {"asc", "desc"})
     private String order = "desc";
 
     @Min(1)

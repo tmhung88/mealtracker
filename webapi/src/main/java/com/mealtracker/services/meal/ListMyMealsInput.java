@@ -5,7 +5,7 @@ import com.mealtracker.services.pagination.PageableParams;
 import com.mealtracker.services.pagination.SortableProperty;
 import com.mealtracker.validation.LocalDateFormat;
 import com.mealtracker.validation.LocalTimeFormat;
-import com.mealtracker.validation.ValidString;
+import com.mealtracker.validation.ValueInList;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
@@ -30,10 +30,10 @@ public class ListMyMealsInput implements PageableParams {
     @LocalTimeFormat
     private String toTime;
 
-    @ValidString(values = {"name", "consumedDate", "consumedTime", "calories"})
+    @ValueInList({"name", "consumedDate", "consumedTime", "calories"})
     private String orderBy = "consumedDate";
 
-    @ValidString(values = {"asc", "desc"})
+    @ValueInList({"asc", "desc"})
     private String order = "desc";
 
     @Min(1)

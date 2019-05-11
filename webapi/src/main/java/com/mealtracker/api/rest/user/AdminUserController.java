@@ -43,7 +43,7 @@ public class AdminUserController {
     private AdminUserService adminUserService;
 
     @PostMapping
-    public SuccessEnvelop<MessageResponse> addUser(@Validated(value = OnAdd.class) @Valid @RequestBody ManageUserInput input) {
+    public SuccessEnvelop<MessageResponse> addUser(@Validated(OnAdd.class) @Valid @RequestBody ManageUserInput input) {
         adminUserService.addUser(input);
         return MessageResponse.of("User added successfully");
     }
@@ -67,16 +67,16 @@ public class AdminUserController {
         return MessageResponse.of("Users deleted successfully");
     }
 
-    @GetMapping(value = "/{userId}")
+    @GetMapping("/{userId}")
     public SuccessEnvelop<ManageUserInfoResponse> getUser(@PathVariable Long userId) {
         var user = adminUserService.getUser(userId);
         return ManageUserInfoResponse.envelop(user);
     }
 
 
-    @PutMapping(value = "/{userId}")
+    @PutMapping("/{userId}")
     public SuccessEnvelop<MessageResponse> updateUser(@PathVariable long userId,
-                                                      @Validated(value = OnUpdate.class) @Valid
+                                                      @Validated(OnUpdate.class) @Valid
                                                       @RequestBody ManageUserInput input) {
         adminUserService.updateUser(userId, input);
         return MessageResponse.of("User updated successfully");

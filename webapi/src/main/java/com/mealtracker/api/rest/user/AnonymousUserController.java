@@ -26,7 +26,7 @@ public class AnonymousUserController {
     private AnonymousUserService anonymousUserService;
 
     @PostMapping
-    public SuccessEnvelop<MessageResponse> registerUser(@Validated(value = OnAdd.class) @Valid
+    public SuccessEnvelop<MessageResponse> registerUser(@Validated(OnAdd.class) @Valid
                                                         @RequestBody RegisterUserInput registrationInput) {
         anonymousUserService.registerUser(registrationInput);
         return MessageResponse.of("User registered successfully");

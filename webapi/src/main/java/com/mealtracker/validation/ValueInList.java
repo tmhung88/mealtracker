@@ -10,14 +10,14 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = ValidStringValidator.class)
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidString {
+public @interface ValueInList {
 
-    String message() default "{app.validation.constraints.ValidString.message}";
+    String message() default "{app.validation.constraints.ValueInList.message}";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
 
-    String[] values() default {};
+    String[] value();
 }

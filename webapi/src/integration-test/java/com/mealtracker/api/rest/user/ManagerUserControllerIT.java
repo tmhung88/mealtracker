@@ -131,7 +131,7 @@ public class ManagerUserControllerIT {
 
     private ManageUserInput manageUserRequest() {
         var input = new ManageUserInput();
-        input.setRole(Role.USER_MANAGER);
+        input.setRole(Role.USER_MANAGER.name());
         input.setDailyCalorieLimit(300);
         input.setEmail("ironman@gmail.com");
         input.setFullName("Tony Stark");

@@ -130,7 +130,7 @@ public class AdminUserControllerIT {
 
     private ManageUserInput manageUserRequest() {
         var input = new ManageUserInput();
-        input.setRole(Role.REGULAR_USER);
+        input.setRole(Role.REGULAR_USER.name());
         input.setDailyCalorieLimit(1000);
         input.setEmail("superman@gmail.com");
         input.setFullName("Clark Kent");

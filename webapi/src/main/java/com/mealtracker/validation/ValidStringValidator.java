@@ -5,13 +5,13 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValidStringValidator implements ConstraintValidator<ValidString, String> {
+public class ValidStringValidator implements ConstraintValidator<ValueInList, String> {
 
     private List<String> acceptableValues;
 
     @Override
-    public void initialize(ValidString constraintAnnotation) {
-        acceptableValues = Arrays.asList(constraintAnnotation.values());
+    public void initialize(ValueInList constraintAnnotation) {
+        acceptableValues = Arrays.asList(constraintAnnotation.value());
     }
 
     @Override
