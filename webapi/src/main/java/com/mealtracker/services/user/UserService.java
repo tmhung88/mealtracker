@@ -2,6 +2,7 @@ package com.mealtracker.services.user;
 
 import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
+import com.mealtracker.exceptions.AuthenticationAppException;
 import com.mealtracker.exceptions.BadRequestAppException;
 import com.mealtracker.exceptions.ResourceName;
 import com.mealtracker.exceptions.ResourceNotFoundAppException;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,7 +74,10 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         var user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+                .orElseThrow(AuthenticationAppException::usernameNotFound);
+        if (user.isDeleted()) {
+            throw AuthenticationAppException.accountDeleted();
+        }
         return UserPrincipal.allDetails(user);
     }
 }

@@ -6,6 +6,8 @@ import com.mealtracker.security.jwt.JwtValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,11 +15,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -34,11 +32,6 @@ public class GlobalExceptionHandler {
     public @ResponseBody
     ErrorEnvelop handleNotFoundException(ResourceNotFoundAppException ex) {
         return new ErrorEnvelop(ex);
-    }
-
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ModelAndView handleError404(HttpServletRequest request, Exception e)   {
-        return new ModelAndView("404");
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -73,7 +66,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({AuthenticationException.class })
     public @ResponseBody
     ErrorEnvelop handleAuthenticationException(AuthenticationException ex) {
+        if (ex.getCause() instanceof AuthenticationAppException) {
+            var appException = (AuthenticationAppException) ex.getCause();
+            return new ErrorEnvelop(appException);
+        }
+        log.warn("Please add a new handler for the new subclass of AuthenticationException: {}", ex.getClass());
         return new ErrorEnvelop(AuthenticationAppException.missingToken());
+    }
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({InsufficientAuthenticationException.class })
+    public @ResponseBody
+    ErrorEnvelop handleInsufficientAuthenticationException() {
+        return new ErrorEnvelop(AuthenticationAppException.missingToken());
+    }
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({BadCredentialsException.class })
+    public @ResponseBody
+    ErrorEnvelop handleBadCredentialsException() {
+        return new ErrorEnvelop(AuthenticationAppException.invalidPassword());
     }
 
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
@@ -86,7 +98,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     @ExceptionHandler({ AccessDeniedException.class })
     public @ResponseBody
-    ErrorEnvelop handleAuthorizationException(AccessDeniedException ex, WebRequest request) {
+    ErrorEnvelop handleAuthorizationException() {
         return new ErrorEnvelop(AuthorizationAppException.apiAccessDeniedError());
     }
 

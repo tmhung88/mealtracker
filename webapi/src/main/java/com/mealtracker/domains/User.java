@@ -33,7 +33,7 @@ public class User {
     private String encryptedPassword;
 
     @Column(name = "deleted", nullable = false)
-    private boolean deleted = true;
+    private boolean deleted = false;
 
     @Column(name = "role")
     @Enumerated(EnumType.ORDINAL)

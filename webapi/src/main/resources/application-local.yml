@@ -14,7 +14,7 @@ logging:
       hibernate:
         SQL:
           TRACE
-        type:z
+        type:
           descriptor:
             sql:
               BasicBinder:

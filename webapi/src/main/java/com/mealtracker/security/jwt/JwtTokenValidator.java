@@ -5,15 +5,16 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public class JwtTokenValidator {
-
+    private static final List<String> COMMON_MISSING_VALUES = Arrays.asList(null, "undefined", "null");
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String EMPTY_JWT_CLAIM_ERROR = "JWT claims string cannot be empty";
     private static final String INVALID_TOKEN_TYPE = "Token must be be a Bearer token ";
@@ -44,7 +45,7 @@ public class JwtTokenValidator {
 
     public Optional<String> extract(HttpServletRequest request) {
         var bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.isEmpty(bearerToken)) {
+        if (COMMON_MISSING_VALUES.contains(bearerToken)) {
             return Optional.empty();
         }
 
@@ -52,9 +53,12 @@ public class JwtTokenValidator {
         if (!isBearerToken) {
             throw new JwtValidationException(INVALID_TOKEN_TYPE);
         }
+        var jwt = bearerToken.substring(BEARER_TOKEN_PREFIX.length());
+        if (COMMON_MISSING_VALUES.contains(jwt)) {
+            return Optional.empty();
+        }
 
-
-        return Optional.of(bearerToken.substring(BEARER_TOKEN_PREFIX.length()));
+        return Optional.of(jwt);
     }
 
 }
