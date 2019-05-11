@@ -15,6 +15,7 @@ import java.time.LocalTime;
 @Data
 public class MyMealInput {
 
+    @NotNull
     @Size(min = 2, max = 200)
     private String name;
 
