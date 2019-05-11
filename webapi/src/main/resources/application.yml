@@ -2,10 +2,7 @@ spring:
   application:
     name: mealtracker
   datasource:
-    driverClassName: @jdbc.driver@
-    url: @jdbc.url@
-    username: @jdbc.username@
-    password: @jdbc.password@
+    driver: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: validate

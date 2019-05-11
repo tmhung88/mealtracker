@@ -17,7 +17,6 @@
 	<properties>
 		<java.version>11</java.version>
 		<dockerfile-maven.version>1.4.10</dockerfile-maven.version>
-		<flyway.version>5.2.4</flyway.version>
 	</properties>
 
 	<dependencies>
@@ -46,17 +45,15 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -70,7 +67,12 @@
 			<scope>test</scope>
 		</dependency>
 
-
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mysql</artifactId>
+			<version>1.11.2</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -81,34 +83,11 @@
 			</resource>
 		</resources>
 
-		<filters>
-			<filter>profiles/${profile.id}.properties</filter>
-		</filters>
-
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>org.flywaydb</groupId>
-				<artifactId>flyway-maven-plugin</artifactId>
-				<version>${flyway.version}</version>
-				<configuration>
-					<configFile>${project.build.directory}/classes/db/flyway.properties</configFile>
-					<locations>
-						<location>classpath:db/migrations</location>
-					</locations>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>com.h2database</groupId>
-						<artifactId>h2</artifactId>
-						<version>1.4.197</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -183,15 +162,14 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<profile.id>local</profile.id>
 				<skip.integration.tests>true</skip.integration.tests>
 				<skip.unit.tests>false</skip.unit.tests>
 			</properties>
+
 		</profile>
 		<profile>
 			<id>integration-test</id>
 			<properties>
-				<profile.id>integration-test</profile.id>
 				<skip.integration.tests>false</skip.integration.tests>
 				<skip.unit.tests>true</skip.unit.tests>
 			</properties>
@@ -200,7 +178,6 @@
 		<profile>
 			<id>ci-server</id>
 			<properties>
-				<profile.id>ci-server</profile.id>
 				<skip.integration.tests>false</skip.integration.tests>
 				<skip.unit.tests>false</skip.unit.tests>
 			</properties>
