@@ -2,9 +2,13 @@ spring:
   application:
     name: mealtracker
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
+    driverClassName: @jdbc.driver@
+    url: @jdbc.url@
+    username: @jdbc.username@
+    password: @jdbc.password@
   jpa:
     hibernate:
+      ddl-auto: validate
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     properties:
       hibernate.create_empty_composites.enabled: true

@@ -4,6 +4,7 @@ import com.mealtracker.domains.User;
 import com.mealtracker.repositories.UserRepository;
 import com.mealtracker.services.user.RegisterUserInput;
 import com.mealtracker.services.user.UserService;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
@@ -26,6 +27,10 @@ public class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Test
+    public void dumpTest() {
+
+    }
 
 //    @Test
 //    public void registerUser_ExistingUserEmail_ExpectException() {

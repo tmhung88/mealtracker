@@ -1,9 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:mysql://db:3306/mealtracker?useSSL=false&useTimezone=true&serverTimezone=UTC
-    username: root
-    password: 8&pqA24iyQ01
-  jpa:
-    hibernate:
-      ddl-auto: validate
-      dialect: org.hibernate.dialect.MySQL5Dialect

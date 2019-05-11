@@ -4,6 +4,7 @@ import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
 import com.mealtracker.domains.UserSettings;
 import org.assertj.core.api.Assertions;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ public class UserRepositoryIT {
     private UserRepository userRepository;
 
     @Test
+    @Ignore
     public void simpleTest() {
         User user = new User();
         user.setEmail("abc@gmail.com");

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -80,6 +80,10 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
+
+		<filters>
+			<filter>profiles/${profile.id}.properties</filter>
+		</filters>
 
 		<plugins>
 			<plugin>
@@ -179,18 +183,15 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
+				<profile.id>local</profile.id>
 				<skip.integration.tests>true</skip.integration.tests>
 				<skip.unit.tests>false</skip.unit.tests>
 			</properties>
-			<build>
-				<filters>
-					<filter>./profiles/local.properties</filter>
-				</filters>
-			</build>
 		</profile>
 		<profile>
 			<id>integration-test</id>
 			<properties>
+				<profile.id>integration-test</profile.id>
 				<skip.integration.tests>false</skip.integration.tests>
 				<skip.unit.tests>true</skip.unit.tests>
 			</properties>
@@ -199,11 +200,12 @@
 		<profile>
 			<id>ci-server</id>
 			<properties>
+				<profile.id>ci-server</profile.id>
 				<skip.integration.tests>false</skip.integration.tests>
 				<skip.unit.tests>false</skip.unit.tests>
 			</properties>
 		</profile>
-
+		
 		<profile>
 			<id>prod</id>
 			<build>
