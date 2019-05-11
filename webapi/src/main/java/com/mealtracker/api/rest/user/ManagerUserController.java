@@ -12,8 +12,11 @@ import com.mealtracker.services.user.DeleteUsersInput;
 import com.mealtracker.services.user.ListUsersInput;
 import com.mealtracker.services.user.ManageUserInput;
 import com.mealtracker.services.user.manager.ManagerUserService;
+import com.mealtracker.validation.OnAdd;
+import com.mealtracker.validation.OnUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +43,7 @@ public class ManagerUserController {
     private ManagerUserService managerUserService;
 
     @PostMapping
-    public SuccessEnvelop<MessageResponse> addUser(@Valid @RequestBody ManageUserInput input) {
+    public SuccessEnvelop<MessageResponse> addUser(@Validated(value = OnAdd.class) @Valid @RequestBody ManageUserInput input) {
         managerUserService.addUser(input);
         return MessageResponse.of("User added successfully");
     }
@@ -72,7 +75,7 @@ public class ManagerUserController {
 
     @PutMapping(value = "/{userId}")
     public SuccessEnvelop<MessageResponse> updateUser(@PathVariable Long userId,
-                                                      @Valid @RequestBody ManageUserInput input) {
+                                                      @Validated(value = OnUpdate.class) @Valid @RequestBody ManageUserInput input) {
         managerUserService.updateUser(userId, input);
         return MessageResponse.of("User updated successfully");
     }

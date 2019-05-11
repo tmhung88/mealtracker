@@ -3,6 +3,8 @@ package com.mealtracker.services.user;
 import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
 import com.mealtracker.domains.UserSettings;
+import com.mealtracker.validation.OnAdd;
+import com.mealtracker.validation.OnUpdate;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -10,10 +12,10 @@ import javax.validation.constraints.NotNull;
 @Data
 public class ManageUserInput extends UserInput {
 
-    @NotNull
+    @NotNull(groups = {OnAdd.class, OnUpdate.class})
     private Role role;
 
-    @NotNull
+    @NotNull(groups = {OnAdd.class, OnUpdate.class})
     private Integer dailyCalorieLimit;
 
     public User toUser() {
