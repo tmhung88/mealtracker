@@ -1,7 +1,6 @@
 package com.mealtracker.config.rest;
 
 import com.mealtracker.config.rest.RequestRoleMapping.RequestRole;
-import com.mealtracker.exceptions.AuthenticationAppException;
 import com.mealtracker.security.UserPrincipal;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,7 +27,7 @@ public class RequestRoleMappingRequestCondition implements RequestCondition<Requ
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isAnonymous = authentication == null || authentication instanceof AnonymousAuthenticationToken;
         if (isAnonymous) {
-            throw AuthenticationAppException.missingToken();
+            return null;
         }
 
         var userPrincipal = (UserPrincipal) authentication.getPrincipal();

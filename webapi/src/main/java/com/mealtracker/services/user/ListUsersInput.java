@@ -7,7 +7,10 @@ import lombok.Data;
 
 @Data
 public class ListUsersInput extends SingleSortableColumnPageableParams {
-    @ValidString(values = {"id", "email", "fullName"})
+    private static final String CALORIE_REQUEST_VALUE = "dailyCalorieLimit";
+    private static final String CALORIE_ENTITY_PATH = "userSettings.dailyCalorieLimit";
+
+    @ValidString(values = {"id", "email", "fullName", "role", CALORIE_REQUEST_VALUE})
     private String orderBy = "id";
 
     @ValidString(values = {"asc", "desc"})
@@ -15,5 +18,9 @@ public class ListUsersInput extends SingleSortableColumnPageableParams {
 
     public PageableOrder getOrder() {
         return PageableOrder.valueOf(order.toUpperCase());
+    }
+
+    public String getOrderBy() {
+        return CALORIE_REQUEST_VALUE.equals(orderBy) ? CALORIE_ENTITY_PATH : orderBy;
     }
 }

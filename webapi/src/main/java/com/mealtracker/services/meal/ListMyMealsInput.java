@@ -10,7 +10,6 @@ import lombok.Data;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,19 +18,15 @@ import java.util.List;
 @Data
 public class ListMyMealsInput implements PageableParams {
 
-    @NotNull
     @LocalDateFormat
     private String fromDate;
 
-    @NotNull
     @LocalDateFormat
     private String toDate;
 
-    @NotNull
     @LocalTimeFormat
     private String fromTime;
 
-    @NotNull
     @LocalTimeFormat
     private String toTime;
 
@@ -54,19 +49,19 @@ public class ListMyMealsInput implements PageableParams {
     }
 
     public LocalDate getFromDate() {
-        return LocalDate.parse(fromDate);
+        return fromDate == null? null : LocalDate.parse(fromDate);
     }
 
     public LocalDate getToDate() {
-        return LocalDate.parse(toDate);
+        return toDate == null? null : LocalDate.parse(toDate);
     }
 
     public LocalTime getFromTime() {
-        return LocalTime.parse(fromTime);
+        return fromTime == null ? null : LocalTime.parse(fromTime);
     }
 
     public LocalTime getToTime() {
-        return LocalTime.parse(toTime);
+        return toTime == null ? null : LocalTime.parse(toTime);
     }
 
     public PageableOrder getOrder() {

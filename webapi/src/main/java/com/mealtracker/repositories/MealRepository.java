@@ -31,8 +31,10 @@ public interface MealRepository extends PagingAndSortingRepository<Meal, Long> {
     List<Meal> findMealByConsumedDateAndConsumerAndDeleted(LocalDate date, User consumer, boolean deleted);
 
     @Query("SELECT meal FROM Meal meal WHERE meal.consumer.id = :consumerId AND deleted = 0 AND " +
-            "meal.consumedDate >= :fromDate AND meal.consumedDate < :toDate AND " +
-            "meal.consumedTime >= :fromTime AND meal.consumedTime <= :toTime")
+            "(:fromDate IS NULL OR :fromDate <= meal.consumedDate) AND " +
+            "(:toDate IS NULL OR :toDate > meal.consumedDate) AND " +
+            "(:fromTime IS NULL OR :fromTime <= meal.consumedTime) AND " +
+            "(:toTime IS NULL OR :toTime > meal.consumedTime)")
     Page<Meal> filterUserMeals(@Param("consumerId") long consumerId,
                                @Param("fromDate") LocalDate fromDate,
                                @Param("toDate") LocalDate toDate,

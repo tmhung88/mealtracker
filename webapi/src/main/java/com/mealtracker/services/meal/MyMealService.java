@@ -59,12 +59,14 @@ public class MyMealService {
     public Page<Meal> listMeals(ListMyMealsInput input, CurrentUser currentUser) {
         var fromDate = input.getFromDate();
         var toDate = input.getToDate();
-        if (fromDate.isAfter(toDate)) {
+        boolean isValidDatePeriod = fromDate == null || toDate == null || fromDate.isBefore(toDate);
+        if (!isValidDatePeriod) {
             throw BadRequestAppException.invalidDateTimeRange("fromDate", "toDate");
         }
         var fromTime = input.getFromTime();
         var toTime = input.getToTime();
-        if (fromTime.isAfter(toTime)) {
+        boolean isValidTimePeriod = fromTime == null || toTime == null || fromTime.isBefore(toTime);
+        if (!isValidTimePeriod) {
             throw BadRequestAppException.invalidDateTimeRange("fromTime", "toTime");
         }
 
