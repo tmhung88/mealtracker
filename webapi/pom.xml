@@ -162,6 +162,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
+				<spring.profile>local</spring.profile>
 				<skip.integration.tests>true</skip.integration.tests>
 				<skip.unit.tests>false</skip.unit.tests>
 			</properties>
@@ -170,6 +171,7 @@
 		<profile>
 			<id>integration-test</id>
 			<properties>
+				<spring.profile>test</spring.profile>
 				<skip.integration.tests>false</skip.integration.tests>
 				<skip.unit.tests>true</skip.unit.tests>
 			</properties>
@@ -178,6 +180,7 @@
 		<profile>
 			<id>ci-server</id>
 			<properties>
+				<spring.profile>test</spring.profile>
 				<skip.integration.tests>false</skip.integration.tests>
 				<skip.unit.tests>false</skip.unit.tests>
 			</properties>

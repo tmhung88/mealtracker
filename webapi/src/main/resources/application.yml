@@ -1,4 +1,9 @@
 spring:
+  profiles:
+    active:
+      @spring.profile@
+  main:
+    banner-mode: "off"
   application:
     name: mealtracker
   datasource:

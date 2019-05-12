@@ -4,11 +4,6 @@ spring:
     username: root
     password: 8&pqA24iyQ01
 
-flyway:
-  url: @jdbc.url@
-  user: @jdbc.username@
-  password: @jdbc.password@
-
 logging:
   level:
     org:
