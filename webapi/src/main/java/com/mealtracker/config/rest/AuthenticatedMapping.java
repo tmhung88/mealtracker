@@ -7,13 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RequestRoleMapping {
-    RequestRole value();
-
-    enum RequestRole {
-        REGULAR_USER,
-        USER_MANAGER,
-        ADMIN,
-        ;
-    }
+public @interface AuthenticatedMapping {
 }

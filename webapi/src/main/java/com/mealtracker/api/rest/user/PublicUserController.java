@@ -4,7 +4,7 @@ import com.mealtracker.domains.User;
 import com.mealtracker.payloads.MessageResponse;
 import com.mealtracker.payloads.SuccessEnvelop;
 import com.mealtracker.payloads.user.PublicUserInfoResponse;
-import com.mealtracker.services.user.AnonymousUserService;
+import com.mealtracker.services.user.PublicUserService;
 import com.mealtracker.services.user.RegisterUserInput;
 import com.mealtracker.validation.OnAdd;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +20,21 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/users")
-public class AnonymousUserController {
+public class PublicUserController {
 
     @Autowired
-    private AnonymousUserService anonymousUserService;
+    private PublicUserService publicUserService;
 
     @PostMapping
     public SuccessEnvelop<MessageResponse> registerUser(@Validated(OnAdd.class) @Valid
                                                         @RequestBody RegisterUserInput registrationInput) {
-        anonymousUserService.registerUser(registrationInput);
+        publicUserService.registerUser(registrationInput);
         return MessageResponse.of("User registered successfully");
     }
 
     @GetMapping(params = "email")
     public SuccessEnvelop<PublicUserInfoResponse> getUser(@RequestParam String email) {
-        User user = anonymousUserService.getByEmail(email);
+        User user = publicUserService.getByEmail(email);
         return PublicUserInfoResponse.of(user);
     }
 }

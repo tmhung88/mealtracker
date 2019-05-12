@@ -1,6 +1,6 @@
 package com.mealtracker.api.rest.user;
 
-import com.mealtracker.config.rest.RequestRoleMapping;
+import com.mealtracker.config.rest.AuthenticatedMapping;
 import com.mealtracker.payloads.MessageResponse;
 import com.mealtracker.payloads.MetaSuccessEnvelop;
 import com.mealtracker.payloads.PaginationMeta;
@@ -11,7 +11,7 @@ import com.mealtracker.security.CurrentUser;
 import com.mealtracker.services.user.DeleteUsersInput;
 import com.mealtracker.services.user.ListUsersInput;
 import com.mealtracker.services.user.ManageUserInput;
-import com.mealtracker.services.user.admin.AdminUserService;
+import com.mealtracker.services.user.UserManagementServiceResolver;
 import com.mealtracker.validation.OnAdd;
 import com.mealtracker.validation.OnUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,46 +30,44 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
-import static com.mealtracker.config.rest.RequestRoleMapping.RequestRole.ADMIN;
-
-
 @Secured("USER_MANAGEMENT")
 @RestController
 @RequestMapping(value = "/v1/users")
-@RequestRoleMapping(ADMIN)
-public class AdminUserController {
+@AuthenticatedMapping
+public class UserController {
 
     @Autowired
-    private AdminUserService adminUserService;
+    private UserManagementServiceResolver serviceResolver;
 
     @PostMapping
-    public SuccessEnvelop<MessageResponse> addUser(@Validated(OnAdd.class) @Valid @RequestBody ManageUserInput input) {
-        adminUserService.addUser(input);
+    public SuccessEnvelop<MessageResponse> addUser(@Validated(OnAdd.class) @Valid @RequestBody ManageUserInput input, CurrentUser currentUser) {
+        serviceResolver.resolve(currentUser).addUser(input);
         return MessageResponse.of("User added successfully");
     }
 
     @GetMapping
-    public MetaSuccessEnvelop<List<ManageUserInfoResponse>, PaginationMeta> listUsers(@Valid ListUsersInput input) {
-        var userPage = adminUserService.listUsers(input);
+    public MetaSuccessEnvelop<List<ManageUserInfoResponse>, PaginationMeta> listUsers(@Valid ListUsersInput input, CurrentUser currentUser) {
+        var userPage = serviceResolver.resolve(currentUser).listUsers(input);
         return ManageUserInfoResponse.envelop(userPage);
     }
 
     @GetMapping(params = "keyword")
     public MetaSuccessEnvelop<List<LookupUserInfoResponse>, PaginationMeta> lookupUsers(@RequestParam String keyword,
-                                                                                        @Valid ListUsersInput input) {
-        var userPage = adminUserService.lookupUsers(keyword, input);
+                                                                                        @Valid ListUsersInput input,
+                                                                                        CurrentUser currentUser) {
+        var userPage = serviceResolver.resolve(currentUser).lookupUsers(keyword, input);
         return LookupUserInfoResponse.envelop(userPage);
     }
 
     @DeleteMapping
     public SuccessEnvelop<MessageResponse> deleteUsers(@Valid @RequestBody DeleteUsersInput input, CurrentUser currentUser) {
-        adminUserService.deleteUsers(input, currentUser);
+        serviceResolver.resolve(currentUser).deleteUsers(input, currentUser);
         return MessageResponse.of("Users deleted successfully");
     }
 
     @GetMapping("/{userId}")
-    public SuccessEnvelop<ManageUserInfoResponse> getUser(@PathVariable Long userId) {
-        var user = adminUserService.getUser(userId);
+    public SuccessEnvelop<ManageUserInfoResponse> getUser(@PathVariable Long userId, CurrentUser currentUser) {
+        var user = serviceResolver.resolve(currentUser).getUser(userId);
         return ManageUserInfoResponse.envelop(user);
     }
 
@@ -77,8 +75,9 @@ public class AdminUserController {
     @PutMapping("/{userId}")
     public SuccessEnvelop<MessageResponse> updateUser(@PathVariable long userId,
                                                       @Validated(OnUpdate.class) @Valid
-                                                      @RequestBody ManageUserInput input) {
-        adminUserService.updateUser(userId, input);
+                                                      @RequestBody ManageUserInput input,
+                                                      CurrentUser currentUser) {
+        serviceResolver.resolve(currentUser).updateUser(userId, input);
         return MessageResponse.of("User updated successfully");
     }
 }

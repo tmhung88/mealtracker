@@ -40,8 +40,19 @@ public class AppRequestBuilder implements RequestBuilder {
         return this;
     }
 
+    public AppRequestBuilder emptyJsonContent() {
+        builder.contentType(MediaType.APPLICATION_JSON);
+        builder.content("{}");
+        return this;
+    }
+
     public AppRequestBuilder pagination(int rowPerPages) {
         builder.param("rowsPerPage", String.valueOf(rowPerPages));
+        return this;
+    }
+
+    public AppRequestBuilder param(String name, String... values) {
+        builder.param(name, values);
         return this;
     }
 

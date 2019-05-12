@@ -2,6 +2,7 @@ package com.mealtracker.exceptions;
 
 public class InternalAppException extends AppException {
     private static final int INTERNAL_SERVER_CODE = 50000;
+    private static final int DEVELOMENT_ATTENION_CODE = 50001;
 
     private InternalAppException(String message) {
         super(INTERNAL_SERVER_CODE, message);

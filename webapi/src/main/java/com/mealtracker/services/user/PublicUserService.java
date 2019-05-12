@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AnonymousUserService {
+public class PublicUserService {
     @Autowired
     private UserService userService;
 

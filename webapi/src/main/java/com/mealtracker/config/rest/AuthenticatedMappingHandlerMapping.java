@@ -4,14 +4,14 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.servlet.mvc.condition.RequestCondition;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-public class RequestRoleMappingHandlerMapping extends RequestMappingHandlerMapping {
+public class AuthenticatedMappingHandlerMapping extends RequestMappingHandlerMapping {
 
     @Override
     protected RequestCondition<?> getCustomTypeCondition(Class<?> handlerType) {
-        var roleRequestMappingAnnotation = AnnotationUtils.findAnnotation(handlerType, RequestRoleMapping.class);
+        var roleRequestMappingAnnotation = AnnotationUtils.findAnnotation(handlerType, AuthenticatedMapping.class);
         if (roleRequestMappingAnnotation == null) {
             return null;
         }
-        return new RequestRoleMappingRequestCondition(roleRequestMappingAnnotation.value());
+        return new AuthenticatedMappingRequestCondition();
     }
 }

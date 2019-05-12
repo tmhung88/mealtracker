@@ -6,6 +6,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Value;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,6 +78,14 @@ public class TestUser {
             .fullName("No Meal Management")
             .enabled(true)
             .role(Role.REGULAR_USER).privileges(TestPrivilege.exclude(MEAL_MANAGEMENT))
+            .build();
+
+    public static final TestUser ONLY_USER_MANAGEMENT = TestUser.builder()
+            .id(7L)
+            .email("only_user_management@gmail.com")
+            .fullName("Only User Management")
+            .enabled(true)
+            .role(Role.REGULAR_USER).privileges(Arrays.asList(USER_MANAGEMENT))
             .build();
 
     public static class TestUserBuilder {

@@ -70,21 +70,12 @@ public class MeControllerIT {
                 .andExpect(AUTHENTICATION_MISSING_TOKEN.json());
     }
 
-
     @Test
-    public void updateMySettings_NegativeCalorieLimit_ExpectValidationError() throws Exception {
+    public void updateMySettings_BadInput_ExpectBadInputError() throws Exception {
         var request = updateCalorieLimitRequest(-1);
         mockMvc.perform(patch("/v1/users/me").auth(USER).content(request))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json("{'error':{'code':40000,'message':'Bad Input','errorFields':[{'name':'dailyCalorieLimit','message':'must be greater than or equal to 0'}]}}"));
-    }
-
-    @Test
-    public void updateMySettings_TooLargeCalorieLimit_ExpectValidationError() throws Exception {
-        var request = updateCalorieLimitRequest(50001);
-        mockMvc.perform(patch("/v1/users/me").auth(USER).content(request))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().json("{'error':{'code':40000,'message':'Bad Input','errorFields':[{'name':'dailyCalorieLimit','message':'must be less than or equal to 50000'}]}}"));
     }
 
     @Test

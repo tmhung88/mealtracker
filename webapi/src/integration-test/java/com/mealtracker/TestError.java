@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public enum TestError {
 
+
     BAD_SPECIFIC_INPUT(40001, "%s"),
 
     AUTHENTICATION_MISSING_TOKEN(40100, "You need to an access token to use the api"),
