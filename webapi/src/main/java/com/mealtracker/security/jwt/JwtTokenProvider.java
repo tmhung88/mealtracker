@@ -16,11 +16,8 @@ public class JwtTokenProvider {
 
     private final String jwtSecret;
 
-    private final int jwtExpirationInMs;
-
-    public JwtTokenProvider(String jwtSecret, int jwtExpirationInMs) {
+    public JwtTokenProvider(String jwtSecret) {
         this.jwtSecret = jwtSecret;
-        this.jwtExpirationInMs = jwtExpirationInMs;
     }
 
     public String generateToken(Authentication authentication) {
@@ -36,23 +33,5 @@ public class JwtTokenProvider {
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-    }
-
-    public boolean validateToken(String authToken) {
-        try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
-            return true;
-        } catch (SignatureException ex) {
-            log.error("Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
-            log.error("Invalid JWT token");
-        } catch (ExpiredJwtException ex) {
-            log.error("Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            log.error("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            log.error("JWT claims string is empty.");
-        }
-        return false;
     }
 }

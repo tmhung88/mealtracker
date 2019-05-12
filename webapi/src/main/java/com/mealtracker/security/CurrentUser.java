@@ -25,10 +25,6 @@ public class CurrentUser {
         this.fullName = userPrincipal.getFullName();
     }
 
-    public boolean has(Privilege privilege) {
-        return privileges.contains(privilege);
-    }
-
     public boolean isOwner(Ownable resource) {
         return id.equals(resource.getOwner().getId());
     }

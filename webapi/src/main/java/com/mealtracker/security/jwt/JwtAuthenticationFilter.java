@@ -1,9 +1,6 @@
 package com.mealtracker.security.jwt;
 
-import com.mealtracker.security.UserPrincipal;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -15,29 +12,24 @@ import java.io.IOException;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider tokenProvider;
-    private final JwtTokenValidator tokenValidator;
+    private final JwtAuthenticationHandler authenticationHandler;
 
-    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider, JwtTokenValidator tokenValidator) {
-        this.tokenProvider = tokenProvider;
-        this.tokenValidator = tokenValidator;
+    public JwtAuthenticationFilter(JwtAuthenticationHandler authenticationHandler) {
+        this.authenticationHandler = authenticationHandler;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        var jwtOptional = tokenValidator.extract(request);
-        if (jwtOptional.isEmpty()) {
+
+        var authOptional = authenticationHandler.authenticate(request);
+        if (authOptional.isEmpty()) {
             filterChain.doFilter(request, response);
             return;
         }
-        String jwtToken = jwtOptional.get();
-        tokenValidator.validate(jwtToken);
-        var jwtClaims = tokenProvider.getBodyFromJwtToken(jwtToken);
-        UserDetails userDetails = UserPrincipal.jwtClaims(jwtClaims);
-        var authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        var authentication = authOptional.get();
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
     }
 }

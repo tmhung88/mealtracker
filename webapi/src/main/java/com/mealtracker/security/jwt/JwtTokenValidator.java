@@ -14,10 +14,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class JwtTokenValidator {
-    private static final List<String> COMMON_MISSING_VALUES = Arrays.asList(null, "undefined", "null");
+    private static final List<String> COMMON_MISSING_VALUES = Arrays.asList(null, "undefined", "null", "");
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String EMPTY_JWT_CLAIM_ERROR = "JWT claims string cannot be empty";
-    private static final String INVALID_TOKEN_TYPE = "Token must be be a Bearer token ";
+    private static final String INVALID_TOKEN_TYPE = "Token must be be a Bearer token";
     private static final String BEARER_TOKEN_PREFIX = "Bearer ";
 
     private final Map<Class, String> exceptionMessageMapping;
