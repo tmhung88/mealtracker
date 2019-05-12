@@ -1,6 +1,7 @@
 package com.mealtracker.services.user;
 
 import com.mealtracker.domains.Privilege;
+import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
 import org.mockito.ArgumentMatcher;
 
@@ -18,6 +19,7 @@ public class UserMatchers {
     public static User eq(RegisterUserInput input) {
         return argThat(new RegisteredUserMatcher(input));
     }
+
     public static User eq(OptionalUser optionalUser) {
         return argThat(new OptionalUserMatcher(optionalUser));
     }
@@ -60,7 +62,11 @@ public class UserMatchers {
     static class OptionalUser {
         private Optional<Long> id = Optional.empty();
         private Optional<String> email = Optional.empty();
+        private Optional<String> password = Optional.empty();
         private Optional<String> encryptedPassword = Optional.empty();
+        private Optional<String> fullName = Optional.empty();
+        private Optional<Integer> dailyCalorieLimit = Optional.empty();
+        private Optional<Role> role = Optional.empty();
 
         public OptionalUser id(Long id) {
             this.id = Optional.ofNullable(id);
@@ -72,8 +78,28 @@ public class UserMatchers {
             return this;
         }
 
+        public OptionalUser password(String password) {
+            this.password = Optional.ofNullable(password);
+            return this;
+        }
+
+        public OptionalUser role(Role role) {
+            this.role = Optional.of(role);
+            return this;
+        }
+
         public OptionalUser encryptedPassword(String encryptedPassword) {
             this.encryptedPassword = Optional.ofNullable(encryptedPassword);
+            return this;
+        }
+
+        public OptionalUser fullName(String fullName) {
+            this.fullName = Optional.ofNullable(fullName);
+            return this;
+        }
+
+        public OptionalUser dailyCalorieLimit(Integer dailyCalorieLimit) {
+            this.dailyCalorieLimit = Optional.ofNullable(dailyCalorieLimit);
             return this;
         }
     }

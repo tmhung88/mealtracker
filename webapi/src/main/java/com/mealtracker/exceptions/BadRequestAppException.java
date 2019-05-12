@@ -32,7 +32,7 @@ public class BadRequestAppException extends AppException {
         return new BadRequestAppException(SPECIFIC_BAD_INPUT, errorMessage);
     }
 
-    public static BadRequestAppException setSuperiorRole(Role superiorRole) {
+    public static BadRequestAppException interactSuperiorRole(Role superiorRole) {
         var errorMessage = "You are not allowed to interact with " + superiorRole.name();
         return new BadRequestAppException(SPECIFIC_BAD_INPUT, errorMessage);
     }

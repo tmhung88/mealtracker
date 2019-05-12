@@ -37,7 +37,7 @@ public class AccessibleRolesUserManagementService implements UserManagementServi
         var newUser = input.toUser();
         var canUseRole = accessibleRoles.contains(newUser.getRole());
         if (!canUseRole) {
-            throw BadRequestAppException.setSuperiorRole(newUser.getRole());
+            throw BadRequestAppException.interactSuperiorRole(newUser.getRole());
         }
         userService.addUser(newUser);
     }
@@ -74,7 +74,7 @@ public class AccessibleRolesUserManagementService implements UserManagementServi
         var user = userService.getExistingUser(userId);
         var canSeeRole = accessibleRoles.contains(user.getRole());
         if (!canSeeRole) {
-            throw BadRequestAppException.setSuperiorRole(user.getRole());
+            throw BadRequestAppException.interactSuperiorRole(user.getRole());
         }
         return user;
     }
@@ -85,7 +85,7 @@ public class AccessibleRolesUserManagementService implements UserManagementServi
         var canPerformOnUser = accessibleRoles.contains(existingUser.getRole());
         var canUpdateToRole = accessibleRoles.contains(input.getRole());
         if (!canPerformOnUser || !canUpdateToRole) {
-            throw BadRequestAppException.setSuperiorRole(Role.ADMIN);
+            throw BadRequestAppException.interactSuperiorRole(Role.ADMIN);
         }
 
         input.merge(existingUser);
