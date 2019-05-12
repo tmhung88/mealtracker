@@ -63,6 +63,12 @@ public class AdminUserService {
     }
 
     public User updateUser(long userId, ManageUserInput input) {
+        var email = input.getEmail().toLowerCase();
+        var emailOwner = userService.findByEmail(email);
+        boolean isSameOwner = emailOwner.map(owner -> owner.getId() == userId).orElse(true);
+        if (!isSameOwner) {
+            throw BadRequestAppException.emailTaken(email);
+        }
         User existingUser = userService.getExistingUser(userId);
         input.merge(existingUser);
         return userService.updateUser(existingUser);

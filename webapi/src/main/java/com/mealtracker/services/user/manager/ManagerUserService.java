@@ -73,6 +73,13 @@ public class ManagerUserService {
     }
 
     public User updateUser(long userId, ManageUserInput input) {
+        var email = input.getEmail().toLowerCase();
+        var emailOwner = userService.findByEmail(email);
+        boolean isSameOwner = emailOwner.map(owner -> owner.getId() == userId).orElse(true);
+        if (!isSameOwner) {
+            throw BadRequestAppException.emailTaken(email);
+        }
+
         User existingUser = userService.getExistingUser(userId);
         var canPerformOnUser = MANAGER_ACCESSIBLE_ROLES.contains(existingUser.getRole());
         var canUpdateToRole = MANAGER_ACCESSIBLE_ROLES.contains(input.getRole());
