@@ -35,7 +35,6 @@ public class SessionInputTest {
     }
 
 
-
     private SessionInput validInput() {
         var input = new SessionInput();
         input.setEmail("abc@gmail.com");

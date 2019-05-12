@@ -34,4 +34,9 @@ public class AppExceptionAssert extends AbstractThrowableAssert<AppExceptionAsse
         return this;
     }
 
+    public AppExceptionAssert hasError(Error error) {
+        hasError(error.getCode(), error.getMessage());
+        return this;
+    }
+
 }

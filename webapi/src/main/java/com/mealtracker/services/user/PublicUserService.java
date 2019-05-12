@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PublicUserService {
+
     @Autowired
     private UserService userService;
 
