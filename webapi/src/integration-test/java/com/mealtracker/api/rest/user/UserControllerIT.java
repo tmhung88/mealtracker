@@ -1,6 +1,7 @@
 package com.mealtracker.api.rest.user;
 
 import com.mealtracker.MealTrackerApplication;
+import com.mealtracker.api.rest.user.UserController;
 import com.mealtracker.api.rest.user.builders.DomainUserBuilder;
 import com.mealtracker.config.WebSecurityConfig;
 import com.mealtracker.domains.Role;
