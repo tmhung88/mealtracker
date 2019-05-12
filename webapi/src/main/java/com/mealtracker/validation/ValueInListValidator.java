@@ -5,7 +5,7 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValidStringValidator implements ConstraintValidator<ValueInList, String> {
+public class ValueInListValidator implements ConstraintValidator<ValueInList, String> {
 
     private List<String> acceptableValues;
 

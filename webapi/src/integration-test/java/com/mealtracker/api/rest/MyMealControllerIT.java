@@ -1,7 +1,8 @@
-package com.mealtracker.api.rest.meal;
+package com.mealtracker.api.rest;
 
 import com.mealtracker.MealTrackerApplication;
 import com.mealtracker.api.rest.MyMealController;
+import com.mealtracker.api.rest.meal.MealRequest;
 import com.mealtracker.config.WebSecurityConfig;
 import com.mealtracker.domains.Meal;
 import com.mealtracker.services.meal.DeleteMealsInput;

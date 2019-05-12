@@ -1,7 +1,8 @@
-package com.mealtracker.api.rest.meal;
+package com.mealtracker.api.rest;
 
 import com.mealtracker.MealTrackerApplication;
 import com.mealtracker.api.rest.MealController;
+import com.mealtracker.api.rest.meal.MealRequest;
 import com.mealtracker.config.WebSecurityConfig;
 import com.mealtracker.services.meal.DeleteMealsInput;
 import com.mealtracker.services.meal.MealService;
@@ -45,6 +46,8 @@ public class MealControllerIT {
                 .andExpect(AUTHORIZATION_API_ACCESS_DENIED.httpStatus())
                 .andExpect(AUTHORIZATION_API_ACCESS_DENIED.json());
     }
+
+
 
     @Test
     public void addMeal_NoMealManagementUser_ExpectAuthorizationError() throws Exception {
