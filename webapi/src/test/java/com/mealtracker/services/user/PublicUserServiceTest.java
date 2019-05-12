@@ -1,9 +1,7 @@
 package com.mealtracker.services.user;
 
 import com.mealtracker.assertions.AppAssertions;
-import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
-import com.mealtracker.domains.UserSettings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
