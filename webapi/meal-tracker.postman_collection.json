@@ -1,0 +1,1171 @@
+{
+	"info": {
+		"_postman_id": "ecb6738c-716d-4d66-be63-602340deca93",
+		"name": "meal-tracker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/v1/anonymous",
+			"item": [
+				{
+					"name": "/users",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"tmhung88@gmail.com\",\n\t\"password\": \"hello\",\n\t\"fullName\": \"Trần Mạnh Hưng\"\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users"
+							]
+						},
+						"description": "Create an user"
+					},
+					"response": []
+				},
+				{
+					"name": "/users?email",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJwcml2aWxlZ2VzIjpbIk1ZX01FQUxTIl0sInJvbGUiOiJSRUdVTEFSX1VTRVIiLCJmdWxsTmFtZSI6IlJlZ3VsYXIgVXNlciIsImlkIjozLCJlbWFpbCI6InVzZXJAZ21haWwuY29tIn0.0Z7ny6qmSUbwrF5JfnQmwFqDMw_o_-9uWwFWNdefIugEh_R3H3S3wlyJgIJ9TazMrg2i4ZGA6CjBaPYrEZJxlg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users?email=admin@gmail.com",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "admin@gmail.com"
+								}
+							]
+						},
+						"description": "Find an user by email"
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2de94a9a-bb93-4026-8016-6f59b887ddad",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4aa1766c-d5b6-40bd-9bc4-487fa59e6b43",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "/v1/sessions",
+			"item": [
+				{
+					"name": "/sessions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"admin@gmail.com\",\n\t\"password\": \"test1234\"\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/sessions",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"sessions"
+							]
+						},
+						"description": "Create a user token"
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "020cdafc-0d6b-490a-a7cd-86f0c88068b9",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "80323c76-0c2f-4883-8059-7a2451316f82",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "/v1/users",
+			"item": [
+				{
+					"name": "/users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"takako_debolt_2005@abc.com\",\n  \"fullName\": \"Takako Debolt\",\n  \"role\": \"REGULAR_USER\",\n  \"password\": \"test1234\",\n  \"dailyCalorieLimit\": 9300\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users"
+							]
+						},
+						"description": "Add an user"
+					},
+					"response": []
+				},
+				{
+					"name": "/users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"ids\": [200, 202]\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users"
+							]
+						},
+						"description": "Delete users"
+					},
+					"response": []
+				},
+				{
+					"name": "/users/<id>",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"takako_debolt_703@abc.com\",\n  \"fullName\": \"Takako Debolt\",\n  \"role\": \"REGULAR_USER\",\n  \"password\": \"test1234\",\n  \"dailyCalorieLimit\": 9300\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users/200",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"200"
+							]
+						},
+						"description": "Update an user"
+					},
+					"response": []
+				},
+				{
+					"name": "/users/<id>",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users/4",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"4"
+							]
+						},
+						"description": "Get details of an user"
+					},
+					"response": []
+				},
+				{
+					"name": "/users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users?pageIndex=3&orderBy=email&order=asc&rowsPerPage=1",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users"
+							],
+							"query": [
+								{
+									"key": "pageIndex",
+									"value": "3",
+									"description": "Default: 0"
+								},
+								{
+									"key": "orderBy",
+									"value": "email",
+									"description": "Default: id. Possible values:  id | email | fullName"
+								},
+								{
+									"key": "order",
+									"value": "asc",
+									"description": "Default: desc.Possible values: asc | desc"
+								},
+								{
+									"key": "rowsPerPage",
+									"value": "1",
+									"description": "Default: 10"
+								}
+							]
+						},
+						"description": "List users"
+					},
+					"response": []
+				}
+			],
+			"description": "API for user management",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2de94a9a-bb93-4026-8016-6f59b887ddad",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4aa1766c-d5b6-40bd-9bc4-487fa59e6b43",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "/v1/meals",
+			"item": [
+				{
+					"name": "/meals",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Bánh Cuốn\",\n\t\"consumedTime\": \"07:26:17\",\n\t\"consumedDate\": \"2019-05-01\",\n\t\"calories\": 250,\n\t\"consumerId\": 3\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/meals",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"meals"
+							]
+						},
+						"description": "Add a meal"
+					},
+					"response": []
+				},
+				{
+					"name": "/meals/<id>",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Bánh Cuốn\",\n\t\"consumedTime\": \"07:26:17\",\n\t\"consumedDate\": \"2019-05-01\",\n\t\"calories\": 250\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/meals/1003",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"meals",
+								"1003"
+							]
+						},
+						"description": "Get a meal's details"
+					},
+					"response": []
+				},
+				{
+					"name": "/meals",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/meals?pageIndex=0&orderBy=name&order=asc&rowsPerPage=5",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"meals"
+							],
+							"query": [
+								{
+									"key": "pageIndex",
+									"value": "0",
+									"description": "Default: 0"
+								},
+								{
+									"key": "orderBy",
+									"value": "name",
+									"description": "Default: consumedDate. Possible values: name | consumedDate | consumedTime  | calories"
+								},
+								{
+									"key": "order",
+									"value": "asc",
+									"description": "Default: desc. Possible values: asc | desc"
+								},
+								{
+									"key": "rowsPerPage",
+									"value": "5",
+									"description": "Default: 10"
+								}
+							]
+						},
+						"description": "List my meals"
+					},
+					"response": []
+				},
+				{
+					"name": "/meals/<id>",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Bánh Canh\",\n\t\"consumedTime\": \"07:26:17\",\n\t\"consumedDate\": \"2018-05-02\",\n\t\"calories\": 250,\n\t\"consumerId\": \"3\"\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/meals/1000",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"meals",
+								"1000"
+							]
+						},
+						"description": "Update my own meal"
+					},
+					"response": []
+				},
+				{
+					"name": "/meals",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n\t\"ids\": [1003,1004]\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/meals",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"meals"
+							]
+						},
+						"description": "Delete multiple meals"
+					},
+					"response": []
+				}
+			],
+			"description": "APIs for meal management",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b553cb49-195d-43a4-ac14-97e496cb76c8",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "ccd632c9-bee0-4cc3-bfc4-423d07d0c3ee",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "/v1/users/me",
+			"item": [
+				{
+					"name": "/me",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{regularUserToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users/me",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"me"
+							]
+						},
+						"description": "Get the current user's settings"
+					},
+					"response": []
+				},
+				{
+					"name": "/me",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{regularUserToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"dailyCalorieLimit\": 400\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users/me",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"me"
+							]
+						},
+						"description": "Update the current user's settings"
+					},
+					"response": []
+				}
+			],
+			"description": "API to get the current user's info",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2de94a9a-bb93-4026-8016-6f59b887ddad",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4aa1766c-d5b6-40bd-9bc4-487fa59e6b43",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "/v1/users/me/meals",
+			"item": [
+				{
+					"name": "/meals",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{regularUserToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Bánh Cuốn\",\n\t\"consumedTime\": \"07:26:17\",\n\t\"consumedDate\": \"2019-05-01\",\n\t\"calories\": 250\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users/me/meals",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"me",
+								"meals"
+							]
+						},
+						"description": "Add a meal"
+					},
+					"response": []
+				},
+				{
+					"name": "/meals/<id>",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{regularUserToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Bánh Cuốn\",\n\t\"consumedTime\": \"07:26:17\",\n\t\"consumedDate\": \"2019-05-01\",\n\t\"calories\": 250\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users/me/meals/1",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"me",
+								"meals",
+								"1"
+							]
+						},
+						"description": "Get a meal's details"
+					},
+					"response": []
+				},
+				{
+					"name": "/meals",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{regularUserToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users/me/meals?fromDate=2019-04-05&toDate=2019-05-01&fromTime=00:00&pageIndex=0&rowsPerPage=5&orderBy=name&order=desc",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"me",
+								"meals"
+							],
+							"query": [
+								{
+									"key": "fromDate",
+									"value": "2019-04-05",
+									"description": "Optional"
+								},
+								{
+									"key": "toDate",
+									"value": "2019-05-01",
+									"description": "Optional"
+								},
+								{
+									"key": "fromTime",
+									"value": "00:00",
+									"description": "Optional"
+								},
+								{
+									"key": "toTime",
+									"value": "19:29",
+									"description": "Optional",
+									"disabled": true
+								},
+								{
+									"key": "pageIndex",
+									"value": "0",
+									"description": "Default 0"
+								},
+								{
+									"key": "rowsPerPage",
+									"value": "5",
+									"description": "Default 10"
+								},
+								{
+									"key": "orderBy",
+									"value": "name",
+									"description": "Default: consumedDate. Possible values: name | consumedDate | consumedTime | calories"
+								},
+								{
+									"key": "order",
+									"value": "desc",
+									"description": "Default: desc. Possible values: asc | desc"
+								}
+							]
+						},
+						"description": "List my meals"
+					},
+					"response": []
+				},
+				{
+					"name": "/meals/<id>",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{regularUserToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Bánh Canh\",\n\t\"consumedTime\": \"07:26:17\",\n\t\"consumedDate\": \"2018-05-01\",\n\t\"calories\": 250\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users/me/meals/1",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"me",
+								"meals",
+								"1"
+							]
+						},
+						"description": "Update my own meal"
+					},
+					"response": []
+				},
+				{
+					"name": "/meals",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{regularUserToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n\t\"ids\": [2,3]\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users/me/meals",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"me",
+								"meals"
+							]
+						},
+						"description": "Delete multiple meals"
+					},
+					"response": []
+				}
+			],
+			"description": "APIs for a regular user to manage his own meals",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b553cb49-195d-43a4-ac14-97e496cb76c8",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "ccd632c9-bee0-4cc3-bfc4-423d07d0c3ee",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "/v1/users/me/alerts",
+			"item": [
+				{
+					"name": "/meals/<id>",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{regularUserToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Bánh Cuốn\",\n\t\"consumedTime\": \"07:26:17\",\n\t\"consumedDate\": \"2019-05-01\",\n\t\"calories\": 250\n}"
+						},
+						"url": {
+							"raw": "{{mealtracker}}/v1/users/me/alerts/calorie?date=2019-04-02",
+							"host": [
+								"{{mealtracker}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"me",
+								"alerts",
+								"calorie"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2019-04-02",
+									"description": "Date format: yyyy-MM-dd . Ex: 2018-11-05"
+								}
+							]
+						},
+						"description": "Get a meal's details"
+					},
+					"response": []
+				}
+			],
+			"description": "APIs for the current user's alerts",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b553cb49-195d-43a4-ac14-97e496cb76c8",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "ccd632c9-bee0-4cc3-bfc4-423d07d0c3ee",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
