@@ -4,22 +4,28 @@ import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
 import com.mealtracker.domains.UserSettings;
 import org.assertj.core.api.Assertions;
-import org.junit.Ignore;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.testcontainers.containers.MySQLContainer;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@SpringBootTest
+@ActiveProfiles("test")
+
 public class UserRepositoryIT {
+
+    @ClassRule
+    public static MySQLContainer mySQLContainer = AppDbContainer.getInstance();
 
     @Autowired
     private UserRepository userRepository;
 
     @Test
-    @Ignore
     public void simpleTest() {
         User user = new User();
         user.setEmail("abc@gmail.com");

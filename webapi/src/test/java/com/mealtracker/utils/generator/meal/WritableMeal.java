@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 public class WritableMeal implements Writable {
 
-    private static final String MYSQL_INSERT_TEMPLATE = "INSERT INTO mealtracker.meals (id, name, calories, consumed_date, consumed_time, consumer_id, deleted) " +
+    private static final String MYSQL_INSERT_TEMPLATE = "INSERT INTO meals (id, name, calories, consumed_date, consumed_time, consumer_id, deleted) " +
             "VALUES (%s, '%s', %s, '%s', '%s', %s, %s);";
 
     private final Meal meal = new Meal();

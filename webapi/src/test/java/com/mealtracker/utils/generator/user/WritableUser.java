@@ -13,7 +13,7 @@ public class WritableUser implements Writable {
     private static final int FIRST_NAME = 0;
     private static final int LAST_NAME = 1;
     private static final String EMAIL_TEMPLATE = "%s_%s_%s@abc.com";
-    private static final String MYSQL_INSERT_TEMPLATE = "INSERT INTO mealtracker.users (id, email, encrypted_password, role, deleted, full_name, daily_calorie_limit) VALUES " +
+    private static final String MYSQL_INSERT_TEMPLATE = "INSERT INTO users (id, email, encrypted_password, role, deleted, full_name, daily_calorie_limit) VALUES " +
             "(%s, '%s', '%s', %s, %s, '%s', %s);";
 
 
