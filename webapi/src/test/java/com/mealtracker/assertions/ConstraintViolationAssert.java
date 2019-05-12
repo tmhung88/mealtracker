@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.EMAIL_FORMAT;
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.LOCAL_DATE_FORMAT;
+import static com.mealtracker.assertions.ConstraintViolationAssert.Message.MAX_FORMAT;
+import static com.mealtracker.assertions.ConstraintViolationAssert.Message.MIN_FORMAT;
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.NOT_NULL;
 
 public class ConstraintViolationAssert<T> extends AbstractAssert<ConstraintViolationAssert<T>, Set<ConstraintViolation<T>>> {
@@ -36,6 +38,16 @@ public class ConstraintViolationAssert<T> extends AbstractAssert<ConstraintViola
         if (violationOptional.isEmpty()) {
             failWithMessage("Expected the field <%s> with the error <%s> but %s", fieldName, message, getErrorSummary(fieldName));
         }
+        return this;
+    }
+
+    public ConstraintViolationAssert<T> violateMin(String fieldName, int min) {
+        violate(fieldName, String.format(MIN_FORMAT, min));
+        return this;
+    }
+
+    public ConstraintViolationAssert<T> violateMax(String fieldName, int max) {
+        violate(fieldName, String.format(MAX_FORMAT, max));
         return this;
     }
 
@@ -87,5 +99,7 @@ public class ConstraintViolationAssert<T> extends AbstractAssert<ConstraintViola
         static final String NOT_NULL = "must not be null";
         static final String LOCAL_DATE_FORMAT = "Date should be in this format yyyy-MM-dd";
         static final String EMAIL_FORMAT = "must be a well-formed email address";
+        static final String MIN_FORMAT = "must be greater than or equal to %s";
+        static final String MAX_FORMAT = "must be less than or equal to %s";
     }
 }

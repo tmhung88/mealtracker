@@ -1,4 +1,4 @@
-package com.mealtracker.services;
+package com.mealtracker.services.usersettings;
 
 import com.mealtracker.domains.User;
 import com.mealtracker.domains.UserSettings;

@@ -4,6 +4,7 @@ import com.mealtracker.config.properties.JwtProperties;
 import com.mealtracker.security.RestAccessDeniedHandler;
 import com.mealtracker.security.RestAuthenticationEntryPoint;
 import com.mealtracker.security.jwt.JwtAuthenticationFilter;
+import com.mealtracker.security.jwt.JwtAuthenticationHandler;
 import com.mealtracker.security.jwt.JwtTokenProvider;
 import com.mealtracker.security.jwt.JwtTokenValidator;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,7 +43,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtTokenProvider jwtTokenProvider(JwtProperties jwtProperties) {
-        return new JwtTokenProvider(jwtProperties.getSecretKey(), jwtProperties.getExpirationInMs());
+        return new JwtTokenProvider(jwtProperties.getSecretKey());
     }
 
     @Bean
@@ -51,8 +52,13 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider, JwtTokenValidator jwtTokenValidator) {
-        return new JwtAuthenticationFilter(jwtTokenProvider, jwtTokenValidator);
+    public JwtAuthenticationHandler jwtAuthenticationHandler(JwtTokenProvider jwtTokenProvider, JwtTokenValidator jwtTokenValidator) {
+        return new JwtAuthenticationHandler(jwtTokenProvider, jwtTokenValidator);
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtAuthenticationHandler authenticationHandler) {
+        return new JwtAuthenticationFilter(authenticationHandler);
     }
 
     @Bean

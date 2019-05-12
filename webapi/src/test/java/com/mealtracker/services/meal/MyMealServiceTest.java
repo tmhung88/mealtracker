@@ -1,4 +1,4 @@
-package com.mealtracker.services;
+package com.mealtracker.services.meal;
 
 import com.mealtracker.repositories.MealRepository;
 import com.mealtracker.services.meal.MyMealService;
