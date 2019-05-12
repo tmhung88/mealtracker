@@ -25,7 +25,7 @@ public class MeController {
     @GetMapping
     public SuccessEnvelop<GetMySettingsResponse> getMySettings(CurrentUser currentUser) {
         var userSettings = userSettingsService.getUserSettings(currentUser.getId());
-        return GetMySettingsResponse.of(userSettings);
+        return GetMySettingsResponse.envelop(userSettings);
     }
 
     @PatchMapping

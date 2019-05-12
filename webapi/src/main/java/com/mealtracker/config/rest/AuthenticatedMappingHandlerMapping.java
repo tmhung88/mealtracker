@@ -8,10 +8,7 @@ public class AuthenticatedMappingHandlerMapping extends RequestMappingHandlerMap
 
     @Override
     protected RequestCondition<?> getCustomTypeCondition(Class<?> handlerType) {
-        var roleRequestMappingAnnotation = AnnotationUtils.findAnnotation(handlerType, AuthenticatedMapping.class);
-        if (roleRequestMappingAnnotation == null) {
-            return null;
-        }
-        return new AuthenticatedMappingRequestCondition();
+        var authenticatedMappingAnnotation = AnnotationUtils.findAnnotation(handlerType, AuthenticatedMapping.class);
+        return authenticatedMappingAnnotation == null ? null : new AuthenticatedMappingRequestCondition();
     }
 }

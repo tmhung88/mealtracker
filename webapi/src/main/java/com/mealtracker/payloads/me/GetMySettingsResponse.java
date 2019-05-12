@@ -10,7 +10,7 @@ import lombok.Value;
 public class GetMySettingsResponse {
     private final Integer dailyCalorieLimit;
 
-    public static SuccessEnvelop<GetMySettingsResponse> of(UserSettings userSettings) {
+    public static SuccessEnvelop<GetMySettingsResponse> envelop(UserSettings userSettings) {
         Integer dailyCalorieLimit = userSettings == null ? null : userSettings.getDailyCalorieLimit();
         return new SuccessEnvelop<>(new GetMySettingsResponse(dailyCalorieLimit));
     }
