@@ -4,7 +4,7 @@ import com.mealtracker.payloads.MessageResponse;
 import com.mealtracker.payloads.SuccessEnvelop;
 import com.mealtracker.payloads.me.GetMySettingsResponse;
 import com.mealtracker.security.CurrentUser;
-import com.mealtracker.services.usersettings.UpdateMySettingsInput;
+import com.mealtracker.services.usersettings.MySettingsInput;
 import com.mealtracker.services.usersettings.UserSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +30,7 @@ public class MeController {
 
     @PatchMapping
     public SuccessEnvelop<MessageResponse> updateMySettings(CurrentUser currentUser,
-                                                            @Valid @RequestBody UpdateMySettingsInput updateRequest) {
+                                                            @Valid @RequestBody MySettingsInput updateRequest) {
         userSettingsService.updateUserSettings(currentUser.getId(), updateRequest);
         return MessageResponse.of("User settings updated successfully");
     }

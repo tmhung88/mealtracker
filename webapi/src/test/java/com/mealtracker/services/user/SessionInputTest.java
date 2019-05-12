@@ -1,6 +1,7 @@
 package com.mealtracker.services.user;
 
 import com.mealtracker.ValidatorProvider;
+import com.mealtracker.services.session.SessionInput;
 import org.junit.Test;
 
 import javax.validation.Validator;

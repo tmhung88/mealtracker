@@ -55,15 +55,23 @@ export class UserForm extends React.Component {
                         email: {
                             email: true,
                             presence: { allowEmpty: false },
+                            length: {
+                                minimum: 5,
+                                maximum: 200
+                            }
                         },
                         fullName: {
                             presence: { allowEmpty: false },
+                            length: {
+                                minimum: 5,
+                                maximum: 200
+                            }
                         },
                         password: passwordOptional ? undefined : {
                             presence: { allowEmpty: false },
                             length: {
-                                minimum: 6,
-                                message: "must be at least 6 characters"
+                                minimum: 5,
+                                maximum: 100
                             }
                         }
                     }}
@@ -94,7 +102,7 @@ export class UserForm extends React.Component {
                                 />
                                 <FormHelperText>{validationFields.fullName}</FormHelperText>
                             </FormControl>
-                            <FormControl margin="normal" required={!passwordOptional} fullWidth error={!!validationFields.password}>
+                            <FormControl margin="normal" required={!passwordOptional} fullWid   th error={!!validationFields.password}>
                                 <InputLabel htmlFor="password">Password</InputLabel>
                                 <Input name="password" type="password" id="password" autoComplete="new-password" value={data.password}
                                     onChange={e => onFieldChange("password", e.currentTarget.value)}

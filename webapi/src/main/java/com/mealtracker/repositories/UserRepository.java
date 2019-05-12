@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findByDeletedAndRoleIn(boolean deleted, List<Role> includedRoles, Pageable pageable);
 
     @Modifying
-    @Query("UPDATE User user SET user.deleted = false where user.id IN :userIds AND user.role IN :roles")
+    @Query("UPDATE User user SET user.deleted = true where user.id IN :userIds AND user.role IN :roles")
     void softDelete(@Param("userIds") List<Long> userIds, @Param("roles") List<Role> roles);
 
     @Query("SELECT user FROM User user WHERE user.deleted = false AND user.role IN :roles AND " +

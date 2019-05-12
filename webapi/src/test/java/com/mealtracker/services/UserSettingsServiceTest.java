@@ -3,7 +3,7 @@ package com.mealtracker.services;
 import com.mealtracker.domains.User;
 import com.mealtracker.domains.UserSettings;
 import com.mealtracker.repositories.UserRepository;
-import com.mealtracker.services.usersettings.UpdateMySettingsInput;
+import com.mealtracker.services.usersettings.MySettingsInput;
 import com.mealtracker.services.usersettings.UserSettingsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,8 +69,8 @@ public class UserSettingsServiceTest {
         return user;
     }
 
-    private UpdateMySettingsInput updateSettingsRequest(Integer calorieLimit) {
-        var request = new UpdateMySettingsInput();
+    private MySettingsInput updateSettingsRequest(Integer calorieLimit) {
+        var request = new MySettingsInput();
         request.setDailyCalorieLimit(calorieLimit);
         return request;
     }

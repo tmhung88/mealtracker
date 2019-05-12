@@ -1,9 +1,9 @@
 package com.mealtracker.api.rest;
 
 import com.mealtracker.payloads.SuccessEnvelop;
-import com.mealtracker.payloads.user.SessionResponse;
+import com.mealtracker.payloads.session.SessionResponse;
 import com.mealtracker.security.jwt.JwtTokenProvider;
-import com.mealtracker.services.user.SessionInput;
+import com.mealtracker.services.session.SessionInput;
 import com.mealtracker.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

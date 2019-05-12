@@ -6,7 +6,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 @Data
-public class UpdateMySettingsInput {
+public class MySettingsInput {
 
     @Min(0)
     @Max(50000)

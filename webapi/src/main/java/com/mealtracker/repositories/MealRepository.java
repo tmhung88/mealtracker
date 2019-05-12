@@ -19,7 +19,7 @@ public interface MealRepository extends PagingAndSortingRepository<Meal, Long> {
 
 
     @Modifying
-    @Query("UPDATE Meal meal SET meal.deleted = false WHERE meal.id IN :mealIds " +
+    @Query("UPDATE Meal meal SET meal.deleted = true WHERE meal.id IN :mealIds " +
             "AND (:consumerId IS NULL OR :consumerId = meal.consumer.id)")
     void softDelete(@Param("mealIds") List<Long> mealIds, @Param("consumerId") Long consumerId);
 

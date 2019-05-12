@@ -5,7 +5,7 @@ import com.mealtracker.MealTrackerApplication;
 import com.mealtracker.config.WebSecurityConfig;
 import com.mealtracker.domains.UserSettings;
 import com.mealtracker.services.user.UserService;
-import com.mealtracker.services.usersettings.UpdateMySettingsInput;
+import com.mealtracker.services.usersettings.MySettingsInput;
 import com.mealtracker.services.usersettings.UserSettingsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -96,8 +96,8 @@ public class MeControllerIT {
     }
 
 
-    public UpdateMySettingsInput updateCalorieLimitRequest(Integer calorieLimit) {
-        var request = new UpdateMySettingsInput();
+    public MySettingsInput updateCalorieLimitRequest(Integer calorieLimit) {
+        var request = new MySettingsInput();
         request.setDailyCalorieLimit(calorieLimit);
         return request;
     }

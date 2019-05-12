@@ -1,4 +1,4 @@
-package com.mealtracker.services.user;
+package com.mealtracker.services.session;
 
 import lombok.Data;
 

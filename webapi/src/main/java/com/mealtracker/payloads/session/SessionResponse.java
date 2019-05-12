@@ -1,4 +1,4 @@
-package com.mealtracker.payloads.user;
+package com.mealtracker.payloads.session;
 
 import com.mealtracker.payloads.SuccessEnvelop;
 import lombok.Value;

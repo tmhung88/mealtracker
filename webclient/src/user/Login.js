@@ -100,71 +100,74 @@ export class Login extends React.Component {
   renderContent() {
     const { classes } = this.props;
     return (
-      <main className={classes.main}>
-        <CssBaseline />
-        <Paper className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-          <form className={classes.form}>
-            <ValidationForm
-              serverValidationError={this.state.serverValidationError}
-              constraints={{
-                email: {
-                  email: true,
-                  presence: { allowEmpty: false },
-                },
-              }}
-              data={this.state.form}
-              onDataChange={(data) => this.setState({ form: data })}
-            >
-              {({ onFieldChange, data, isValid, validationFields, validationMessage }) => {
-                return (<Fragment>
-                  <FormControl margin="normal" required fullWidth error={!!validationFields.email}>
-                    <InputLabel htmlFor="email">Email Address</InputLabel>
-                    <Input id="email" name="email" autoComplete="email" autoFocus
-                      value={data.email}
-                      onChange={e => onFieldChange("email", e.currentTarget.value)} />
-                    <FormHelperText>{validationFields.email}</FormHelperText>
-                  </FormControl>
-                  <FormControl margin="normal" required fullWidth error={!!validationFields.password}>
-                    <InputLabel htmlFor="password">Password</InputLabel>
-                    <Input name="password" type="password" id="password" autoComplete="current-password" value={data.password}
-                      onChange={e => onFieldChange("password", e.currentTarget.value)} />
+        <main className={classes.main}>
+          <CssBaseline />
+          <Paper className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            <form className={classes.form}>
+              <ValidationForm
+                  serverValidationError={this.state.serverValidationError}
+                  constraints={{
+                    email: {
+                      email: true,
+                      presence: { allowEmpty: false },
+                    },
+                    password: {
+                      presence: { allowEmpty: false },
+                    }
+                  }}
+                  data={this.state.form}
+                  onDataChange={(data) => this.setState({ form: data })}
+              >
+                {({ onFieldChange, data, isValid, validationFields, validationMessage }) => {
+                  return (<Fragment>
+                    <FormControl margin="normal" required fullWidth error={!!validationFields.email}>
+                      <InputLabel htmlFor="email">Email Address</InputLabel>
+                      <Input id="email" name="email" autoComplete="email" autoFocus
+                             value={data.email}
+                             onChange={e => onFieldChange("email", e.currentTarget.value)} />
+                      <FormHelperText>{validationFields.email}</FormHelperText>
+                    </FormControl>
+                    <FormControl margin="normal" required fullWidth error={!!validationFields.password}>
+                      <InputLabel htmlFor="password">Password</InputLabel>
+                      <Input name="password" type="password" id="password" autoComplete="current-password" value={data.password}
+                             onChange={e => onFieldChange("password", e.currentTarget.value)} />
 
-                  </FormControl>
-                  {validationMessage ? <FormHelperText error>{validationMessage}</FormHelperText> : undefined}
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      if (!isValid()) {
-                        return;
-                      }
+                    </FormControl>
+                    {validationMessage ? <FormHelperText error>{validationMessage}</FormHelperText> : undefined}
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          if (!isValid()) {
+                            return;
+                          }
 
-                      await this.handleSubmit(e);
-                    }}
-                  >
-                    Sign in
-                  </Button>
+                          await this.handleSubmit(e);
+                        }}
+                    >
+                      Sign in
+                    </Button>
 
-                  <Link className={classes.link} component={RouterLink} to={Pages.REGISTER}>
-                    Register new User
-                  </Link>
-                </Fragment>)
-              }}
-            </ValidationForm>
+                    <Link className={classes.link} component={RouterLink} to={Pages.REGISTER}>
+                      Register new User
+                    </Link>
+                  </Fragment>)
+                }}
+              </ValidationForm>
 
-          </form>
-        </Paper>
-      </main>
+            </form>
+          </Paper>
+        </main>
     );
   }
 }

@@ -40,6 +40,10 @@ export class MealForm extends React.Component {
         let constraints = {
             name: {
                 presence: { allowEmpty: false },
+                length: {
+                    minimum: 5,
+                    maximum: 200
+                }
             },
             consumedDate: {
                 presence: { allowEmpty: false },
@@ -130,7 +134,7 @@ export class MealForm extends React.Component {
                                 />
                                 <FormHelperText>{validationFields.name}</FormHelperText>
                             </FormControl>
-                            <FormControl margin="normal" required fullWidth>
+                            <FormControl margin="normal" required fullWidth error={!!validationFields.name}>
                                 <TextField
                                     id="calories"
                                     label="Calories"
@@ -141,7 +145,7 @@ export class MealForm extends React.Component {
                                     }}
                                     required
                                     margin="normal"
-                                    value={data.calories || 0}
+                                    value={data.calories || 1}
                                     onChange={e => {
                                         onFieldChange("calories", Number.parseInt(e.currentTarget.value, 10));
                                     }}

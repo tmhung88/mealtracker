@@ -101,88 +101,96 @@ export class Register extends React.Component {
   renderContent() {
     const { classes } = this.props;
     return (
-      <main className={classes.main}>
-        <CssBaseline />
-        <Paper className={classes.paper}>
-          <Typography component="h1" variant="h5">
-            Register new User
-        </Typography>
-          <form className={classes.form}>
-            <ValidationForm
-              serverValidationError={this.state.serverValidationError}
-              constraints={{
-                email: {
-                  email: true,
-                  presence: { allowEmpty: false },
-                },
-                fullName: {
-                  presence: { allowEmpty: false },
-                },
-                password: {
-                  presence: { allowEmpty: false },
-                  length: {
-                    minimum: 6,
-                    message: "must be at least 6 characters"
-                  }
-                }
-              }}
-              data={this.state.user}
-              onDataChange={(user) => this.setState({ user: user })}
-            >
-              {({ onFieldChange, data, isValid, validationFields, validationMessage }) => {
-                return <Fragment>
-                  <FormControl margin="normal" required fullWidth error={!!validationFields.email}>
-                    <InputLabel htmlFor="email">Email Address</InputLabel>
-                    <Input id="email" name="email"
-                      autoComplete="email"
-                      autoFocus
-                      value={data.email}
-                      onChange={e => onFieldChange("email", e.currentTarget.value)}
-                    />
-                    <FormHelperText>{validationFields.email}</FormHelperText>
-                  </FormControl>
-                  <FormControl margin="normal" required fullWidth error={!!validationFields.fullName}>
-                    <InputLabel htmlFor="fullName">Full Name</InputLabel>
-                    <Input name="fullName" id="fullName" value={data.fullName}
-                      onChange={e => onFieldChange("fullName", e.currentTarget.value)}
-                    />
-                    <FormHelperText>{validationFields.fullName}</FormHelperText>
-                  </FormControl>
-
-                  <FormControl margin="normal" required fullWidth error={!!validationFields.password}>
-                    <InputLabel htmlFor="password">Password</InputLabel>
-                    <Input name="password" type="password" id="password" autoComplete="new-password" value={data.password}
-                      onChange={e => onFieldChange("password", e.currentTarget.value)}
-                    />
-                    <FormHelperText>{validationFields.password}</FormHelperText>
-                  </FormControl>
-                  {validationMessage ? <FormHelperText error>{validationMessage}</FormHelperText> : undefined}
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      if (!isValid()) {
-                        return;
+        <main className={classes.main}>
+          <CssBaseline />
+          <Paper className={classes.paper}>
+            <Typography component="h1" variant="h5">
+              Register new User
+            </Typography>
+            <form className={classes.form}>
+              <ValidationForm
+                  serverValidationError={this.state.serverValidationError}
+                  constraints={{
+                    email: {
+                      email: true,
+                      presence: { allowEmpty: false },
+                      length: {
+                        minimum: 5,
+                        maximum: 200
                       }
+                    },
+                    fullName: {
+                      presence: { allowEmpty: false },
+                      length: {
+                        minimum: 5,
+                        maximum: 200
+                      }
+                    },
+                    password: {
+                      presence: { allowEmpty: false },
+                      length: {
+                        minimum: 5,
+                        maximum: 100
+                      }
+                    }
+                  }}
+                  data={this.state.user}
+                  onDataChange={(user) => this.setState({ user: user })}
+              >
+                {({ onFieldChange, data, isValid, validationFields, validationMessage }) => {
+                  return <Fragment>
+                    <FormControl margin="normal" required fullWidth error={!!validationFields.email}>
+                      <InputLabel htmlFor="email">Email Address</InputLabel>
+                      <Input id="email" name="email"
+                             autoComplete="email"
+                             autoFocus
+                             value={data.email}
+                             onChange={e => onFieldChange("email", e.currentTarget.value)}
+                      />
+                      <FormHelperText>{validationFields.email}</FormHelperText>
+                    </FormControl>
+                    <FormControl margin="normal" required fullWidth error={!!validationFields.fullName}>
+                      <InputLabel htmlFor="fullName">Full Name</InputLabel>
+                      <Input name="fullName" id="fullName" value={data.fullName}
+                             onChange={e => onFieldChange("fullName", e.currentTarget.value)}
+                      />
+                      <FormHelperText>{validationFields.fullName}</FormHelperText>
+                    </FormControl>
 
-                      await this.handleSubmit(e);
-                    }}
-                  >
-                    Register
-                  </Button>
-                </Fragment>
-              }}
-            </ValidationForm>
-            <Link className={classes.link} component={RouterLink} to={Pages.LOGIN}>
-              Or Login
-            </Link>
-          </form>
-        </Paper>
-      </main>
+                    <FormControl margin="normal" required fullWidth error={!!validationFields.password}>
+                      <InputLabel htmlFor="password">Password</InputLabel>
+                      <Input name="password" type="password" id="password" autoComplete="new-password" value={data.password}
+                             onChange={e => onFieldChange("password", e.currentTarget.value)}
+                      />
+                      <FormHelperText>{validationFields.password}</FormHelperText>
+                    </FormControl>
+                    {validationMessage ? <FormHelperText error>{validationMessage}</FormHelperText> : undefined}
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          if (!isValid()) {
+                            return;
+                          }
+
+                          await this.handleSubmit(e);
+                        }}
+                    >
+                      Register
+                    </Button>
+                  </Fragment>
+                }}
+              </ValidationForm>
+              <Link className={classes.link} component={RouterLink} to={Pages.LOGIN}>
+                Or Login
+              </Link>
+            </form>
+          </Paper>
+        </main>
     );
   }
 }
