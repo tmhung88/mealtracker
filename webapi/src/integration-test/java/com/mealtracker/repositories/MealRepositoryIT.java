@@ -2,11 +2,13 @@ package com.mealtracker.repositories;
 
 import com.mealtracker.domains.Meal;
 import com.mealtracker.domains.User;
+import org.assertj.core.api.Assertions;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -14,8 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
@@ -73,7 +77,51 @@ public class MealRepositoryIT {
         assertThat(meals.get(0).getName()).isEqualTo("user cake");
     }
 
+    @Test
+    @Sql("classpath:repositories/meal/insert_meal_4.sql")
+    @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
+    public void filterMyMeals_FromDate_ExpectMealsEqualOrAfterDateReturned() {
+        var meals = mealRepository.filterMyMeals(1L, LocalDate.of(2017, 2, 10), null, null, null, PageRequest.of(0, 1000)).getContent();
+        Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat on fromDate", "eat after fromDate");
+    }
+
+    @Test
+    @Sql("classpath:repositories/meal/insert_meal_5.sql")
+    @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
+    public void filterMyMeals_ToDate_ExpectMealsBeforeDateReturned() {
+        var meals = mealRepository.filterMyMeals(1L, null, LocalDate.of(2018, 9, 20), null, null, PageRequest.of(0, 1000)).getContent();
+        Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat before toDate");
+    }
+
+    @Test
+    @Sql("classpath:repositories/meal/insert_meal_6.sql")
+    @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
+    public void filterMyMeals_FromTime_ExpectMealsEqualOrAfterTimeReturned() {
+        var meals = mealRepository.filterMyMeals(1L, null, null, LocalTime.of(9, 0), null, PageRequest.of(0, 1000)).getContent();
+        Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat on fromTime", "eat after fromTime");
+    }
+
+    @Test
+    @Sql("classpath:repositories/meal/insert_meal_7.sql")
+    @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
+    public void filterMyMeals_ToTime_ExpectMealsBeforeTimeReturned() {
+        var meals = mealRepository.filterMyMeals(1L, null, null, null, LocalTime.of(15, 30), PageRequest.of(0, 1000)).getContent();
+        Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat before toTime");
+    }
+
+    @Test
+    @Sql("classpath:repositories/meal/insert_meal_8.sql")
+    @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
+    public void filterMyMeals_NoDateTimeCriteria_ExpectExistingMeals_ConsumerReturned() {
+        var meals = mealRepository.filterMyMeals(1L, null, null, null, null, PageRequest.of(0, 1000)).getContent();
+        Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat another day", "eat another time");
+    }
+
     long countDeletedMeals(List<Meal> meals) {
         return meals.stream().filter(Meal::isDeleted).count();
+    }
+
+    List<String> name(List<Meal> meals) {
+        return meals.stream().map(Meal::getName).collect(Collectors.toList());
     }
 }
