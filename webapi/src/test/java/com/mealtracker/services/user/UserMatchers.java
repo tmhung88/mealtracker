@@ -63,7 +63,7 @@ public class UserMatchers {
         }
     }
 
-    static class OptionalUser {
+    public static class OptionalUser {
         private Optional<Long> id = Optional.empty();
         private Optional<String> email = Optional.empty();
         private Optional<String> password = Optional.empty();

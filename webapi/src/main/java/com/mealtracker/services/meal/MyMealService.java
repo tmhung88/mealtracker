@@ -24,9 +24,6 @@ public class MyMealService {
     private MealRepository mealRepository;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private PageableBuilder pageableBuilder;
 
     public Meal addMeal(MyMealInput input, CurrentUser currentUser) {
@@ -42,11 +39,7 @@ public class MyMealService {
     }
 
     public Meal getMeal(long mealId, CurrentUser currentUser) {
-        var existingMeal = getUserExistingMeal(mealId, currentUser.getId());
-        if (!currentUser.isOwner(existingMeal)) {
-            throw AuthorizationAppException.notResourceOwner();
-        }
-        return existingMeal;
+        return getUserExistingMeal(mealId, currentUser.getId());
     }
 
     public void deleteMeals(DeleteMealsInput input, CurrentUser currentUser) {
