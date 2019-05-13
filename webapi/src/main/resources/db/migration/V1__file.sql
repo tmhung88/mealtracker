@@ -1,3 +1,5 @@
+SET FOREIGN_KEY_CHECKS=0;
+drop table if exists users;
 create table users
 (
 	id bigint(20) auto_increment,
@@ -15,6 +17,7 @@ create unique index users_email_uindex
 	on users (email);
 
 
+drop table if exists meals;
 create table meals
 (
 	id bigint auto_increment,
@@ -34,7 +37,9 @@ create index my_meals_list_filter_index
 create index all_meals_list_filter_index
 	on meals (deleted);
 
-INSERT INTO mealtracker.users (id, email, encrypted_password, role, deleted, full_name, daily_calorie_limit) VALUES (1, 'admin@gmail.com', '$2a$10$RCZw83ABG6tYUvI78L.Re.s9TEelb.zgu3nu5Mg0C7u/5/b8bRM1C', 2, 0, 'Admin', 0);
-INSERT INTO mealtracker.users (id, email, encrypted_password, role, deleted, full_name, daily_calorie_limit) VALUES (2, 'user_manager@gmail.com', '$2a$10$TVs2QIjD0ZLVWUfHObt9Z.gG2fpOVKd4PgVTjHpziye6QP/xEZQ06', 1, 0, 'User Manager', 0);
-INSERT INTO mealtracker.users (id, email, encrypted_password, role, deleted, full_name, daily_calorie_limit) VALUES (3, 'regular_user@gmail.com', '$2a$10$AapnAlo5V4zKK2qlm8lL4uTj7FPAPjknrYazfGW1QNNwZO8rYVhVu', 0, 0, 'Regular User', 0);
+SET FOREIGN_KEY_CHECKS=1;
 
+INSERT INTO users VALUES (1, 'admin@gmail.com', '$2a$10$xiohcq/oqfYE281xFiB6Oub3X.9idVUplOT08iKX6zwP9bYrvxX4m', 2, 0, 'Admin', 0);
+INSERT INTO users VALUES (2, 'user_manager@gmail.com', '$2a$10$xiohcq/oqfYE281xFiB6Oub3X.9idVUplOT08iKX6zwP9bYrvxX4m', 1, 0, 'User Manager', 0);
+INSERT INTO users VALUES (3, 'regular_user@gmail.com', '$2a$10$xiohcq/oqfYE281xFiB6Oub3X.9idVUplOT08iKX6zwP9bYrvxX4m', 0, 0, 'Regular User', 0);
+INSERT INTO users VALUES (4, 'hung@gmail.com', '$2a$10$xiohcq/oqfYE281xFiB6Oub3X.9idVUplOT08iKX6zwP9bYrvxX4m', 2, 0, 'Regular User', 0);
