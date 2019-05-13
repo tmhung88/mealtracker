@@ -83,7 +83,7 @@ public class MealRepositoryIT {
     @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
     public void filterMyMeals_FromDate_ExpectMealsEqualOrAfterDateReturned() {
         var meals = mealRepository.filterMyMeals(1L, LocalDate.of(2017, 2, 10), null, null, null, pageable()).getContent();
-        Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat on fromDate", "eat after fromDate");
+        assertThat(name(meals)).containsExactlyInAnyOrder("eat on fromDate", "eat after fromDate");
     }
 
     @Test
@@ -91,7 +91,7 @@ public class MealRepositoryIT {
     @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
     public void filterMyMeals_ToDate_ExpectMealsBeforeDateReturned() {
         var meals = mealRepository.filterMyMeals(1L, null, LocalDate.of(2018, 9, 20), null, null, pageable()).getContent();
-        Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat before toDate");
+        assertThat(name(meals)).containsExactlyInAnyOrder("eat before toDate");
     }
 
     @Test
@@ -99,7 +99,7 @@ public class MealRepositoryIT {
     @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
     public void filterMyMeals_FromTime_ExpectMealsEqualOrAfterTimeReturned() {
         var meals = mealRepository.filterMyMeals(1L, null, null, LocalTime.of(9, 0), null, pageable()).getContent();
-        Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat on fromTime", "eat after fromTime");
+        assertThat(name(meals)).containsExactlyInAnyOrder("eat on fromTime", "eat after fromTime");
     }
 
     @Test
@@ -107,7 +107,7 @@ public class MealRepositoryIT {
     @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
     public void filterMyMeals_ToTime_ExpectMealsBeforeTimeReturned() {
         var meals = mealRepository.filterMyMeals(1L, null, null, null, LocalTime.of(15, 30), pageable()).getContent();
-        Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat before toTime");
+        assertThat(name(meals)).containsExactlyInAnyOrder("eat before toTime");
     }
 
     @Test
@@ -115,7 +115,7 @@ public class MealRepositoryIT {
     @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
     public void filterMyMeals_NoDateTimeCriteria_ExpectExistingMeals_ConsumerReturned() {
         var meals = mealRepository.filterMyMeals(1L, null, null, null, null, pageable()).getContent();
-        Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat another day", "eat another time");
+        assertThat(name(meals)).containsExactlyInAnyOrder("eat another day", "eat another time");
     }
 
     @Test
@@ -123,7 +123,7 @@ public class MealRepositoryIT {
     @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
     public void listExistingMeals_ExpectNoDeletedMealsReturned() {
         var meals = mealRepository.listExistingMeals(pageable()).getContent();
-        Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("im active", "different consumer");
+        assertThat(name(meals)).containsExactlyInAnyOrder("im active", "different consumer");
     }
 
     @Test
@@ -131,7 +131,7 @@ public class MealRepositoryIT {
     @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
     public void listExistingMeals_ExpectMealsWithDeletedUsersReturned() {
         var meals = mealRepository.listExistingMeals(pageable()).getContent();
-        Assertions.assertThat(meals.size()).describedAs("Number of existing meals").isEqualTo(0);
+        assertThat(meals.size()).describedAs("Number of existing meals").isEqualTo(0);
     }
 
     @Test
@@ -139,12 +139,44 @@ public class MealRepositoryIT {
     @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
     public void listExistingMeals_ExpectMealsReturnedWithOwnerDetails() {
         var meal = mealRepository.listExistingMeals(pageable()).getContent().get(0);
-        Assertions.assertThat(meal.getOwner())
+        assertThat(meal.getOwner())
                 .hasFieldOrPropertyWithValue("id", 1L)
                 .hasFieldOrPropertyWithValue("email", "listExistingUser_details@gmail.com")
                 .hasFieldOrPropertyWithValue("fullName", "Owner Details");
-
     }
+
+    @Test
+    @Sql("classpath:repositories/meal/insert_meal_12.sql")
+    @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
+    public void findExistingMeal_MealId_ExpectMealWithDeletedConsumerNotReturned() {
+        var activeConsumerMealId = 1L;
+        var deletedConsumerMealId = 2L;
+        assertThat(mealRepository.findExistingMeal(activeConsumerMealId, null)).isNotEmpty();
+        assertThat(mealRepository.findExistingMeal(deletedConsumerMealId, null)).isEmpty();
+    }
+
+    @Test
+    @Sql("classpath:repositories/meal/insert_meal_13.sql")
+    @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
+    public void findExistingMeal_MealId_ConsumerId_ExpectMealWithSpecifcExistingConsumerReturned() {
+        var mealId = 1L;
+        var consumerId = 1L;
+        var differentConsumerId = 2L;
+        assertThat(mealRepository.findExistingMeal(mealId, consumerId)).isNotEmpty();
+        assertThat(mealRepository.findExistingMeal(mealId, differentConsumerId)).isEmpty();
+    }
+
+    @Sql("classpath:repositories/meal/insert_meal_13.sql")
+    @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
+    public void findExistingMeal_ExpectMealReturnedWithConsumerDetails() {
+        var meal = mealRepository.findExistingMeal(1L, 1L).get();
+
+        assertThat(meal.getOwner())
+                .hasFieldOrPropertyWithValue("id", 1L)
+                .hasFieldOrPropertyWithValue("email", "findExistingMeal_details@gmail.com")
+                .hasFieldOrPropertyWithValue("fullName", "My Details");
+    }
+
 
     long countDeletedMeals(List<Meal> meals) {
         return meals.stream().filter(Meal::isDeleted).count();
