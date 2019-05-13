@@ -48,4 +48,7 @@ public interface MealRepository extends PagingAndSortingRepository<Meal, Long> {
     @EntityGraph(value = "Meal.consumer", type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT meal FROM Meal meal JOIN meal.consumer consumer WHERE meal.deleted = false AND consumer.deleted = false")
     Page<Meal> listExistingMeals(Pageable pageable);
+
+    @Override
+    List<Meal> findAll();
 }
