@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -81,7 +82,7 @@ public class MealRepositoryIT {
     @Sql("classpath:repositories/meal/insert_meal_4.sql")
     @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
     public void filterMyMeals_FromDate_ExpectMealsEqualOrAfterDateReturned() {
-        var meals = mealRepository.filterMyMeals(1L, LocalDate.of(2017, 2, 10), null, null, null, PageRequest.of(0, 1000)).getContent();
+        var meals = mealRepository.filterMyMeals(1L, LocalDate.of(2017, 2, 10), null, null, null, pageable()).getContent();
         Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat on fromDate", "eat after fromDate");
     }
 
@@ -89,7 +90,7 @@ public class MealRepositoryIT {
     @Sql("classpath:repositories/meal/insert_meal_5.sql")
     @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
     public void filterMyMeals_ToDate_ExpectMealsBeforeDateReturned() {
-        var meals = mealRepository.filterMyMeals(1L, null, LocalDate.of(2018, 9, 20), null, null, PageRequest.of(0, 1000)).getContent();
+        var meals = mealRepository.filterMyMeals(1L, null, LocalDate.of(2018, 9, 20), null, null, pageable()).getContent();
         Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat before toDate");
     }
 
@@ -97,7 +98,7 @@ public class MealRepositoryIT {
     @Sql("classpath:repositories/meal/insert_meal_6.sql")
     @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
     public void filterMyMeals_FromTime_ExpectMealsEqualOrAfterTimeReturned() {
-        var meals = mealRepository.filterMyMeals(1L, null, null, LocalTime.of(9, 0), null, PageRequest.of(0, 1000)).getContent();
+        var meals = mealRepository.filterMyMeals(1L, null, null, LocalTime.of(9, 0), null, pageable()).getContent();
         Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat on fromTime", "eat after fromTime");
     }
 
@@ -105,7 +106,7 @@ public class MealRepositoryIT {
     @Sql("classpath:repositories/meal/insert_meal_7.sql")
     @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
     public void filterMyMeals_ToTime_ExpectMealsBeforeTimeReturned() {
-        var meals = mealRepository.filterMyMeals(1L, null, null, null, LocalTime.of(15, 30), PageRequest.of(0, 1000)).getContent();
+        var meals = mealRepository.filterMyMeals(1L, null, null, null, LocalTime.of(15, 30), pageable()).getContent();
         Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat before toTime");
     }
 
@@ -113,8 +114,36 @@ public class MealRepositoryIT {
     @Sql("classpath:repositories/meal/insert_meal_8.sql")
     @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
     public void filterMyMeals_NoDateTimeCriteria_ExpectExistingMeals_ConsumerReturned() {
-        var meals = mealRepository.filterMyMeals(1L, null, null, null, null, PageRequest.of(0, 1000)).getContent();
+        var meals = mealRepository.filterMyMeals(1L, null, null, null, null, pageable()).getContent();
         Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("eat another day", "eat another time");
+    }
+
+    @Test
+    @Sql("classpath:repositories/meal/insert_meal_9.sql")
+    @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
+    public void listExistingMeals_ExpectNoDeletedMealsReturned() {
+        var meals = mealRepository.listExistingMeals(pageable()).getContent();
+        Assertions.assertThat(name(meals)).containsExactlyInAnyOrder("im active", "different consumer");
+    }
+
+    @Test
+    @Sql("classpath:repositories/meal/insert_meal_10.sql")
+    @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
+    public void listExistingMeals_ExpectMealsWithDeletedUsersReturned() {
+        var meals = mealRepository.listExistingMeals(pageable()).getContent();
+        Assertions.assertThat(meals.size()).describedAs("Number of existing meals").isEqualTo(0);
+    }
+
+    @Test
+    @Sql("classpath:repositories/meal/insert_meal_11.sql")
+    @Sql(scripts = "classpath:repositories/delete_meals.sql", executionPhase = AFTER_TEST_METHOD)
+    public void listExistingMeals_ExpectMealsReturnedWithOwnerDetails() {
+        var meal = mealRepository.listExistingMeals(pageable()).getContent().get(0);
+        Assertions.assertThat(meal.getOwner())
+                .hasFieldOrPropertyWithValue("id", 1L)
+                .hasFieldOrPropertyWithValue("email", "listExistingUser_details@gmail.com")
+                .hasFieldOrPropertyWithValue("fullName", "Owner Details");
+
     }
 
     long countDeletedMeals(List<Meal> meals) {
@@ -123,5 +152,9 @@ public class MealRepositoryIT {
 
     List<String> name(List<Meal> meals) {
         return meals.stream().map(Meal::getName).collect(Collectors.toList());
+    }
+    
+    Pageable pageable() {
+        return PageRequest.of(0, 1000);
     }
 }
