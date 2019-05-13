@@ -1,5 +1,6 @@
 package com.mealtracker.services.pagination;
 
+import com.mealtracker.validation.ValueInList;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
@@ -17,13 +18,14 @@ public abstract class SingleSortableColumnPageableParams implements PageablePara
     @PositiveOrZero
     private int pageIndex = 0;
 
-    public abstract PageableOrder getOrder();
+    @ValueInList({"asc", "desc"})
+    private String order = "desc";
 
     public abstract String getOrderBy();
 
     @Override
     public List<SortableProperty> getSortableProperties() {
-        return SortableProperty.singlePropertyOrder(getOrderBy(), getOrder());
+        return SortableProperty.singlePropertyOrder(getOrderBy(), PageableOrder.valueOf(order.toUpperCase()));
     }
 
     @Override

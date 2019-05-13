@@ -217,6 +217,18 @@ public class MyMealServiceTest {
         assertThat(myMealService.listMeals(input, currentUser)).isEqualTo(result);
     }
 
+    @Test
+    public void deleteMeals_ExpectSoftDeleteMealsOfCurrentUser() {
+        var currentUser = currentUser(90L);
+        var mealIds = Arrays.asList(4L, 6L, 3L);
+        var input = new DeleteMealsInput();
+        input.setIds(mealIds);
+
+        myMealService.deleteMeals(input, currentUser);
+
+        verify(mealRepository).softDelete(mealIds, currentUser.getId());
+    }
+
     CurrentUser currentUser(long id) {
         var user = new User();
         user.setId(id);

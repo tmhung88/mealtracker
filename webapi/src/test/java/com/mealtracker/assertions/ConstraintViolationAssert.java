@@ -13,6 +13,7 @@ import static com.mealtracker.assertions.ConstraintViolationAssert.Message.LOCAL
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.MAX_FORMAT;
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.MIN_FORMAT;
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.NOT_NULL;
+import static com.mealtracker.assertions.ConstraintViolationAssert.Message.POSITIVE_OR_ZERO_FORMAT;
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.VALUE_IN_LIST_FORMAT;
 
 public class ConstraintViolationAssert<T> extends AbstractAssert<ConstraintViolationAssert<T>, Set<ConstraintViolation<T>>> {
@@ -57,6 +58,10 @@ public class ConstraintViolationAssert<T> extends AbstractAssert<ConstraintViola
         return this;
     }
 
+    public ConstraintViolationAssert<T> violatePositiveOrZero(String fieldName) {
+        violate(fieldName, POSITIVE_OR_ZERO_FORMAT);
+        return this;
+    }
     public ConstraintViolationAssert<T> violateEmailFormat(String fieldName) {
         violate(fieldName, EMAIL_FORMAT);
         return this;
@@ -108,5 +113,6 @@ public class ConstraintViolationAssert<T> extends AbstractAssert<ConstraintViola
         static final String MIN_FORMAT = "must be greater than or equal to %s";
         static final String MAX_FORMAT = "must be less than or equal to %s";
         static final String VALUE_IN_LIST_FORMAT = "The given value is not valid. Possible values are %s";
+        static final String POSITIVE_OR_ZERO_FORMAT = "must be greater than or equal to 0";
     }
 }

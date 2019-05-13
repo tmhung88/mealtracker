@@ -1,22 +1,17 @@
 package com.mealtracker.services.meal;
 
-import com.mealtracker.services.pagination.PageableOrder;
-import com.mealtracker.services.pagination.PageableParams;
-import com.mealtracker.services.pagination.SortableProperty;
+import com.mealtracker.services.pagination.SingleSortableColumnPageableParams;
 import com.mealtracker.validation.LocalDateFormat;
 import com.mealtracker.validation.LocalTimeFormat;
 import com.mealtracker.validation.ValueInList;
 import lombok.Data;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
+import java.util.Optional;
 
 @Data
-public class ListMyMealsInput implements PageableParams {
+public class ListMyMealsInput extends SingleSortableColumnPageableParams {
 
     @LocalDateFormat
     private String fromDate;
@@ -33,38 +28,19 @@ public class ListMyMealsInput implements PageableParams {
     @ValueInList({"name", "consumedDate", "consumedTime", "calories"})
     private String orderBy = "consumedDate";
 
-    @ValueInList({"asc", "desc"})
-    private String order = "desc";
-
-    @Min(1)
-    @Max(50)
-    private int rowsPerPage = 10;
-
-    @PositiveOrZero
-    private int pageIndex = 0;
-
-    @Override
-    public List<SortableProperty> getSortableProperties() {
-        return SortableProperty.singlePropertyOrder(orderBy, getOrder());
-    }
-
     public LocalDate getFromDate() {
-        return fromDate == null? null : LocalDate.parse(fromDate);
+        return Optional.ofNullable(fromDate).map(LocalDate::parse).orElse(null);
     }
 
     public LocalDate getToDate() {
-        return toDate == null? null : LocalDate.parse(toDate);
+        return Optional.ofNullable(toDate).map(LocalDate::parse).orElse(null);
     }
 
     public LocalTime getFromTime() {
-        return fromTime == null ? null : LocalTime.parse(fromTime);
+        return Optional.ofNullable(fromTime).map(LocalTime::parse).orElse(null);
     }
 
     public LocalTime getToTime() {
-        return toTime == null ? null : LocalTime.parse(toTime);
-    }
-
-    public PageableOrder getOrder() {
-        return PageableOrder.valueOf(order.toUpperCase());
+        return Optional.ofNullable(toTime).map(LocalTime::parse).orElse(null);
     }
 }

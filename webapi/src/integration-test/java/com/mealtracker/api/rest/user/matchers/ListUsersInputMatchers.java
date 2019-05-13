@@ -34,7 +34,7 @@ public class ListUsersInputMatchers {
             return pageIndex == actual.getPageIndex() &&
                     rowsPerPage == actual.getRowsPerPage() &&
                     orderBy.equals(actual.getOrderBy()) &&
-                    order == actual.getOrder();
+                    order.name().toLowerCase().equals(actual.getOrder());
         }
     }
 }
