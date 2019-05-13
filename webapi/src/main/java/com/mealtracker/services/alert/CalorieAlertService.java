@@ -22,7 +22,10 @@ public class CalorieAlertService {
     public CalorieAlertOutput getAlert(LocalDate date, CurrentUser currentUser) {
         var user = userService.getExistingUser(currentUser.getId());
         var totalCalories = myMealService.calculateDailyCalories(date, currentUser);
-        var alerted = user.isDailyCalorieLimitExceeded(totalCalories);
+        var alerted = false;
+        if (user.getUserSettings().isCalorieLimitEnabled()) {
+            alerted = totalCalories >= user.getUserSettings().getDailyCalorieLimit();
+        }
         return new CalorieAlertOutput(alerted, user.getUserSettings().getDailyCalorieLimit(), totalCalories);
     }
 }
