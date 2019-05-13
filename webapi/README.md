@@ -1,7 +1,12 @@
 # Requirements:
 - JDK 11
 - Maven 3
-- Docker CE 19
+- Docker CE 19 
+    
+Docker is for running integration tests against MySQL and setup an MySQL instance to run the app.
+
+Docker settings of the Mysql container can be found at ./webapi/local-env
+    
 ---
 # How to test
 - To run unit tests only
