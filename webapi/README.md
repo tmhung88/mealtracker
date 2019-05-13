@@ -37,4 +37,5 @@ be downloaded at:
 
 `https://www.dropbox.com/s/bdyulwio8gymie0/sample_data.sql?dl=0`
 
+- Pass of all users are `test1234`
  
