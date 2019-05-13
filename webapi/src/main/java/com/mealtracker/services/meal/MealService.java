@@ -25,15 +25,17 @@ public class MealService {
     private PageableBuilder pageableBuilder;
 
     public Meal addMeal(MealInput input) {
-        userService.getExistingUser(input.getConsumerId());
+        var consumer = userService.getExistingUser(input.getConsumerId());
         var meal = input.toMeal();
+        meal.setConsumer(consumer);
         return mealRepository.save(meal);
     }
 
     public Meal updateMeal(long mealId, MealInput input) {
-        userService.getExistingUser(input.getConsumerId());
+        var consumer = userService.getExistingUser(input.getConsumerId());
         var existingMeal = getExistingMeal(mealId);
         input.merge(existingMeal);
+        existingMeal.setConsumer(consumer);
         return mealRepository.save(existingMeal);
     }
 

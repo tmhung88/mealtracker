@@ -55,7 +55,11 @@ public class UserMatchers {
         public boolean matches(User actual) {
             return expectation.id.map(i -> i.equals(actual.getId())).orElse(true) &&
                     expectation.email.map(e -> e.equals(actual.getEmail())).orElse(true) &&
-                    expectation.encryptedPassword.map(e -> e.equals(actual.getEncryptedPassword())).orElse(true);
+                    expectation.password.map(e -> e.equals(actual.getPassword())).orElse(true) &&
+                    expectation.encryptedPassword.map(e -> e.equals(actual.getEncryptedPassword())).orElse(true) &&
+                    expectation.fullName.map(e -> e.equals(actual.getFullName())).orElse(true) &&
+                    expectation.dailyCalorieLimit.map(e -> e.equals(actual.getUserSettings().getDailyCalorieLimit())).orElse(true) &&
+                    expectation.role.map(e -> e.equals(actual.getRole())).orElse(true);
         }
     }
 
