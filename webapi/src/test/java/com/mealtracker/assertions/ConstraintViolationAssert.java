@@ -10,10 +10,12 @@ import java.util.stream.Collectors;
 
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.EMAIL_FORMAT;
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.LOCAL_DATE_FORMAT;
+import static com.mealtracker.assertions.ConstraintViolationAssert.Message.LOCAL_TIME_FORMAT;
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.MAX_FORMAT;
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.MIN_FORMAT;
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.NOT_NULL;
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.POSITIVE_OR_ZERO_FORMAT;
+import static com.mealtracker.assertions.ConstraintViolationAssert.Message.SIZE_FORMAT;
 import static com.mealtracker.assertions.ConstraintViolationAssert.Message.VALUE_IN_LIST_FORMAT;
 
 public class ConstraintViolationAssert<T> extends AbstractAssert<ConstraintViolationAssert<T>, Set<ConstraintViolation<T>>> {
@@ -40,6 +42,11 @@ public class ConstraintViolationAssert<T> extends AbstractAssert<ConstraintViola
         if (violationOptional.isEmpty()) {
             failWithMessage("Expected the field <%s> with the error <%s> but %s", fieldName, message, getErrorSummary(fieldName));
         }
+        return this;
+    }
+
+    public ConstraintViolationAssert<T> violateSize(String fieldName, int min, int max) {
+        violate(fieldName, String.format(SIZE_FORMAT, min, max));
         return this;
     }
 
@@ -77,6 +84,11 @@ public class ConstraintViolationAssert<T> extends AbstractAssert<ConstraintViola
         return this;
     }
 
+    public ConstraintViolationAssert<T> violateLocalTimeFormat(String fieldName) {
+        violate(fieldName, LOCAL_TIME_FORMAT);
+        return this;
+    }
+
     private List<ConstraintViolation> getAllViolations(String fieldName) {
         return this.violations.stream().filter(violation -> violation.getPropertyPath().toString().equals(fieldName)).collect(Collectors.toList());
     }
@@ -109,10 +121,12 @@ public class ConstraintViolationAssert<T> extends AbstractAssert<ConstraintViola
     static class Message {
         static final String NOT_NULL = "must not be null";
         static final String LOCAL_DATE_FORMAT = "Date should be in this format yyyy-MM-dd";
+        static final String LOCAL_TIME_FORMAT = "Time should be in this format hh:mm";
         static final String EMAIL_FORMAT = "must be a well-formed email address";
         static final String MIN_FORMAT = "must be greater than or equal to %s";
         static final String MAX_FORMAT = "must be less than or equal to %s";
         static final String VALUE_IN_LIST_FORMAT = "The given value is not valid. Possible values are %s";
         static final String POSITIVE_OR_ZERO_FORMAT = "must be greater than or equal to 0";
+        static final String SIZE_FORMAT = "size must be between %s and %s";
     }
 }
