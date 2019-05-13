@@ -28,3 +28,8 @@
 ```
 chmod 0755 ./local-env/app.sh
 ```
+
+--------------------------------------------------
+# Test Data
+- Test data is located at the root GIT directory, sample_data.sql. All users share the same password: test1234
+
