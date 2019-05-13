@@ -42,14 +42,6 @@ public class UserService implements UserDetailsService {
     }
 
     public User updateUser(User updatedUser) {
-        var email = updatedUser.getEmail().toLowerCase();
-        var emailOwner = userRepository.findByEmail(email);
-        boolean isSameOwner = emailOwner.map(owner -> owner.getId().equals(updatedUser.getId()))
-                .orElse(true);
-        if (!isSameOwner) {
-            throw BadRequestAppException.emailTaken(email);
-        }
-
         updatedUser.setEmail(updatedUser.getEmail().toLowerCase());
         boolean isPasswordChanged = updatedUser.getPassword() != null;
         if (isPasswordChanged) {

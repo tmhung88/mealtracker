@@ -49,15 +49,6 @@ public class User {
         return role.getPrivileges();
     }
 
-    public boolean isDailyCalorieLimitExceeded(int totalCalories) {
-        var isCalorieAlertDisabled = userSettings.getDailyCalorieLimit() == 0;
-        if (isCalorieAlertDisabled) {
-            return false;
-        } else {
-            return totalCalories >= userSettings.getDailyCalorieLimit();
-        }
-    }
-
     public boolean isEnabled() {
         return !deleted;
     }

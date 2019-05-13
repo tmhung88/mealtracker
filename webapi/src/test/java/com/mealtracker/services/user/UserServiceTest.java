@@ -73,18 +73,6 @@ public class UserServiceTest {
     }
 
     @Test
-    public void updateUser_UpdatedEmailAlreadyTaken_ExpectException() {
-        var updatedUser = new User();
-        updatedUser.setId(4L);
-        updatedUser.setEmail("used_EMAIL@abc.com");
-        var emailOwner = new User();
-        emailOwner.setId(9L);
-        when(userRepository.findByEmail("used_email@abc.com")).thenReturn(Optional.of(emailOwner));
-
-        AppAssertions.assertThatThrownBy(() -> userService.updateUser(updatedUser)).hasError(40001, "Email used_email@abc.com is already taken");
-    }
-
-    @Test
     public void updateUser_NewPasswordAvailable_ExpectNewEncryptedPassworedSaved() {
         var user = new User();
         user.setEmail("abc@gmail.com");

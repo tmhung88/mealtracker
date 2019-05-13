@@ -1,6 +1,7 @@
 package com.mealtracker.services.user;
 
 
+import com.mealtracker.assertions.AppAssertions;
 import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
 import com.mealtracker.domains.UserSettings;
@@ -11,6 +12,8 @@ import org.junit.Test;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
+
 import com.mealtracker.payloads.Error;
 import static com.mealtracker.assertions.AppAssertions.assertThatThrownBy;
 import static com.mealtracker.services.user.UserMatchers.eq;
@@ -124,12 +127,25 @@ public class AccessibleRolesUserManagementServiceTest {
     }
 
     @Test
+    public void updateUser_UpdatedEmailAlreadyTaken_ExpectException() {
+        var input = manageUserInput();
+        input.setEmail("used_EMAIL@abc.com");
+        var emailOwner = new User();
+        emailOwner.setId(5923L);
+
+        when(userService.findByEmail(input.getEmail().toLowerCase())).thenReturn(Optional.of(emailOwner));
+
+        AppAssertions.assertThatThrownBy(() -> managerService.updateUser(21L, input)).hasError(40001, "Email used_email@abc.com is already taken");
+    }
+
+    @Test
     public void updateUser_UpdatedUserSuperiorRole_ExpectException() {
         var input = manageUserInput();
         input.setRole(Role.REGULAR_USER.name());
         var superiorUser = new User();
         superiorUser.setId(4L);
         superiorUser.setRole(Role.ADMIN);
+        when(userService.findByEmail(input.getEmail().toLowerCase())).thenReturn(Optional.empty());
         when(userService.getExistingUser(superiorUser.getId())).thenReturn(superiorUser);
 
         assertThatThrownBy(() -> managerService.updateUser(superiorUser.getId(), input))
@@ -143,6 +159,7 @@ public class AccessibleRolesUserManagementServiceTest {
         var updatedUser = new User();
         updatedUser.setId(21L);
         updatedUser.setRole(Role.REGULAR_USER);
+        when(userService.findByEmail(input.getEmail().toLowerCase())).thenReturn(Optional.empty());
         when(userService.getExistingUser(updatedUser.getId())).thenReturn(updatedUser);
 
         assertThatThrownBy(() -> managerService.updateUser(updatedUser.getId(), input))
@@ -187,6 +204,7 @@ public class AccessibleRolesUserManagementServiceTest {
 
     ManageUserInput manageUserInput() {
         var input = new ManageUserInput();
+        input.setEmail("decent_one@gmail.com");
         input.setDailyCalorieLimit(0);
         return input;
     }
