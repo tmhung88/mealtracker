@@ -8,11 +8,10 @@
 		<version>2.3.1.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.mealtracker</groupId>
-	<artifactId>mealtracker</artifactId>
+	<groupId>com.company</groupId>
+	<artifactId>webservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>mealtracker</name>
-	<description>One stop solution to keep track of your meals</description>
+	<name>WebService</name>
 
 	<properties>
 		<java.version>11</java.version>

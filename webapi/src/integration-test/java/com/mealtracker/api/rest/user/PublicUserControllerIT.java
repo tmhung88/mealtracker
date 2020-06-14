@@ -1,14 +1,12 @@
 package com.mealtracker.api.rest.user;
 
 import com.mealtracker.MealTrackerApplication;
+import com.mealtracker.api.rest.PublicUserController;
 import com.mealtracker.config.WebSecurityConfig;
-import com.mealtracker.domains.Role;
 import com.mealtracker.domains.User;
 import com.mealtracker.exceptions.BadRequestAppException;
-import com.mealtracker.services.user.ManageUserInput;
 import com.mealtracker.services.user.PublicUserService;
 import com.mealtracker.services.user.RegisterUserInput;
-import com.mealtracker.services.user.UserManagementServiceResolver;
 import com.mealtracker.services.user.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = {PublicUserController.class, UserController.class})
+@WebMvcTest(controllers = {PublicUserController.class})
 @ContextConfiguration(classes={MealTrackerApplication.class, WebSecurityConfig.class})
 public class PublicUserControllerIT {
 
@@ -42,20 +40,6 @@ public class PublicUserControllerIT {
 
     @MockBean
     private UserService userService;
-
-    @MockBean
-    private UserManagementServiceResolver managementServiceResolver;
-
-    /**
-     *
-     * Creating user request of Authenticated users is directed to Management api
-     */
-    @Test
-    public void registerUser_RegularUserWithValidInput_ExpectAuthorizationError() throws Exception {
-        mockMvc.perform(post("/v1/users").auth(USER).content(manageUserRequest()))
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.httpStatus())
-                .andExpect(AUTHORIZATION_API_ACCESS_DENIED.json());
-    }
 
     @Test
     public void registerUser_AnonymousWithValidInput_ExpectUserRegistered() throws Exception {
@@ -145,16 +129,6 @@ public class PublicUserControllerIT {
         user.setId(5L);
         user.setDeleted(false);
         return user;
-    }
-
-    private ManageUserInput manageUserRequest() {
-        var input = new ManageUserInput();
-        input.setRole(Role.REGULAR_USER.name());
-        input.setDailyCalorieLimit(1000);
-        input.setEmail("panda@gmail.com");
-        input.setFullName("Kungfu Kent");
-        input.setPassword("Heyyoo");
-        return input;
     }
 
 }

@@ -10,8 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class PublicUserService {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public PublicUserService(UserService userService) {
+        this.userService = userService;
+    }
 
     public User registerUser(RegisterUserInput registrationInput) {
         var newUser = registrationInput.toUser();

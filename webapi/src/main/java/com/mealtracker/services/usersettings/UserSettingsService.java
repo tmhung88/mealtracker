@@ -17,12 +17,4 @@ public class UserSettingsService {
         var user = userRepository.getOne(userId);
         return user.getUserSettings();
     }
-
-    public UserSettings updateUserSettings(long userId, MySettingsInput input) {
-        var user = userRepository.getOne(userId);
-        if (input.isDailyCalorieLimitPatched()) {
-            user.getUserSettings().setDailyCalorieLimit(input.getDailyCalorieLimit());
-        }
-        return userRepository.save(user).getUserSettings();
-    }
 }

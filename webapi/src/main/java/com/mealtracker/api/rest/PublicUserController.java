@@ -1,4 +1,4 @@
-package com.mealtracker.api.rest.user;
+package com.mealtracker.api.rest;
 
 import com.mealtracker.domains.User;
 import com.mealtracker.payloads.MessageResponse;
