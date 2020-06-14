@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.0.M2</version>
+		<version>2.3.1.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mealtracker</groupId>
@@ -15,14 +15,18 @@
 	<description>One stop solution to keep track of your meals</description>
 
 	<properties>
-		<java.version>11</java.version>
-		<dockerfile-maven.version>1.4.10</dockerfile-maven.version>
+		<java.version>14</java.version>
+		<dockerfile-maven.version>1.4.13</dockerfile-maven.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -36,7 +40,7 @@
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
-			<version>0.9.0</version>
+			<version>0.9.1</version>
 		</dependency>
 
 		<dependency>
@@ -70,7 +74,7 @@
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>mysql</artifactId>
-			<version>1.11.2</version>
+			<version>1.14.3</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -91,7 +95,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.12</version>
+				<version>3.1.0</version>
 				<executions>
 					<execution>
 						<id>add-integration-test-sources</id>
@@ -125,7 +129,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.1</version>
+				<version>3.0.0-M1</version>
 				<configuration>
 					<skipTests>${skip.unit.tests}</skipTests>
 					<excludes>
@@ -137,7 +141,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.22.1</version>
+				<version>3.0.0-M1</version>
 				<executions>
 					<execution>
 						<id>integration-tests</id>
@@ -185,7 +189,7 @@
 				<skip.unit.tests>false</skip.unit.tests>
 			</properties>
 		</profile>
-		
+
 		<profile>
 			<id>prod</id>
 			<build>
@@ -193,7 +197,7 @@
 					<plugin>
 						<groupId>com.spotify</groupId>
 						<artifactId>dockerfile-maven-plugin</artifactId>
-						<version>${dockerfile-maven.version}</version>
+						<version>1.4.13</version>
 						<executions>
 							<execution>
 								<id>default</id>
