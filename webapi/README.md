@@ -1,3 +1,8 @@
+# Description
+
+A minimum implementation for a webservice application. It's built with the latest Spring Boot, Hibernate, and Docker. It also has
+unit testing, and integration testing configured out-of-box.
+
 # Requirements:
 - JDK 11
 - Maven 3
@@ -20,7 +25,6 @@ Docker settings of the Mysql container can be found at ./webapi/local-env
 - To run all tests:
 ```
 ./mvnw clean verify -P ci-server
-
 ```
 ---
 # How to run
@@ -33,9 +37,3 @@ Docker settings of the Mysql container can be found at ./webapi/local-env
 ```
 chmod 0755 ./local-env/app.sh
 ```
-
-
-# Sample Data:
-
-- Pass of all users are `test1234`
- 
