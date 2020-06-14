@@ -14,8 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/sessions")
 public class SessionController {
 
+    private final SessionService sessionService;
+
     @Autowired
-    private SessionService sessionService;
+    public SessionController(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
 
     @PostMapping
     public SuccessEnvelop<SessionResponse> generateToken(@RequestBody SessionInput sessionInput) {

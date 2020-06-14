@@ -36,8 +36,12 @@ import java.util.List;
 @AuthenticatedMapping
 public class UserController {
 
+    private final UserManagementServiceResolver serviceResolver;
+
     @Autowired
-    private UserManagementServiceResolver serviceResolver;
+    public UserController(UserManagementServiceResolver serviceResolver) {
+        this.serviceResolver = serviceResolver;
+    }
 
     @PostMapping
     public SuccessEnvelop<MessageResponse> addUser(@Validated(OnAdd.class) @Valid @RequestBody ManageUserInput input, CurrentUser currentUser) {

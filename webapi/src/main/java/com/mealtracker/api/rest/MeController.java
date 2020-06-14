@@ -19,8 +19,12 @@ import javax.validation.Valid;
 @RequestMapping("/v1/users/me")
 public class MeController {
 
+    private final UserSettingsService userSettingsService;
+
     @Autowired
-    private UserSettingsService userSettingsService;
+    public MeController(UserSettingsService userSettingsService) {
+        this.userSettingsService = userSettingsService;
+    }
 
     @GetMapping
     public SuccessEnvelop<GetMySettingsResponse> getMySettings(CurrentUser currentUser) {

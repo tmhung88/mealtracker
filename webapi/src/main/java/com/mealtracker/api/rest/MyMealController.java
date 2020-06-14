@@ -29,8 +29,12 @@ import java.util.List;
 @Secured("MY_MEALS")
 public class MyMealController {
 
+    private final MyMealService myMealService;
+
     @Autowired
-    private MyMealService myMealService;
+    public MyMealController(MyMealService myMealService) {
+        this.myMealService = myMealService;
+    }
 
     @GetMapping
     public MetaSuccessEnvelop<List<MyMealResponse>, PaginationMeta> listMeal(@Valid ListMyMealsInput input,

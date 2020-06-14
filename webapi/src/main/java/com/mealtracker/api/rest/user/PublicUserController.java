@@ -22,8 +22,12 @@ import javax.validation.Valid;
 @RequestMapping("/v1/users")
 public class PublicUserController {
 
+    private final PublicUserService publicUserService;
+
     @Autowired
-    private PublicUserService publicUserService;
+    public PublicUserController(PublicUserService publicUserService) {
+        this.publicUserService = publicUserService;
+    }
 
     @PostMapping
     public SuccessEnvelop<MessageResponse> registerUser(@Validated(OnAdd.class) @Valid

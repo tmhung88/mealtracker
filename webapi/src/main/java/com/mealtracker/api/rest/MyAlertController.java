@@ -16,8 +16,12 @@ import javax.validation.Valid;
 @RequestMapping("/v1/users/me/alerts")
 public class MyAlertController {
 
+    private final CalorieAlertService calorieAlertService;
+
     @Autowired
-    private CalorieAlertService calorieAlertService;
+    public MyAlertController(CalorieAlertService calorieAlertService) {
+        this.calorieAlertService = calorieAlertService;
+    }
 
     @GetMapping("/calorie")
     public SuccessEnvelop<CalorieAlertResponse> getCalorieAlert(@Valid CalorieAlertInput request, CurrentUser currentUser) {

@@ -28,8 +28,12 @@ import java.util.List;
 @RequestMapping("/v1/meals")
 public class MealController {
 
+    private final MealService mealService;
+
     @Autowired
-    private MealService mealService;
+    public MealController(MealService mealService) {
+        this.mealService = mealService;
+    }
 
     @GetMapping
     public MetaSuccessEnvelop<List<MealResponse>, PaginationMeta> listMeals(@Valid ListMealsInput input) {
