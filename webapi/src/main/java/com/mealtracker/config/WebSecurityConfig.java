@@ -8,6 +8,7 @@ import com.mealtracker.security.jwt.JwtAuthenticationHandler;
 import com.mealtracker.security.jwt.JwtTokenProvider;
 import com.mealtracker.security.jwt.JwtTokenValidator;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +36,12 @@ import static org.springframework.http.HttpMethod.POST;
         prePostEnabled = true
 )
 public class WebSecurityConfig {
+
+    @Bean
+    @ConfigurationProperties("app.jwt")
+    public JwtProperties jwtProperties() {
+        return new JwtProperties();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
