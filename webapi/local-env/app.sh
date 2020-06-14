@@ -8,7 +8,7 @@ echo ">>>>>>>>>>>>>>>>>>> Starting up docker containers: MySQL"
 cd local-env
 docker-compose up -d
 
-echo ">>>>>>>>>>>>>>>>>>> Starting the application Meal Tracker"
+echo ">>>>>>>>>>>>>>>>>>> Starting the application WebService"
 cd ..
 ./mvnw clean compile -DskipTests spring-boot:run
 

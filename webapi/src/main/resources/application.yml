@@ -5,7 +5,7 @@ spring:
   main:
     banner-mode: "off"
   application:
-    name: mealtracker
+    name: webservice
   datasource:
     driver: com.mysql.cj.jdbc.Driver
   jpa:

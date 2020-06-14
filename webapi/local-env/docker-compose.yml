@@ -7,7 +7,7 @@ services:
       - ./mysql/data:/var/lib/mysql
       - ./mysql/config:/etc/mysql/conf.d
     environment:
-      MYSQL_DATABASE: mealtracker
+      MYSQL_DATABASE: webservice
       MYSQL_ROOT_PASSWORD: 8&pqA24iyQ01
       MYSQL_ROOT_HOST: '%'
     ports:
