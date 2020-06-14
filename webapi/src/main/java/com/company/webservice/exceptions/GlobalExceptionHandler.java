@@ -2,13 +2,8 @@ package com.company.webservice.exceptions;
 
 import com.company.webservice.payloads.ErrorEnvelop;
 import com.company.webservice.payloads.ErrorField;
-import com.company.webservice.security.jwt.JwtValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -61,54 +56,6 @@ public class GlobalExceptionHandler {
     ErrorEnvelop handleBadRequestException(BadRequestAppException ex) {
         return new ErrorEnvelop(ex);
     }
-
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler({AuthenticationException.class })
-    public @ResponseBody
-    ErrorEnvelop handleAuthenticationException(AuthenticationException ex) {
-        if (ex.getCause() instanceof AuthenticationAppException) {
-            var appException = (AuthenticationAppException) ex.getCause();
-            return new ErrorEnvelop(appException);
-        }
-        log.warn("Please add a new handler for the new subclass of AuthenticationException: {}", ex.getClass());
-        return new ErrorEnvelop(AuthenticationAppException.missingToken());
-    }
-
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler({InsufficientAuthenticationException.class })
-    public @ResponseBody
-    ErrorEnvelop handleInsufficientAuthenticationException() {
-        return new ErrorEnvelop(AuthenticationAppException.missingToken());
-    }
-
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler({BadCredentialsException.class })
-    public @ResponseBody
-    ErrorEnvelop handleBadCredentialsException() {
-        return new ErrorEnvelop(AuthenticationAppException.invalidPassword());
-    }
-
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler({JwtValidationException.class })
-    public @ResponseBody
-    ErrorEnvelop handleJwtValidationException(JwtValidationException ex) {
-        return new ErrorEnvelop(AuthenticationAppException.invalidJwtToken(ex));
-    }
-
-    @ResponseStatus(value = HttpStatus.FORBIDDEN)
-    @ExceptionHandler({ AccessDeniedException.class })
-    public @ResponseBody
-    ErrorEnvelop handleAuthorizationException() {
-        return new ErrorEnvelop(AuthorizationAppException.apiAccessDeniedError());
-    }
-
-    @ResponseStatus(value = HttpStatus.FORBIDDEN)
-    @ExceptionHandler({ AuthorizationAppException.class })
-    public @ResponseBody
-    ErrorEnvelop handleAuthorizationException(AuthorizationAppException ex) {
-        return new ErrorEnvelop(ex);
-    }
-
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class, InternalAppException.class})

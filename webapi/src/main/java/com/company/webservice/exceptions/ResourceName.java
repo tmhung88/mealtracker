@@ -2,7 +2,7 @@ package com.company.webservice.exceptions;
 
 public enum ResourceName {
     USER("user"),
-    MEAL("meal");
+    ;
 
     private final String name;
 
@@ -13,4 +13,4 @@ public enum ResourceName {
     public String getName() {
         return name;
     }
-}
+    }

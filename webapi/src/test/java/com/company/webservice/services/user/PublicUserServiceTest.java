@@ -43,7 +43,6 @@ public class PublicUserServiceTest {
         var input = new RegisterUserInput();
         input.setEmail("abc@gmail.com");
         input.setFullName("ABC DEF");
-        input.setPassword("alphabet");
         return input;
     }
 

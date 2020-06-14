@@ -25,11 +25,6 @@ public class AppRequestBuilder implements RequestBuilder {
         return builder.buildRequest(servletContext);
     }
 
-    public AppRequestBuilder auth(TestUser user) {
-        builder.header("Authorization", user.getToken());
-        return this;
-    }
-
     public AppRequestBuilder content(Object object) {
         if (object instanceof String) {
             builder.content((String) object);

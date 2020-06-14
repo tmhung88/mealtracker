@@ -2,7 +2,6 @@ package com.company.webservice.api.rest.user;
 
 import com.company.webservice.WebServiceApplication;
 import com.company.webservice.api.rest.PublicUserController;
-import com.company.webservice.config.WebSecurityConfig;
 import com.company.webservice.domains.User;
 import com.company.webservice.exceptions.BadRequestAppException;
 import com.company.webservice.request.AppRequestBuilders;
@@ -27,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = {PublicUserController.class})
-@ContextConfiguration(classes={WebServiceApplication.class, WebSecurityConfig.class})
+@ContextConfiguration(classes={WebServiceApplication.class})
 public class PublicUserControllerIT {
 
     @Autowired
@@ -70,18 +69,6 @@ public class PublicUserControllerIT {
     }
 
     @Test
-    public void registerUser_InvalidPassword_ExpectFullNameValidationErrors() throws Exception {
-        String invalidPassword = "d";
-        var input = registrationRequest();
-        input.setPassword(invalidPassword);
-
-        mockMvc.perform(AppRequestBuilders.post("/v1/users").content(input))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().json("{'error':{'code':40000,'message':'Bad Input','errorFields':[{'name':'password','message':'size must be between 5 and 100'}]}}"));
-    }
-
-
-    @Test
     public void registerUser_ExistingEmail_ExpectError() throws Exception {
         var input = registrationRequest();
 
@@ -115,7 +102,6 @@ public class PublicUserControllerIT {
         var request =  new RegisterUserInput();
         request.setEmail("superman@gmail.com");
         request.setFullName("Superman");
-        request.setPassword("JusticeLeague");
         return request;
     }
 
@@ -123,7 +109,6 @@ public class PublicUserControllerIT {
         var user = new User();
         user.setEmail("hello@gmail.com");
         user.setFullName("Hello World");
-        user.setEncryptedPassword("4895742");
         user.setId(5L);
         user.setDeleted(false);
         return user;
