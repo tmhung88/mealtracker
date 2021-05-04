@@ -1,4 +1,4 @@
-FROM openjdk:11.0.3-jre-stretch
+FROM amazoncorretto:16.0.1-alpine
 MAINTAINER Hung Tran <tmhung88@outlook.com>
 VOLUME /tmp
 ARG JAR_FILE
