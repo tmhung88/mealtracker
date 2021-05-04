@@ -6,10 +6,7 @@ spring:
 
 logging:
   level:
-    org:
-      springframework:
-        test:
-          context:
-            jdbc:
-              SqlScriptsTestExecutionListener:
-                DEBUG
+    org.hibernate.SQL: OFF
+    org.hibernate.type: OFF
+    org.springframework:
+        test.context.jdbc.SqlScriptsTestExecutionListener: DEBUG

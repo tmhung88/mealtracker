@@ -30,10 +30,10 @@ public class Meal implements Ownable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "consumed_date", nullable = false)
+    @Column(name = "consumed_date", nullable = false, columnDefinition = "DATE")
     private LocalDate consumedDate;
 
-    @Column(name = "consumed_time", nullable = false)
+    @Column(name = "consumed_time", nullable = false, columnDefinition = "TIME")
     private LocalTime consumedTime;
 
     @Column(name = "calories", nullable = false)
